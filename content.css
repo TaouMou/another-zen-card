@@ -230,25 +230,6 @@
       font-weight: 400 !important;
     }
 
-    & menulist {
-      appearance: none !important;
-      height: 30px !important;
-      min-height: 0 !important;
-      padding: 0 10px !important;
-      border: none !important;
-      border-radius: 8px !important;
-      corner-shape: round !important;
-      background-color: var(--zc-frame) !important;
-      color: var(--zc-text) !important;
-      box-shadow: inset 0 0 0 1px var(--zc-line) !important;
-      font-weight: 400 !important;
-      transition: box-shadow 0.2s ease !important;
-
-      &:is(:hover, [open]) {
-        box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--zc-text) 25%, var(--zc-frame)) !important;
-      }
-    }
-
     & input[type="text"] {
       appearance: none !important;
       height: 30px !important;
@@ -437,11 +418,36 @@
     color: var(--zc-muted) !important;
   }
 
-  /* Sine makes the text in its mod list bold (600); keep the dropdowns,
-     their lists and the selected value at normal weight */
-  .sineItemPreferenceDialog menulist,
-  .sineItemPreferenceDialog menulist * {
+  /* Dropdowns everywhere in settings (Zen's own settings, Sine's dialog,
+     the settings dialogs): inset fields like the sidebar's address field,
+     at normal weight. Zen and Sine make their text bold, so the weight
+     covers the field's label and its list too. */
+  menulist {
+    appearance: none !important;
+    min-height: 30px !important;
+    padding-block: 0 !important;
+    padding-inline: 10px !important;
+    border: none !important;
+    border-radius: 8px !important;
+    corner-shape: round !important;
+    background-color: var(--zc-frame) !important;
+    color: var(--zc-text) !important;
+    box-shadow: inset 0 0 0 1px var(--zc-line) !important;
+    transition: box-shadow 0.2s ease !important;
+
+    &:is(:hover, [open]) {
+      background-color: var(--zc-frame) !important;
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--zc-text) 25%, var(--zc-frame)) !important;
+    }
+  }
+
+  menulist,
+  menulist * {
     font-weight: 400 !important;
+  }
+
+  .sineItemPreferenceDialogContent menulist {
+    height: 30px !important;
   }
 
   /* Dropdown lists opened from those fields. Firefox fills the current
