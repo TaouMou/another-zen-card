@@ -398,6 +398,31 @@
     }
   }
 
+  /* The marketplace shows six mods per page; let the list grow to fit
+     them instead of scrolling inside a 400px box, and tighten the cards */
+  #sineInstallationList {
+    max-height: none !important;
+    overflow-y: visible !important;
+  }
+
+  .sineInstallationItem {
+    padding: 12px !important;
+    gap: 4px !important;
+
+    & .sineMarketplaceItemTitle {
+      margin: 0 !important;
+    }
+
+    & .sineMarketplaceItemDescription {
+      margin: 0 !important;
+      padding-bottom: 8px !important;
+    }
+
+    & .sineMarketplaceButtonContainer {
+      height: auto !important;
+    }
+  }
+
   :is(.sineMarketplaceItemTitle, .sineItem .sineItemTitle) {
     font-size: 14px !important;
     font-weight: 500 !important;
