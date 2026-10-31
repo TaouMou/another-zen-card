@@ -347,7 +347,7 @@
 
 /* ---- Window buttons ----
    Minimize, maximize and close (Windows and Linux) become three small
-   dots: two muted ones and an accent one for close, no glyphs. Each keeps
+   dots: two muted ones and a dimmed accent one for close, no glyphs. Each keeps
    a full-height click area wider than the dot, and maximize still opens
    Windows 11's snap layouts on hover. The muted dots follow currentColor,
    so they also follow the site-colored strip.
@@ -382,12 +382,13 @@
       }
     }
 
+    /* Close is a dimmed accent at rest and the full accent on hover */
     & .titlebar-close::before {
-      background-color: var(--zc-accent) !important;
+      background-color: color-mix(in srgb, var(--zc-accent) 40%, transparent) !important;
     }
 
     & .titlebar-close:hover::before {
-      background-color: color-mix(in srgb, var(--zc-accent) 75%, var(--zc-text)) !important;
+      background-color: var(--zc-accent) !important;
     }
   }
 }
