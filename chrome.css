@@ -1396,6 +1396,14 @@
   corner-shape: round !important;
   box-shadow: 0 24px 60px -24px rgb(0 0 0 / 0.55) !important;
   overflow: clip !important;
+
+  /* Zen fades the box out over 0.2s, easing in, so it lingers before it
+     goes; a short ease-out instead. It stays an animation because the
+     dialog closes when it ends. */
+  &[zen-closing] {
+    animation-duration: 0.12s !important;
+    animation-timing-function: ease-out !important;
+  }
 }
 
 /* ---- Interface font ---- */

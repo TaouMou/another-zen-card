@@ -696,6 +696,14 @@
     corner-shape: round !important;
     box-shadow: 0 24px 60px -24px rgb(0 0 0 / 0.55) !important;
     overflow: clip !important;
+
+    /* Zen fades the box out over 0.2s, easing in, so it lingers before it
+       goes; a short ease-out instead. It stays an animation because the
+       dialog closes when it ends. */
+    &[zen-closing] {
+      animation-duration: 0.12s !important;
+      animation-timing-function: ease-out !important;
+    }
   }
 
   .dialogTitleBar {
@@ -723,8 +731,26 @@
     }
   }
 
+  /* The dialog's page sits 10px inside the box; Firefox paints it in the
+     box color (lighter than the card), which showed as a second card */
   .dialogFrame {
-    border-radius: 0 0 11px 11px !important;
+    border-radius: 0 !important;
+  }
+
+  dialog:not([open]) {
+    background-color: transparent !important;
+  }
+
+  /* The dialog's own buttons (Save changes, Cancel...): Zen gives them
+     23px corners; same corners as every other button */
+  dialog::part(dialog-button) {
+    border-radius: var(--button-border-radius) !important;
+    corner-shape: round !important;
+  }
+
+  /* Lists in dialogs (Exceptions, Languages...) take the field corners */
+  :is(richlistbox, tree) {
+    border-radius: 8px !important;
     corner-shape: round !important;
   }
 }
