@@ -5,7 +5,7 @@ A solid, glass-free theme for Zen Browser, installed through the Sine mod manage
 ## Files
 
 - `chrome.css`: the whole theme (palettes, card, site-colored strip, address bar, tab styles, fonts)
-- `card-tint.uc.js`: chrome script that samples the top edge of the page to color the toolbar strip, and makes the address bar show only the domain
+- `card-tint.uc.js`: chrome script that samples the top edge of the page to color the toolbar strip, makes the address bar show only the domain, cross-fades the Library, and moves the window buttons into the sidebar's top row in the sidebar-only layout (Zen otherwise puts them in a strip above the page, `#zen-appcontent-navbar-container`, and re-appends them there on every layout rebuild)
 - `preferences.json`: the settings Sine shows
 - `theme.json`: Sine's manifest
 
