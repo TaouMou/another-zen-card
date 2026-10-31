@@ -266,16 +266,25 @@
 
   // ---- Extension popups ----
   // With Zen's zen.theme.hide-unified-extensions-button off, extensions
-  // get their own toolbar button, but Zen still points the toolbar's
-  // extension popups at its site button in the address bar, so they
-  // open in the middle of the toolbar. Point them back at the
-  // Extensions button.
+  // get their own toolbar button, but Zen still anchors extension popups
+  // to its site button in the address bar, so they open in the middle of
+  // the toolbar. Zen sets that anchor on CustomizableUI's extensions area
+  // (and on the nav bar, for extensions that overflow the toolbar);
+  // registering the area again with the Extensions button updates it.
   function anchorExtensionPopups() {
     if (
       Services.prefs.getBoolPref("zen.theme.hide-unified-extensions-button", true) ||
       !document.getElementById("unified-extensions-button")
     ) {
       return;
+    }
+    try {
+      CustomizableUI.registerArea(CustomizableUI.AREA_ADDONS, {
+        type: CustomizableUI.TYPE_PANEL,
+        anchor: "unified-extensions-button",
+      });
+    } catch (e) {
+      console.error("Another Zen Card: couldn't re-anchor extension popups", e);
     }
     document
       .getElementById("nav-bar")
