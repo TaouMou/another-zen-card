@@ -235,17 +235,27 @@
   }
 }
 
-/* Centered, no background (the default): at rest the domain sits on the
-   bare toolbar. Hovering fades in a faint see-through wash of the text
-   color (as Zia does), so the strip's color still shows through. */
+/* Centered, no background (the default): the domain sits on the bare
+   toolbar, slightly dimmed. Hovering brings it to full brightness and
+   fades in the buttons; no box ever appears. While typing (when Zen
+   doesn't float the bar) a faint wash shows where the field is. */
 :root:not([zen-single-toolbar="true"]):not([zen-private-window="true"]):not(:has(.sine-theme-strings[mod-zencard-urlbar="full"])):not(:has(.sine-theme-strings[mod-zencard-urlbar="centered"])) #urlbar:not([breakout-extend]) {
   & > .urlbar-background {
     background-color: transparent !important;
     transition: background-color 0.2s ease !important;
   }
 
-  &:is(:hover, [focused="true"]) > .urlbar-background {
+  &[focused="true"] > .urlbar-background {
     background-color: color-mix(in srgb, currentColor 7%, transparent) !important;
+  }
+
+  & .urlbar-input {
+    opacity: 0.7 !important;
+    transition: opacity 0.2s ease !important;
+  }
+
+  &:is(:hover, [focused="true"]) .urlbar-input {
+    opacity: 1 !important;
   }
 
   & :is(#zen-site-data-icon-button, #zen-copy-url-button) {
