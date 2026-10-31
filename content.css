@@ -272,6 +272,8 @@
     box-sizing: border-box !important;
     width: 16px !important;
     height: 16px !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
     border: 1px solid var(--zc-line-strong) !important;
     border-radius: 4px !important;
     background: transparent no-repeat center !important;
@@ -281,6 +283,13 @@
 
   :is(input[type="radio"], .radio-check) {
     border-radius: 50% !important;
+  }
+
+  /* Firefox's checkboxes and radios take their box width (and their
+     label's indent) from --input-width, which they inherit from a toggle
+     they're nested under (Firefox Home > Widgets), making them 32px wide */
+  :is(moz-checkbox, moz-radio) {
+    --input-width: 16px !important;
   }
 
   :is(input[type="checkbox"], input[type="radio"], .checkbox-check, .radio-check):hover {
