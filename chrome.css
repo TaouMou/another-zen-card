@@ -653,18 +653,61 @@
   box-shadow: inset 0 0 0 1px var(--zc-line) !important;
 }
 
-/* Accent: like the current page in the settings list, a light accent
-   tint with the title in the accent, no border */
+/* Accent: like the current page in the settings list (Firefox's
+   moz-page-nav-button): 8px corners, 12px padding and gap, an 8% accent
+   tint, title and icon in the accent, no border. Line icons (settings,
+   new tab...) take the accent; site favicons keep their own colors. */
 @media -moz-pref("mod.zencard.tabstyle", "accent") {
-  :root:not([zen-private-window="true"]) .tabbrowser-tab[visuallyselected]:not([zen-essential]) {
-    & > .tab-stack > .tab-background {
-      background: color-mix(in srgb, var(--zc-accent) 12%, transparent) !important;
-      box-shadow: none !important;
+  :root:not([zen-private-window="true"]) {
+    & .tabbrowser-tab:not([zen-essential]) > .tab-stack > .tab-background {
+      border-radius: 8px !important;
+      corner-shape: round !important;
     }
 
-    & .tab-label {
-      color: var(--zc-accent) !important;
-      font-weight: 600 !important;
+    /* Spacing only in the expanded sidebar; collapsed tabs stay centered.
+       The background sits 2px inside the tab, hence 14px. */
+    & #navigator-toolbox[zen-sidebar-expanded="true"] #tabbrowser-tabs {
+      --tab-padding-inline: 14px !important;
+
+      & .tabbrowser-tab:not([zen-essential]) {
+        & > .tab-stack > .tab-content {
+          padding-inline: var(--tab-padding-inline) 10px !important;
+        }
+
+        & :is(.tab-throbber, .tab-icon-pending, .tab-icon-image, .tab-sharing-icon-overlay, .tab-icon-overlay) {
+          margin-inline: 0 12px !important;
+        }
+
+        &[zen-pinned-changed="true"] > .tab-stack > .tab-content > .tab-icon-stack {
+          left: var(--tab-padding-inline) !important;
+        }
+      }
+    }
+
+    & .tabbrowser-tab[visuallyselected]:not([zen-essential]) {
+      & > .tab-stack > .tab-background {
+        background: color-mix(in srgb, var(--zc-accent) 8%, transparent) !important;
+        box-shadow: none !important;
+      }
+
+      & > .tab-stack > .tab-content {
+        color: var(--zc-accent) !important;
+      }
+
+      & .tab-label {
+        color: var(--zc-accent) !important;
+        font-weight: 600 !important;
+      }
+
+      & .tab-icon-image {
+        fill: var(--zc-accent) !important;
+        fill-opacity: 1 !important;
+      }
+
+      & :is(.tab-close-button, .tab-reset-button, .tab-audio-button) {
+        color: var(--zc-muted) !important;
+        fill: var(--zc-muted) !important;
+      }
     }
   }
 }
