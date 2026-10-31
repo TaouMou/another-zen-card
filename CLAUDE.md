@@ -37,6 +37,7 @@ Zen's source (`zen-browser/desktop`) is the reference: check selectors there bef
 - With `layout.css.corner-shape.enabled`, Zen gives every element squircle corners; anything along a card edge needs `corner-shape: round`, and children inside a 1px border need `radius - 1px`.
 - Firefox's own styles aren't in Zen's repo. The installed build is the reference: `C:\Program Files\Zen Browser\browser\omni.ja` is a zip (Windows theme at `chrome/browser/skin/classic/browser/browser.css`, Zen's at `chrome/browser/content/browser/zen-styles/`). Example: window buttons draw their glyph as a font character in `::before`, not as an icon.
 - In the sidebar-only layout, hovering the strip above the page sets `[has-toolbar-hovered]` on `#tabbrowser-tabpanels`, and Zen pulls `.browserContainer` up with a negative `margin-top` (only with `zen.view.hide-window-controls`).
+- Extension popups anchor to the anchor of CustomizableUI's addons area, which Zen's build registers as `zen-site-data-icon-button` (the address bar's site button), not to the `addon-webext-overflowbutton` attribute (that one is only for extensions overflowing the toolbar). `card-tint.uc.js` re-registers the area with `unified-extensions-button` when `zen.theme.hide-unified-extensions-button` is off.
 - `#zen-sidebar-splitter` is absolutely positioned and takes no space; the gap between sidebar and page comes from margins.
 - Moving this folder with the app dropped the `.git` folders; reconnect with `git init`, `git remote add`, `git fetch` and `git reset origin/main` (keeps files).
 
