@@ -456,12 +456,17 @@
   }
 }
 
-/* Library button: Zen's 36-frame animation strip is drawn with
-   context-fill, so force it to the text color like the gear beside it.
-   The hover animation and the download badge keep working. */
+/* Library button: a plain icon in the text color, like the gear beside
+   it. Zen draws it from a 36-frame strip whose glow is hard-coded white
+   in dark mode; holding the strip on its first frame (glow at 0 opacity)
+   leaves only the context-fill shapes. Zen's library.svg is no way out:
+   it runs its own glow fade-out every time it is drawn. The download
+   badge is a separate element and keeps animating. */
 :root:not([zen-private-window="true"]) #zen-library-button .zen-library-sprite::before {
   -moz-context-properties: fill, fill-opacity !important;
   fill: currentColor !important;
+  animation: none !important;
+  transform: none !important;
 }
 
 /* ---- Library pane ----
