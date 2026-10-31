@@ -10,6 +10,7 @@ A solid, glass-free theme for [Zen Browser](https://zen-browser.app).
 - **Six active tab styles**: soft fill with a thin border, outline, accent tint, inverted, text only, accent dot
 - **Ghost tabs**: tabs that aren't loaded yet are faded and grey
 - Optional serif or mono interface font
+- **Settings pages** (about:preferences, about:addons, about:config...) use the same palette. The Custom palette falls back to Warm graphite there
 
 Private windows keep Zen's own look.
 

@@ -1,0 +1,130 @@
+/*
+ * =================================================================
+ *  Another Zen Card - settings pages
+ *
+ *  Gives Zen's settings pages (about:preferences, including Sine's
+ *  page, about:addons, about:config and similar) the theme's palette.
+ *
+ *  Sine loads this as a user sheet into content pages. Sine's settings
+ *  don't reach content pages, so the palette is read with -moz-pref.
+ *  The Custom palette can't pass its colors here and falls back to
+ *  Warm graphite. Only these about: pages are matched, never websites
+ *  or about:blank frames inside them.
+ * =================================================================
+ */
+
+@-moz-document url-prefix("about:preferences"), url-prefix("about:settings"), url-prefix("about:addons"), url-prefix("about:config"), url-prefix("about:support"), url-prefix("about:profiles"), url-prefix("about:downloads"), url-prefix("about:logins"), url-prefix("about:processes") {
+  /* ---- Palettes (same values as chrome.css) ---- */
+  :root {
+    --zc-frame: #1f1e1d;
+    --zc-text: #e8e6dc;
+    --zc-accent: #d97757;
+    --zc-on-accent: #1f1e1d;
+    --zc-scheme: dark;
+  }
+
+  @media -moz-pref("mod.zencard.palette", "ink") {
+    :root {
+      --zc-frame: #141414;
+      --zc-text: #e6e6e6;
+      --zc-accent: #6aa6ff;
+      --zc-on-accent: #141414;
+    }
+  }
+
+  @media -moz-pref("mod.zencard.palette", "slate") {
+    :root {
+      --zc-frame: #14171b;
+      --zc-text: #e3e7ec;
+      --zc-accent: #5fd4a4;
+      --zc-on-accent: #14171b;
+    }
+  }
+
+  @media -moz-pref("mod.zencard.palette", "paper") {
+    :root {
+      --zc-frame: #e9e7df;
+      --zc-text: #1f1e1d;
+      --zc-accent: #c96442;
+      --zc-on-accent: #ffffff;
+      --zc-scheme: light;
+    }
+  }
+
+  :root {
+    --zc-page: color-mix(in srgb, var(--zc-text) 4%, var(--zc-frame));
+    --zc-surface: color-mix(in srgb, var(--zc-text) 8%, var(--zc-frame));
+    --zc-raised: color-mix(in srgb, var(--zc-text) 12%, var(--zc-frame));
+    --zc-line: color-mix(in srgb, var(--zc-text) 13%, var(--zc-frame));
+    --zc-muted: color-mix(in srgb, var(--zc-text) 62%, var(--zc-frame));
+  }
+
+  @media -moz-pref("mod.zencard.palette", "paper") {
+    :root {
+      --zc-page: color-mix(in srgb, white 60%, var(--zc-frame));
+      --zc-surface: color-mix(in srgb, white 45%, var(--zc-frame));
+      --zc-raised: color-mix(in srgb, white 70%, var(--zc-frame));
+    }
+  }
+
+  /* ---- Feed the palette into Zen's and Firefox's page variables ---- */
+  :root {
+    color-scheme: var(--zc-scheme) !important;
+
+    /* Zen (zen-theme.css is imported into these pages) */
+    --zen-primary-color: var(--zc-accent) !important;
+    --zen-branding-bg: var(--zc-frame) !important;
+    --zen-branding-bg-reverse: var(--zc-text) !important;
+    --zen-colors-primary: var(--zc-surface) !important;
+    --zen-colors-secondary: var(--zc-raised) !important;
+    --zen-colors-tertiary: var(--zc-page) !important;
+    --zen-colors-border: var(--zc-line) !important;
+    --zen-colors-border-contrast: var(--zc-line) !important;
+    --zen-colors-input-bg: var(--zc-surface) !important;
+    --zen-colors-hover-bg: var(--zc-raised) !important;
+    --zen-colors-primary-foreground: var(--zc-text) !important;
+    --zen-dialog-background: var(--zc-page) !important;
+
+    /* Older in-content variables */
+    --in-content-page-background: var(--zc-page) !important;
+    --in-content-page-color: var(--zc-text) !important;
+    --in-content-text-color: var(--zc-text) !important;
+    --in-content-deemphasized-text: var(--zc-muted) !important;
+    --in-content-box-background: var(--zc-surface) !important;
+    --in-content-box-border-color: var(--zc-line) !important;
+    --in-content-border-color: var(--zc-line) !important;
+    --in-content-button-background: var(--zc-surface) !important;
+    --in-content-button-background-hover: var(--zc-raised) !important;
+    --in-content-button-text-color: var(--zc-text) !important;
+    --in-content-primary-button-background: var(--zc-accent) !important;
+    --in-content-primary-button-background-hover: color-mix(in srgb, var(--zc-accent) 85%, var(--zc-text)) !important;
+    --in-content-primary-button-text-color: var(--zc-on-accent) !important;
+
+    /* Firefox design tokens */
+    --background-color-canvas: var(--zc-page) !important;
+    --background-color-box: var(--zc-surface) !important;
+    --text-color: var(--zc-text) !important;
+    --text-color-deemphasized: var(--zc-muted) !important;
+    --border-color: var(--zc-line) !important;
+    --border-color-interactive: color-mix(in srgb, var(--zc-text) 30%, var(--zc-frame)) !important;
+    --color-accent-primary: var(--zc-accent) !important;
+    --color-accent-primary-hover: color-mix(in srgb, var(--zc-accent) 85%, var(--zc-text)) !important;
+    --color-accent-primary-active: color-mix(in srgb, var(--zc-accent) 70%, var(--zc-text)) !important;
+    --button-background-color: var(--zc-surface) !important;
+    --button-background-color-hover: var(--zc-raised) !important;
+    --button-text-color-primary: var(--zc-on-accent) !important;
+    --link-color: var(--zc-accent) !important;
+    --focus-outline-color: var(--zc-accent) !important;
+    --table-row-background-color: var(--zc-page) !important;
+    --table-row-background-color-alternate: var(--zc-surface) !important;
+
+    background-color: var(--zc-page) !important;
+    color: var(--zc-text) !important;
+  }
+
+  /* The settings category list sits on the frame color, like the
+     browser's sidebar beside the page */
+  .navigation {
+    background: var(--zc-frame) !important;
+  }
+}

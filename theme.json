@@ -12,7 +12,8 @@
     }
   },
   "style": {
-    "chrome": "chrome.css"
+    "chrome": "chrome.css",
+    "content": "content.css"
   },
   "readme": "README.md",
   "preferences": "preferences.json",
