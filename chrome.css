@@ -350,7 +350,9 @@
    dots: two muted ones and an accent one for close, no glyphs. Each keeps
    a full-height click area wider than the dot, and maximize still opens
    Windows 11's snap layouts on hover. The muted dots follow currentColor,
-   so they also follow the site-colored strip. */
+   so they also follow the site-colored strip.
+   Firefox draws each glyph as a Segoe Fluent Icons character in ::before
+   (its icon image is hidden), so the dot replaces that character. */
 @media not (-moz-platform: macos) {
   :root:not([zen-private-window="true"]) {
     & .titlebar-buttonbox {
@@ -358,8 +360,6 @@
     }
 
     & .titlebar-button {
-      appearance: none !important;
-      list-style-image: none !important;
       width: 22px !important;
       min-width: 0 !important;
       padding: 0 !important;
@@ -367,7 +367,8 @@
       justify-content: center !important;
       background: transparent !important;
 
-      & > .toolbarbutton-icon {
+      &::before {
+        content: "" !important;
         width: 12px !important;
         height: 12px !important;
         border-radius: 50% !important;
@@ -376,16 +377,16 @@
         transition: background-color 0.2s ease !important;
       }
 
-      &:hover > .toolbarbutton-icon {
+      &:hover::before {
         background-color: color-mix(in srgb, currentColor 50%, transparent) !important;
       }
     }
 
-    & .titlebar-close > .toolbarbutton-icon {
+    & .titlebar-close::before {
       background-color: var(--zc-accent) !important;
     }
 
-    & .titlebar-close:hover > .toolbarbutton-icon {
+    & .titlebar-close:hover::before {
       background-color: color-mix(in srgb, var(--zc-accent) 75%, var(--zc-text)) !important;
     }
   }
@@ -402,6 +403,12 @@
   & #zen-appcontent-navbar-container {
     min-height: 0 !important;
   }
+}
+
+/* Zen pulls the page up while that strip is hovered, to make room for it
+   to slide open. It no longer opens, so the page would just jump. */
+:root[zc-window-dots-in-sidebar]:not([zen-has-bookmarks]):not([zen-private-window="true"]) #tabbrowser-tabpanels[has-toolbar-hovered] .browserContainer {
+  margin-top: 0 !important;
 }
 
 /* ---- Site-colored toolbar ----
