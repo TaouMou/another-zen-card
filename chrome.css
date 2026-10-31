@@ -165,10 +165,11 @@
     margin-inline-end: 0 !important;
   }
 
+  /* Sits inside the card's 1px border, so its corners are 1px tighter */
   & #zen-appcontent-navbar-wrapper {
     background: var(--zc-page) !important;
     border-bottom: 1px solid var(--zc-line) !important;
-    border-radius: var(--zc-radius) var(--zc-radius) 0 0 !important;
+    border-radius: calc(var(--zc-radius) - 1px) calc(var(--zc-radius) - 1px) 0 0 !important;
   }
 
   & #zen-tabbox-wrapper {
@@ -180,6 +181,13 @@
     corner-shape: round !important;
     border-radius: 0 0 calc(var(--zc-radius) - 1px) calc(var(--zc-radius) - 1px) !important;
   }
+}
+
+/* With layout.css.corner-shape.enabled, Zen gives every element squircle
+   corners. The cards use plain round corners, so everything along their
+   edges must too, or its corners poke past the card's border. */
+:root:not([zen-private-window="true"]) :is(#navigator-toolbox, #zen-appcontent-wrapper, #zen-appcontent-navbar-wrapper, #zen-tabbox-wrapper, #tabbrowser-tabbox, #tabbrowser-tabpanels, .browserSidebarContainer, .browserContainer, .browserStack, browser[type="content"]) {
+  corner-shape: round !important;
 }
 
 /* Sidebar-only layout: the page alone becomes the outlined card */
