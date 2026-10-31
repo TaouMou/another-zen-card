@@ -309,6 +309,75 @@
   }
 }
 
+/* Floating address bar (the big one Zen opens in the middle of the
+   window): a Spotlight-style card. A larger field with an accent caret
+   instead of an accent outline, results at normal weight with muted
+   addresses and group labels, and the selected result in a light accent
+   tint with an accent icon (Zen fills it with the accent and white text). */
+:root:not([zen-private-window="true"]) #urlbar[open][zen-floating-urlbar="true"] {
+  --urlbar-container-height: 64px !important;
+
+  & > .urlbar-background {
+    background-color: var(--zc-page) !important;
+    outline: 1px solid var(--zc-line) !important;
+    outline-offset: -1px !important;
+    box-shadow: 0 24px 80px -24px rgb(0 0 0 / 0.55) !important;
+  }
+
+  & .urlbar-input-box {
+    font-weight: 400 !important;
+  }
+
+  & .urlbar-input {
+    font-size: 18px !important;
+    caret-color: var(--zc-accent) !important;
+  }
+
+  & .urlbarView-row {
+    border-radius: 8px !important;
+    corner-shape: round !important;
+    color: var(--zc-text) !important;
+
+    &:hover,
+    &:hover .urlbarView-favicon {
+      background-color: color-mix(in srgb, var(--zc-text) 5%, transparent) !important;
+    }
+
+    &[label]::before {
+      color: var(--zc-muted) !important;
+      font-size: 11px !important;
+      font-weight: 400 !important;
+    }
+
+    &[selected] {
+      background-color: color-mix(in srgb, var(--zc-accent) 16%, transparent) !important;
+
+      & *,
+      & .urlbarView-title-separator::before {
+        color: var(--zc-text) !important;
+      }
+
+      & .urlbarView-favicon {
+        fill: var(--zc-accent) !important;
+        stroke: var(--zc-accent) !important;
+        background-color: color-mix(in srgb, var(--zc-accent) 22%, transparent) !important;
+      }
+    }
+  }
+
+  & .urlbarView-title {
+    font-weight: 400 !important;
+  }
+
+  & .urlbarView-url,
+  & .urlbarView-title-separator::before,
+  & .urlbarView-row[selected] .urlbarView-url,
+  & .urlbarView-row[selected] .urlbarView-title-separator::before {
+    color: var(--zc-muted) !important;
+    font-weight: 400 !important;
+  }
+}
+
 /* ---- Toolbar buttons ----
    Back, forward, reload and the other toolbar buttons are bare icons,
    in every layout: no box on hover, the icon dims at rest and brightens
