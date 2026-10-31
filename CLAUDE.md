@@ -46,4 +46,5 @@ Zen's source (`zen-browser/desktop`) is the reference: check selectors there bef
 - Commit locally and **push only when the user says so**; they batch several changes into one Sine update.
 - Show mockups before building anything visual.
 - Private windows keep Zen's own look.
+- The user wants **one unified set of components across Zen** (buttons, fields, dropdowns, checkboxes, toggles, boxes, dialogs, menus, panels), not per-screen fixes. Extend the "Components" sections (Firefox design tokens such as `--button-*`, `--input-*`, `--select-*`, `--checkbox-*`, `--toggle-*`, `--box-*`, `--card-*`) in both `chrome.css` and `content.css` first, and only add element rules for what ignores the tokens. Corners are plain round everywhere (`corner-shape: round`).
 - Related mod: `TaouMou/another-zen-load-bar` (loading bar; its default color follows `--zen-primary-color`, which this theme sets to the accent).
