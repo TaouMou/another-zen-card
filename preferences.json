@@ -68,6 +68,18 @@
     ]
   },
   {
+    "property": "mod.zencard.urlbar",
+    "label": "Address bar style",
+    "type": "dropdown",
+    "value": "string",
+    "defaultValue": "centered",
+    "placeholder": false,
+    "options": [
+      { "label": "Centered compact (domain only)", "value": "centered" },
+      { "label": "Full width (Zen's default)", "value": "full" }
+    ]
+  },
+  {
     "property": "mod.zencard.nositetint",
     "label": "Keep the toolbar in the theme color instead of the site's color",
     "type": "checkbox",

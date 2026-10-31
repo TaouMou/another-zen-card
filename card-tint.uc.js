@@ -1,6 +1,7 @@
 // ==UserScript==
 // @name           Another Zen Card: site-colored toolbar
-// @description    Colors the card's toolbar with the color along the top edge of the page.
+// @description    Colors the card's toolbar with the color along the top edge of the page,
+//                 and shows only the domain in the centered address bar.
 // @include        main
 // ==/UserScript==
 
@@ -169,16 +170,63 @@
     },
   };
 
+  // ---- Domain-only address bar ----
+  // Zen shows only the domain in the sidebar layout by trimming through
+  // gURLBar._zenTrimURL. Wrap it to do the same for the centered address
+  // bar in the top toolbar. Like Zen, only https addresses are shortened,
+  // and the full address comes back while you edit it.
+  const PREF_URLBAR = "mod.zencard.urlbar";
+  let originalTrim = null;
+
+  const domainOnly = () =>
+    Services.prefs.getStringPref(PREF_URLBAR, "centered") !== "full" &&
+    root.getAttribute("zen-single-toolbar") !== "true";
+
+  function trimToDomain(url) {
+    if (!domainOnly() || gURLBar.hasAttribute("breakout-extend")) {
+      return originalTrim(url);
+    }
+    try {
+      const uri = Services.io.newURI(url);
+      if (uri.scheme !== "https" || !uri.host) {
+        return originalTrim(url);
+      }
+      return uri.host.replace(/^www\./, "");
+    } catch {
+      return originalTrim(url);
+    }
+  }
+
+  function refreshUrlbar() {
+    try {
+      gURLBar.setURI();
+    } catch {}
+  }
+
+  const urlbarPrefObserver = { observe: refreshUrlbar };
+
   function init() {
     gBrowser.addTabsProgressListener(progressListener);
     gBrowser.tabContainer.addEventListener("TabSelect", onTabSelect);
     Services.prefs.addObserver(PREF_OFF, prefObserver);
+
+    if (typeof gURLBar._zenTrimURL === "function") {
+      originalTrim = gURLBar._zenTrimURL;
+      gURLBar._zenTrimURL = trimToDomain;
+      Services.prefs.addObserver(PREF_URLBAR, urlbarPrefObserver);
+      refreshUrlbar();
+    }
+
     window.addEventListener(
       "unload",
       () => {
         gBrowser.removeTabsProgressListener(progressListener);
         gBrowser.tabContainer.removeEventListener("TabSelect", onTabSelect);
         Services.prefs.removeObserver(PREF_OFF, prefObserver);
+        if (originalTrim) {
+          gURLBar._zenTrimURL = originalTrim;
+          Services.prefs.removeObserver(PREF_URLBAR, urlbarPrefObserver);
+        }
       },
       { once: true }
     );

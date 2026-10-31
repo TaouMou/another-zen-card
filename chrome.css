@@ -206,6 +206,26 @@
   }
 }
 
+/* Centered compact address bar (the default; "Full width" turns it off).
+   A shorter box in the middle of the toolbar with the text centered.
+   card-tint.uc.js also trims the text to just the domain. The floating
+   bar that opens when you type is positioned by Zen on its own, so it
+   keeps its full width. */
+:root:not([zen-single-toolbar="true"]):not([zen-private-window="true"]):not(:has(.sine-theme-strings[mod-zencard-urlbar="full"])) {
+  & #urlbar-container {
+    max-width: min(560px, 48%) !important;
+    margin-inline: auto !important;
+  }
+
+  & #urlbar:not([breakout-extend]) .urlbar-input {
+    text-align: center !important;
+  }
+
+  & #urlbar:not([breakout-extend]):not(:hover) #zen-site-data-icon-button {
+    opacity: 0 !important;
+  }
+}
+
 /* ---- Site-colored toolbar ----
    card-tint.uc.js sets --zc-site, --zc-site-text and [zc-site-tint]
    on :root. The toolbar then takes the color of the top of the page
