@@ -35,6 +35,8 @@ Zen's source (`zen-browser/desktop`) is the reference: check selectors there bef
 - Firefox paints `#nav-bar` with `--toolbar-bgcolor`, which covered the strip; it is made transparent while tinted.
 - Variables like `--toolbar-field-color` resolve on `:root`, so they must be redeclared on the strip to follow the site text color.
 - With `layout.css.corner-shape.enabled`, Zen gives every element squircle corners; anything along a card edge needs `corner-shape: round`, and children inside a 1px border need `radius - 1px`.
+- Firefox's own styles aren't in Zen's repo. The installed build is the reference: `C:\Program Files\Zen Browser\browser\omni.ja` is a zip (Windows theme at `chrome/browser/skin/classic/browser/browser.css`, Zen's at `chrome/browser/content/browser/zen-styles/`). Example: window buttons draw their glyph as a font character in `::before`, not as an icon.
+- In the sidebar-only layout, hovering the strip above the page sets `[has-toolbar-hovered]` on `#tabbrowser-tabpanels`, and Zen pulls `.browserContainer` up with a negative `margin-top` (only with `zen.view.hide-window-controls`).
 - `#zen-sidebar-splitter` is absolutely positioned and takes no space; the gap between sidebar and page comes from margins.
 - Moving this folder with the app dropped the `.git` folders; reconnect with `git init`, `git remote add`, `git fetch` and `git reset origin/main` (keeps files).
 
