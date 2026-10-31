@@ -542,8 +542,11 @@
     }
   }
 
+  /* The chosen value is drawn inside the dropdown's shadow DOM, so it
+     needs ::part to drop the bold */
   menulist,
   menulist *,
+  menulist::part(label),
   select {
     font-weight: 400 !important;
   }
