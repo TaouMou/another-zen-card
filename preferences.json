@@ -52,8 +52,24 @@
     ]
   },
   {
-    "property": "mod.zencard.noactiveline",
-    "label": "Hide the accent line on the active tab",
+    "property": "mod.zencard.tabstyle",
+    "label": "Active tab style",
+    "type": "dropdown",
+    "value": "string",
+    "defaultValue": "fill",
+    "placeholder": false,
+    "options": [
+      { "label": "Soft fill", "value": "fill" },
+      { "label": "Outline", "value": "outline" },
+      { "label": "Accent tint", "value": "tint" },
+      { "label": "Inverted", "value": "inverted" },
+      { "label": "Text only", "value": "text" },
+      { "label": "Accent dot", "value": "dot" }
+    ]
+  },
+  {
+    "property": "mod.zencard.nositetint",
+    "label": "Keep the toolbar in the theme color instead of the site's color",
     "type": "checkbox",
     "defaultValue": false
   },

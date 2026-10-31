@@ -3,11 +3,19 @@
   "name": "Another Zen Card",
   "description": "A solid, glass-free theme: fixed palettes instead of the workspace gradient, the page and toolbar as one outlined card, and the accent kept for a few small touches.",
   "homepage": "https://github.com/TaouMou/another-zen-card",
-  "style": {
-    "chrome": "https://raw.githubusercontent.com/TaouMou/another-zen-card/main/chrome.css"
+  "js": true,
+  "scripts": {
+    "card-tint.uc.js": {
+      "name": "Site-colored toolbar",
+      "description": "Colors the card's toolbar with the color along the top of the page.",
+      "include": ["chrome://browser/content/browser.xhtml"]
+    }
   },
-  "readme": "https://raw.githubusercontent.com/TaouMou/another-zen-card/main/README.md",
-  "preferences": "https://raw.githubusercontent.com/TaouMou/another-zen-card/main/preferences.json",
+  "style": {
+    "chrome": "chrome.css"
+  },
+  "readme": "README.md",
+  "preferences": "preferences.json",
   "author": "TaouMou",
   "version": "0.1.0",
   "tags": ["Theme"],

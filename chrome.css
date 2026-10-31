@@ -65,6 +65,7 @@
   --zc-surface: color-mix(in srgb, var(--zc-text) 8%, var(--zc-frame));
   --zc-raised: color-mix(in srgb, var(--zc-text) 12%, var(--zc-frame));
   --zc-line: color-mix(in srgb, var(--zc-text) 13%, var(--zc-frame));
+  --zc-muted: color-mix(in srgb, var(--zc-text) 55%, var(--zc-frame));
 }
 
 /* On light palettes the page and surfaces step towards white instead */
@@ -205,6 +206,35 @@
   }
 }
 
+/* ---- Site-colored toolbar ----
+   card-tint.uc.js sets --zc-site, --zc-site-text and [zc-site-tint]
+   on :root. The toolbar then takes the color of the top of the page
+   and drops its divider, so it flows into the site's header. The
+   field variables are redeclared here because the :root ones resolve
+   against the theme text color. */
+:root[zc-site-tint]:not([zen-single-toolbar="true"]):not([zen-compact-mode="true"]):not([zen-private-window="true"]) #zen-appcontent-navbar-wrapper {
+  background: var(--zc-site) !important;
+  border-bottom-color: transparent !important;
+  color: var(--zc-site-text) !important;
+  --toolbox-textcolor: var(--zc-site-text) !important;
+  --toolbar-field-color: var(--zc-site-text) !important;
+  --zen-toolbar-element-bg: color-mix(in srgb, var(--zc-site-text) 10%, var(--zc-site)) !important;
+  --zen-toolbar-element-bg-hover: color-mix(in srgb, var(--zc-site-text) 16%, var(--zc-site)) !important;
+  transition: background-color 0.25s ease !important;
+
+  & #urlbar[breakout-extend] .urlbar-background {
+    background-color: color-mix(in srgb, var(--zc-site-text) 4%, var(--zc-site)) !important;
+  }
+}
+
+:root[zc-site-tint="dark"]:not([zen-private-window="true"]) #zen-appcontent-navbar-wrapper {
+  color-scheme: dark !important;
+}
+
+:root[zc-site-tint="light"]:not([zen-private-window="true"]) #zen-appcontent-navbar-wrapper {
+  color-scheme: light !important;
+}
+
 /* ---- Tabs ---- */
 :root:not([zen-private-window="true"]) {
   & zen-workspace {
@@ -223,14 +253,70 @@
   }
 }
 
-/* Active tab line: an accent edge on the selected tab */
-@media not -moz-pref("mod.zencard.noactiveline") {
-  :root:not([zen-private-window="true"]) .tabbrowser-tab[visuallyselected]:not([zen-essential]) > .tab-stack > .tab-background {
-    box-shadow: inset 3px 0 0 var(--zc-accent) !important;
+/* ---- Active tab style ----
+   "Soft fill" (the default) is the selected-tab color set above plus
+   the same thin border as the card; the other styles build on or
+   replace it. */
+:root:not([zen-private-window="true"]) .tabbrowser-tab[visuallyselected]:not([zen-essential]) > .tab-stack > .tab-background {
+  box-shadow: inset 0 0 0 1px var(--zc-line) !important;
+}
+
+:root:not([zen-private-window="true"]):has(.sine-theme-strings[mod-zencard-tabstyle="outline"]) .tabbrowser-tab[visuallyselected]:not([zen-essential]) > .tab-stack > .tab-background {
+  background: transparent !important;
+}
+
+:root:not([zen-private-window="true"]):has(.sine-theme-strings[mod-zencard-tabstyle="tint"]) .tabbrowser-tab[visuallyselected]:not([zen-essential]) > .tab-stack > .tab-background {
+  background: color-mix(in srgb, var(--zc-accent) 18%, var(--zc-frame)) !important;
+  box-shadow: none !important;
+}
+
+:root:not([zen-private-window="true"]):has(.sine-theme-strings[mod-zencard-tabstyle="inverted"]) .tabbrowser-tab[visuallyselected]:not([zen-essential]) {
+  & > .tab-stack > .tab-background {
+    background: var(--zc-text) !important;
+    box-shadow: none !important;
   }
 
-  :root[zen-right-side="true"]:not([zen-private-window="true"]) .tabbrowser-tab[visuallyselected]:not([zen-essential]) > .tab-stack > .tab-background {
-    box-shadow: inset -3px 0 0 var(--zc-accent) !important;
+  & .tab-content {
+    color: var(--zc-frame) !important;
+  }
+}
+
+:root:not([zen-private-window="true"]):has(.sine-theme-strings[mod-zencard-tabstyle="text"]) {
+  & .tabbrowser-tab[visuallyselected]:not([zen-essential]) {
+    & > .tab-stack > .tab-background {
+      background: transparent !important;
+      box-shadow: none !important;
+    }
+
+    & .tab-label {
+      font-weight: 600 !important;
+    }
+  }
+
+  & .tabbrowser-tab:not([visuallyselected]):not([zen-essential]) .tab-label {
+    color: var(--zc-muted) !important;
+  }
+}
+
+:root:not([zen-private-window="true"]):has(.sine-theme-strings[mod-zencard-tabstyle="dot"]) .tabbrowser-tab[visuallyselected]:not([zen-essential]) {
+  & > .tab-stack > .tab-background {
+    position: relative !important;
+  }
+
+  & > .tab-stack > .tab-background::after {
+    content: "" !important;
+    position: absolute !important;
+    inset-inline-end: 12px !important;
+    top: calc(50% - 3px) !important;
+    width: 6px !important;
+    height: 6px !important;
+    border-radius: 50% !important;
+    background: var(--zc-accent) !important;
+  }
+
+  /* The close button takes that spot on hover */
+  &:hover > .tab-stack > .tab-background::after {
+    opacity: 0 !important;
   }
 }
 
