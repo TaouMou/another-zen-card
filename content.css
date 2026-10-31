@@ -19,6 +19,15 @@
  * =================================================================
  */
 
+/* The settings dialogs' fade-out (see .dialogBox below). It moves with
+   `translate` so it adds to any `transform` the box already has. */
+@keyframes zc-dialog-out {
+  to {
+    opacity: 0;
+    translate: 0 -6px;
+  }
+}
+
 @-moz-document url-prefix("about:preferences"), url-prefix("about:settings"), url-prefix("about:addons"), url-prefix("about:config"), url-prefix("about:support"), url-prefix("about:profiles"), url-prefix("about:downloads"), url-prefix("about:logins"), url-prefix("about:processes"), url-prefix("chrome://browser/content/preferences/"), url-prefix("chrome://browser/content/migration/"), url-prefix("chrome://browser/content/sanitize"), url-prefix("chrome://pippki/content/"), url-prefix("chrome://global/content/commonDialog") {
   /* ---- Palettes (same values and light/dark rule as chrome.css) ---- */
   :root {
@@ -697,12 +706,13 @@
     box-shadow: 0 24px 60px -24px rgb(0 0 0 / 0.55) !important;
     overflow: clip !important;
 
-    /* Zen fades the box out over 0.2s, easing in, so it lingers before it
-       goes; a short ease-out instead. It stays an animation because the
-       dialog closes when it ends. */
+    /* Zen marks the box [zen-closing] and closes the dialog when its
+       fade-out ends, or after 0.4s. The fade only exists in the browser
+       window, so in settings the dialog sat still for 0.4s and then
+       vanished; it gets its own short fade here. */
     &[zen-closing] {
-      animation-duration: 0.12s !important;
-      animation-timing-function: ease-out !important;
+      animation: zc-dialog-out 0.12s ease-out forwards !important;
+      pointer-events: none !important;
     }
   }
 
