@@ -561,7 +561,11 @@
    selected tab's fill and border. Zen's icon animations and press
    effect stay; hover and selection fade like the rest of the theme. */
 :root:not([zen-private-window="true"]) {
+  /* Zen gives the rail height: 100%, which pushes its bottom margin and
+     corners out of the window; letting the flex row stretch it keeps
+     them inside. */
   & zen-library #zen-library-side {
+    height: auto !important;
     margin: var(--zen-element-separation) !important;
     margin-inline-end: 0 !important;
     background: var(--zc-page) !important;
