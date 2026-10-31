@@ -296,6 +296,117 @@
     }
   }
 
+  /* Readme dialogs (opened from a marketplace card) reuse the same
+     dialog and need more room for their text */
+  dialog.sineItemPreferenceDialog:has(.markdown-body) {
+    width: min(860px, 92vw) !important;
+  }
+
+  /* ---- Sine's mods page ----
+     Marketplace and installed mods become outlined cards like the
+     sidebar, with normal-weight titles. Install is the one filled
+     accent button; other buttons are soft with a thin border, icon
+     buttons are bare and brighten on hover, and the text boxes are
+     inset fields. */
+  :is(#sineInstallationGroup, #sineInstalledGroup) {
+    /* The dialogs inside these groups have their own styles above */
+    & :where(button):not(dialog *) {
+      appearance: none !important;
+      min-height: 30px !important;
+      height: auto !important;
+      padding: 0 12px !important;
+      border: none !important;
+      border-radius: 8px !important;
+      corner-shape: round !important;
+      background-color: var(--zc-surface) !important;
+      color: var(--zc-text) !important;
+      box-shadow: inset 0 0 0 1px var(--zc-line) !important;
+      font-weight: 400 !important;
+      transition: background-color 0.2s ease, opacity 0.2s ease !important;
+
+      &:hover {
+        background-color: var(--zc-raised) !important;
+      }
+    }
+
+    & :is(.sineMarketplaceOpenButton, .sineItemConfigureButton, .sineItemHomepageButton, .github-link, #sineMarketplaceRefreshButton, .auto-update-toggle:not([enabled])) {
+      width: 30px !important;
+      min-width: 0 !important;
+      height: 30px !important;
+      min-height: 0 !important;
+      padding: 0 !important;
+      background-color: transparent !important;
+      box-shadow: none !important;
+      opacity: 0.65 !important;
+
+      &:hover {
+        background-color: var(--zc-surface) !important;
+        opacity: 1 !important;
+      }
+    }
+
+    & .auto-update-toggle[enabled] {
+      background-color: var(--zc-accent) !important;
+      color: var(--zc-on-accent) !important;
+      box-shadow: none !important;
+    }
+
+    & .sineMarketplaceItemButton {
+      flex: 1 !important;
+      background-color: var(--zc-accent) !important;
+      color: var(--zc-on-accent) !important;
+      box-shadow: none !important;
+      font-weight: 500 !important;
+
+      &:hover {
+        background-color: color-mix(in srgb, var(--zc-accent) 85%, var(--zc-text)) !important;
+      }
+    }
+
+    & :is(.sineCKSOption-input, input[type="text"]):not(dialog *) {
+      height: 30px !important;
+      padding: 0 10px !important;
+      border: 1px solid var(--zc-line) !important;
+      border-radius: 8px !important;
+      corner-shape: round !important;
+      background: var(--zc-frame) !important;
+      color: var(--zc-text) !important;
+      box-shadow: none !important;
+      transition: border-color 0.2s ease !important;
+
+      &:hover {
+        border-color: color-mix(in srgb, var(--zc-text) 25%, var(--zc-frame)) !important;
+      }
+
+      &:focus {
+        border-color: color-mix(in srgb, var(--zc-accent) 70%, transparent) !important;
+        outline: none !important;
+      }
+    }
+  }
+
+  :is(.sineInstallationItem, .sineItem) {
+    background-color: var(--zc-page) !important;
+    border: 1px solid var(--zc-line) !important;
+    border-radius: 10px !important;
+    corner-shape: round !important;
+    box-shadow: none !important;
+    transition: border-color 0.2s ease !important;
+
+    &:hover {
+      border-color: color-mix(in srgb, var(--zc-text) 25%, var(--zc-frame)) !important;
+    }
+  }
+
+  :is(.sineMarketplaceItemTitle, .sineItem .sineItemTitle) {
+    font-size: 14px !important;
+    font-weight: 500 !important;
+  }
+
+  :is(.sineMarketplaceItemDescription, .sineItemDescription) {
+    color: var(--zc-muted) !important;
+  }
+
   /* Sine makes the text in its mod list bold (600); keep the dropdowns,
      their lists and the selected value at normal weight */
   .sineItemPreferenceDialog menulist,
@@ -304,9 +415,9 @@
   }
 
   /* Dropdown lists opened from those fields. Firefox fills the current
-     choice with a bright accent block, which hid where the mouse was;
-     the current choice now only takes the accent as its text color, and
-     the hovered item gets the active-tab look. */
+     choice with a bright accent block that stays put, which hid where
+     the mouse was. Now the current choice only takes the accent as its
+     text color, and the accent fill follows the mouse, like Install. */
   menulist > menupopup {
     --panel-background: var(--zc-page) !important;
     --panel-background-color: var(--zc-page) !important;
@@ -328,8 +439,8 @@
       }
 
       &[_moz-menuactive]:not([disabled]) {
-        background-color: var(--zc-surface) !important;
-        box-shadow: inset 0 0 0 1px var(--zc-line) !important;
+        background-color: var(--zc-accent) !important;
+        color: var(--zc-on-accent) !important;
       }
     }
   }
