@@ -977,6 +977,14 @@
   --panel-item-active-bgcolor: var(--zc-raised) !important;
 }
 
+/* Extension popups (uBlock, SponsorBlock...) inherit the panel's corner
+   radius, but Zen gives every element squircle corners while the
+   panel's own frame (inside its shadow DOM) stays round, so the page
+   poked out at the corners. Keep the popup's layers round too. */
+:root:not([zen-private-window="true"]) panel :is(panelmultiview, .panel-viewcontainer, .panel-viewstack, panelview, .webextension-popup-stack, .webextension-popup-browser) {
+  corner-shape: round !important;
+}
+
 /* Site panel (the button in the address bar): share, screenshot, boost
    and bookmark become bare icons that brighten on hover, like the
    toolbar buttons, above a divider. Section titles are small and muted.
