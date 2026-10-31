@@ -153,6 +153,12 @@
      plain <hr> with its own margins and inset border. Zen's matches
      Firefox's: a 1px line with 24px on each side (20px plus the list's
      4px gap). */
+  /* The current page's soft accent border, like the main buttons (the
+     button inside moz-page-nav-button; there's no token for it) */
+  button[selected][aria-selected="true"] {
+    box-shadow: inset 0 0 0 1px var(--zc-tint-line) !important;
+  }
+
   #categories > .nav-separator {
     height: 1px !important;
     margin: 20px 0 !important;
@@ -279,8 +285,11 @@
     --message-bar-icon-background-color-critical: transparent !important;
     --message-bar-icon-background-color-success: transparent !important;
 
-    /* Settings list: the current page keeps its accent text and tint,
-       without the accent line along its left edge */
+    /* Settings list: the current page in the main buttons' accent tint
+       and text (its border is set below), without the accent line along
+       its left edge */
+    --page-nav-button-background-color-selected: var(--zc-tint) !important;
+    --page-nav-button-text-color-selected: var(--zc-tint-text) !important;
     --page-nav-button-indicator-width: 0px !important;
     --page-nav-button-indicator-background-color: transparent !important;
     /* no line between the list and the page; dividers in the line color */

@@ -687,9 +687,10 @@
 }
 
 /* Accent: like the current page in the settings list (Firefox's
-   moz-page-nav-button): 8px corners, 12px padding and gap, an 8% accent
-   tint, title and icon in the accent, no border. Line icons (settings,
-   new tab...) take the accent; site favicons keep their own colors. */
+   moz-page-nav-button): 8px corners, 12px padding and gap, and the main
+   buttons' look: a light accent tint, a soft accent border, title and
+   icon in the accent. Line icons (settings, new tab...) take the accent;
+   site favicons keep their own colors. */
 @media -moz-pref("mod.zencard.tabstyle", "accent") {
   :root:not([zen-private-window="true"]) {
     & .tabbrowser-tab:not([zen-essential]) > .tab-stack > .tab-background {
@@ -719,21 +720,21 @@
 
     & .tabbrowser-tab[visuallyselected]:not([zen-essential]) {
       & > .tab-stack > .tab-background {
-        background: color-mix(in srgb, var(--zc-accent) 8%, transparent) !important;
-        box-shadow: none !important;
+        background: var(--zc-tint) !important;
+        box-shadow: inset 0 0 0 1px var(--zc-tint-line) !important;
       }
 
       & > .tab-stack > .tab-content {
-        color: var(--zc-accent) !important;
+        color: var(--zc-tint-text) !important;
       }
 
       & .tab-label {
-        color: var(--zc-accent) !important;
+        color: var(--zc-tint-text) !important;
         font-weight: 600 !important;
       }
 
       & .tab-icon-image {
-        fill: var(--zc-accent) !important;
+        fill: var(--zc-tint-text) !important;
         fill-opacity: 1 !important;
       }
 
