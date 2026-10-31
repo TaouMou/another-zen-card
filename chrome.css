@@ -206,6 +206,7 @@
   --toggle-background-color-pressed-hover: color-mix(in srgb, var(--zc-accent) 26%, transparent) !important;
   --toggle-background-color-pressed-active: color-mix(in srgb, var(--zc-accent) 32%, transparent) !important;
   --toggle-dot-background-color-on-pressed: var(--zc-accent) !important;
+  --zc-toggle-border: var(--zc-accent);
 
   /* Message bars (info, warning, error, success): a light tint with a
      soft border in the bar's color, like the main buttons. Info uses the
@@ -230,9 +231,14 @@
   --message-bar-icon-background-color-success: transparent !important;
 }
 
-/* The toggle sets its own border when on; give it the accent outline */
-:root:not([zen-private-window="true"]) moz-toggle[pressed]::part(button) {
-  border-color: var(--zc-accent) !important;
+/* The toggle sets its own border when on; give it the accent outline.
+   ::part() rules from this sheet never apply, but its rules do match
+   inside components' shadow trees, so the button is matched directly
+   (no :root condition: selectors can't see past the shadow root).
+   --zc-toggle-border is only set outside private windows, which keep
+   Zen's look. */
+.toggle-button[aria-pressed="true"] {
+  border-color: var(--zc-toggle-border, transparent) !important;
 }
 
 /* Zen gives every element squircle corners, while the theme's cards and
@@ -1134,13 +1140,6 @@
   --panel-separator-color: var(--zc-line) !important;
   --menuitem-icon-fill: color-mix(in srgb, currentColor 55%, transparent) !important;
 
-  /* The sidebar's corners. Zen's mica rule sets the frame's radius to 0
-     directly, so the variable alone doesn't reach it. */
-  &::part(content) {
-    border-radius: var(--panel-border-radius) !important;
-    corner-shape: round !important;
-  }
-
   & > :is(menuitem, menu) {
     border-radius: 6px !important;
     corner-shape: round !important;
@@ -1208,10 +1207,18 @@
   --panel-background-color: var(--zc-page) !important;
   --panel-border-color: var(--zc-line) !important;
   --panel-border-radius: var(--zc-radius) !important;
+}
 
-  &::part(content) {
-    border-radius: var(--panel-border-radius) !important;
-  }
+/* The frame of menus and panels (their "content" part) takes the
+   sidebar's corners. Zen's mica rule sets its radius to 0 directly, and
+   ::part() rules from this sheet never apply, so the frame inside each
+   popup's shadow tree is matched directly: the menu's scroll box and the
+   panel's only slot. No :root condition (selectors can't see past the
+   shadow root); in private windows --panel-border-radius is Zen's. */
+.menupopup-arrowscrollbox,
+slot[part="content"]:only-child {
+  border-radius: var(--panel-border-radius) !important;
+  corner-shape: round !important;
 }
 
 /* Extension popups (uBlock, SponsorBlock...): the page inside didn't
@@ -1221,10 +1228,6 @@
    it sits inside the frame's 1px border. Make the frame and every layer
    inside it round, and the page 1px tighter than the frame. */
 :root:not([zen-private-window="true"]) panel {
-  &::part(content) {
-    corner-shape: round !important;
-  }
-
   & :is(panelmultiview, .panel-viewcontainer, .panel-viewstack, panelview) {
     corner-shape: round !important;
   }

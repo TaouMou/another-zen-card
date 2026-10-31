@@ -369,7 +369,9 @@
     outline-offset: 1px !important;
   }
 
-  moz-toggle[pressed]::part(button) {
+  /* ::part() rules from this sheet never apply; it matches inside the
+     toggle's shadow tree instead */
+  .toggle-button[aria-pressed="true"] {
     border-color: var(--zc-accent) !important;
   }
 
