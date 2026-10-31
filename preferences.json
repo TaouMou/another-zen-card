@@ -121,6 +121,10 @@
         "value": "fill"
       },
       {
+        "label": "Accent, like the settings list",
+        "value": "accent"
+      },
+      {
         "label": "Outline",
         "value": "outline"
       },

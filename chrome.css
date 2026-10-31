@@ -653,6 +653,22 @@
   box-shadow: inset 0 0 0 1px var(--zc-line) !important;
 }
 
+/* Accent: like the current page in the settings list, a light accent
+   tint with the title in the accent, no border */
+@media -moz-pref("mod.zencard.tabstyle", "accent") {
+  :root:not([zen-private-window="true"]) .tabbrowser-tab[visuallyselected]:not([zen-essential]) {
+    & > .tab-stack > .tab-background {
+      background: color-mix(in srgb, var(--zc-accent) 12%, transparent) !important;
+      box-shadow: none !important;
+    }
+
+    & .tab-label {
+      color: var(--zc-accent) !important;
+      font-weight: 600 !important;
+    }
+  }
+}
+
 @media -moz-pref("mod.zencard.tabstyle", "outline") {
   :root:not([zen-private-window="true"]) .tabbrowser-tab[visuallyselected]:not([zen-essential]) > .tab-stack > .tab-background {
     background: transparent !important;
