@@ -72,9 +72,10 @@
     "label": "Address bar style",
     "type": "dropdown",
     "value": "string",
-    "defaultValue": "centered",
+    "defaultValue": "ghost",
     "placeholder": false,
     "options": [
+      { "label": "Centered, no background (domain only)", "value": "ghost" },
       { "label": "Centered compact (domain only)", "value": "centered" },
       { "label": "Full width (Zen's default)", "value": "full" }
     ]

@@ -5,7 +5,7 @@ A solid, glass-free theme for [Zen Browser](https://zen-browser.app).
 - **Fixed palettes** instead of the workspace gradient: no transparency, blur, grain or gradients
 - **One card**: the top toolbar and the page share one outlined card
 - **Site-colored toolbar**: the toolbar takes the color of the top of the page, so it flows into the site's header (a small script; can be turned off)
-- **Centered compact address bar**: a shorter box in the middle of the toolbar showing just the domain (the domain-only part uses the script)
+- **Centered address bar**: just the domain in the middle of the toolbar, with no box until you hover or type (the domain-only part uses the script). A boxed version and Zen's full-width bar are also available
 - **Six active tab styles**: soft fill with a thin border, outline, accent tint, inverted, text only, accent dot
 - **Ghost tabs**: tabs that aren't loaded yet are faded and grey
 - Optional serif or mono interface font
@@ -39,7 +39,7 @@ The theme replaces the colors from Zen's theme picker, so changes made there won
 | Custom background, text and accent colors | Warm graphite's colors |
 | Custom palette is light | Off |
 | Active tab style | Soft fill |
-| Address bar style | Centered compact (domain only) |
+| Address bar style | Centered, no background (domain only) |
 | Keep the toolbar in the theme color instead of the site's color | Off |
 | Interface font | System |
 | Don't fade tabs that aren't loaded yet | Off |
