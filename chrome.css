@@ -844,11 +844,14 @@
   --panel-background: var(--zc-page) !important;
   --panel-background-color: var(--zc-page) !important;
   --panel-color: var(--zc-text) !important;
+  /* Firefox colors menu text with this one, set to Windows' MenuText
+     (pure white); use the theme's text color like the tabs */
+  --panel-text-color: var(--zc-text) !important;
   --panel-border-color: var(--zc-line) !important;
   --panel-border-radius: 10px !important;
   --panel-padding: 4px !important;
   --panel-separator-color: var(--zc-line) !important;
-  --menuitem-icon-fill: color-mix(in srgb, currentColor 65%, transparent) !important;
+  --menuitem-icon-fill: color-mix(in srgb, currentColor 55%, transparent) !important;
 
   & > :is(menuitem, menu) {
     border-radius: 6px !important;
