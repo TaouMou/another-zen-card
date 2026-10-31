@@ -324,11 +324,27 @@
   color: var(--zc-text) !important;
   color-scheme: var(--zc-scheme) !important;
 
+  /* Lifted: the raised surface with a brighter border and round corners.
+     The huge shadow spread dims the whole window behind it, like
+     Spotlight, so a busy page or wallpaper fades back. */
+  &,
   & > .urlbar-background {
-    background-color: var(--zc-page) !important;
-    outline: 1px solid var(--zc-line) !important;
+    border-radius: 14px !important;
+    corner-shape: round !important;
+  }
+
+  & > .urlbar-background {
+    background-color: var(--zc-raised) !important;
+    outline: 1px solid color-mix(in srgb, var(--zc-text) 22%, var(--zc-frame)) !important;
     outline-offset: -1px !important;
-    box-shadow: 0 24px 80px -24px rgb(0 0 0 / 0.55) !important;
+    box-shadow:
+      0 0 0 100vmax rgb(0 0 0 / 0.45),
+      0 24px 80px -24px rgb(0 0 0 / 0.55) !important;
+  }
+
+  /* Empty field: a muted search icon instead of Zen's info icon */
+  &:has(.urlbar-input:placeholder-shown) #identity-icon {
+    list-style-image: url("chrome://browser/skin/zen-icons/search-glass.svg") !important;
   }
 
   & .urlbar-input-box {
