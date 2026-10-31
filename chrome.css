@@ -206,6 +206,28 @@
   --toggle-background-color-pressed-hover: color-mix(in srgb, var(--zc-accent) 26%, transparent) !important;
   --toggle-background-color-pressed-active: color-mix(in srgb, var(--zc-accent) 32%, transparent) !important;
   --toggle-dot-background-color-on-pressed: var(--zc-accent) !important;
+
+  /* Message bars (info, warning, error, success): a light tint with a
+     soft border in the bar's color, like the main buttons. Info uses the
+     accent. */
+  --zc-warning: light-dark(#9a6a0c, #e0b45a);
+  --zc-critical: light-dark(#b8402e, #e06c5a);
+  --zc-success: light-dark(#2f7a45, #7cc48a);
+  --background-color-information: var(--zc-tint) !important;
+  --background-color-warning: color-mix(in srgb, var(--zc-warning) 12%, transparent) !important;
+  --background-color-critical: color-mix(in srgb, var(--zc-critical) 12%, transparent) !important;
+  --background-color-success: color-mix(in srgb, var(--zc-success) 12%, transparent) !important;
+  --icon-color-information: var(--zc-tint-text) !important;
+  --icon-color-warning: var(--zc-warning) !important;
+  --icon-color-critical: var(--zc-critical) !important;
+  --icon-color-success: var(--zc-success) !important;
+  --message-bar-border-color: color-mix(in srgb, var(--message-bar-icon-color) 32%, transparent) !important;
+  --message-bar-border-radius: 8px !important;
+  --message-bar-text-color: var(--zc-text) !important;
+  --message-bar-icon-background-color: transparent !important;
+  --message-bar-icon-background-color-warning: transparent !important;
+  --message-bar-icon-background-color-critical: transparent !important;
+  --message-bar-icon-background-color-success: transparent !important;
 }
 
 /* The toggle sets its own border when on; give it the accent outline */
