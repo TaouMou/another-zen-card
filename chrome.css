@@ -517,6 +517,38 @@
   }
 }
 
+/* Opening: the Library fades in over the page instead of sliding in and
+   pushing the page aside. Zen's script sets the slide and push as inline
+   transforms every frame; these overrides cancel them (only the Library
+   moves the page wrapper). It needs a solid background now that it sits
+   on top of the page. card-tint.uc.js mirrors Zen's sidebar fade onto
+   --zc-library-fade, so it cross-fades with the sidebar both ways; without
+   the script the Library simply appears. Compact mode keeps Zen's slide. */
+:root:not([zen-compact-mode="true"]):not([zen-private-window="true"]) {
+  & zen-library {
+    transform: none !important;
+    background: var(--zc-frame) !important;
+    border-inline-end: 1px solid var(--zc-line) !important;
+  }
+
+  &[zen-right-side="true"] zen-library {
+    border-inline-end: none !important;
+    border-inline-start: 1px solid var(--zc-line) !important;
+  }
+
+  &[zc-library-fade] zen-library {
+    opacity: var(--zc-library-fade, 1) !important;
+  }
+
+  &[zc-library-fade] zen-library[transitioning] {
+    opacity: var(--zc-library-fade, 0) !important;
+  }
+
+  & :is(#zen-appcontent-wrapper, #zen-toast-container) {
+    transform: none !important;
+  }
+}
+
 /* ---- Interface font ---- */
 :root:has(.sine-theme-strings[mod-zencard-font="serif"]) {
   font-family: Georgia, "Times New Roman", serif !important;

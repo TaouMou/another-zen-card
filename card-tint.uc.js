@@ -205,7 +205,30 @@
 
   const urlbarPrefObserver = { observe: refreshUrlbar };
 
+  // ---- Library cross-fade ----
+  // As the Library opens, Zen fades the sidebar out with an inline opacity
+  // (1 to 0 during its spring) and back in as it closes, then clears it.
+  // Mirror that onto the Library as --zc-library-fade so chrome.css can
+  // fade the Library in over the page instead of sliding it.
+  function syncLibraryFade() {
+    const library = document.querySelector("zen-library");
+    if (!library) {
+      return;
+    }
+    const sidebarOpacity = gNavToolbox.style.opacity;
+    if (sidebarOpacity === "") {
+      library.style.removeProperty("--zc-library-fade");
+    } else {
+      library.style.setProperty("--zc-library-fade", String(1 - parseFloat(sidebarOpacity)));
+    }
+  }
+
+  const libraryFadeObserver = new MutationObserver(syncLibraryFade);
+
   function init() {
+    libraryFadeObserver.observe(gNavToolbox, { attributes: true, attributeFilter: ["style"] });
+    root.setAttribute("zc-library-fade", "true");
+
     gBrowser.addTabsProgressListener(progressListener);
     gBrowser.tabContainer.addEventListener("TabSelect", onTabSelect);
     Services.prefs.addObserver(PREF_OFF, prefObserver);
@@ -223,6 +246,7 @@
         gBrowser.removeTabsProgressListener(progressListener);
         gBrowser.tabContainer.removeEventListener("TabSelect", onTabSelect);
         Services.prefs.removeObserver(PREF_OFF, prefObserver);
+        libraryFadeObserver.disconnect();
         if (originalTrim) {
           gURLBar._zenTrimURL = originalTrim;
           Services.prefs.removeObserver(PREF_URLBAR, urlbarPrefObserver);
