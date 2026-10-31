@@ -1028,6 +1028,25 @@
   }
 }
 
+/* Dropdown lists (as in settings): the current choice keeps its normal
+   text with a small accent check in front; every row leaves room for it */
+:root:not([zen-private-window="true"]) menulist > menupopup > :is(menuitem, menu) {
+  color: var(--zc-text) !important;
+
+  &::before {
+    content: "" !important;
+    flex: none !important;
+    width: 14px !important;
+    height: 14px !important;
+    margin-inline-end: 8px !important;
+  }
+
+  &[selected]:not([disabled])::before {
+    background-color: var(--zc-accent) !important;
+    mask: url("chrome://global/skin/icons/check.svg") center / 14px no-repeat !important;
+  }
+}
+
 /* ---- Panels ----
    Hovered rows in every panel (site panel, extensions, app menu) get
    the active-tab fill, like the context menus. */
