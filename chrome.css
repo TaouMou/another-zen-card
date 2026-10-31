@@ -563,6 +563,28 @@
   }
 }
 
+/* Collapsed sidebar, the space at the top: hovering it shows the space's
+   menu (⋯), and Zen filled both a wide pill behind the whole row and a
+   smaller square behind the ⋯. Only the square, like the buttons above. */
+:root:not([zen-sidebar-expanded="true"]):not([zen-private-window="true"]) .zen-current-workspace-indicator {
+  &::before {
+    background: transparent !important;
+  }
+
+  & .zen-workspaces-actions > .toolbarbutton-icon {
+    width: 32px !important;
+    height: 32px !important;
+    padding: 8px !important;
+    margin: 0 !important;
+    border-radius: 8px !important;
+    corner-shape: round !important;
+  }
+
+  &:is(:hover, [open="true"]) .zen-workspaces-actions > .toolbarbutton-icon {
+    background-color: var(--zc-surface) !important;
+  }
+}
+
 /* Room between the first button and the card's edge */
 :root:not([zen-single-toolbar="true"]):not([zen-private-window="true"]) #nav-bar {
   padding-inline: 6px !important;
