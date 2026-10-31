@@ -16,13 +16,14 @@ Private windows keep Zen's own look.
 
 ## Palettes
 
-| Palette | Background | Text | Accent |
-|---|---|---|---|
-| Warm graphite (default) | `#1f1e1d` | `#e8e6dc` | `#d97757` |
-| Neutral ink | `#141414` | `#e6e6e6` | `#6aa6ff` |
-| Cool slate | `#14171b` | `#e3e7ec` | `#5fd4a4` |
-| Paper (light) | `#e9e7df` | `#1f1e1d` | `#c96442` |
-| Custom | your own hex codes | | |
+Each palette has a dark and a light version. By default the theme follows Zen's light/dark setting (the sun, moon and auto buttons in Zen's theme panel); the **Mode** setting can force dark or light instead.
+
+| Palette | Dark | Light |
+|---|---|---|
+| Warm graphite (default) | `#1f1e1d` / `#e8e6dc`, accent `#d97757` | `#efede6` / `#1f1e1d`, accent `#c96442` |
+| Neutral ink | `#141414` / `#e6e6e6`, accent `#6aa6ff` | `#ececec` / `#1a1a1a`, accent `#2f6fdb` |
+| Cool slate | `#14171b` / `#e3e7ec`, accent `#5fd4a4` | `#e7ebef` / `#15181c`, accent `#168a5e` |
+| Custom | your own hex codes, with its own light switch | |
 
 ## Install
 
@@ -38,8 +39,9 @@ The theme replaces the colors from Zen's theme picker, so changes made there won
 | Setting | Default |
 |---|---|
 | Palette | Warm graphite |
+| Mode | Follow Zen's light/dark setting |
 | Custom background, text and accent colors | Warm graphite's colors |
-| Custom palette is light | Off |
+| Custom palette is light (Custom ignores Mode) | Off |
 | Active tab style | Soft fill |
 | Address bar style | Centered, no background (domain only) |
 | Keep the toolbar in the theme color instead of the site's color | Off |

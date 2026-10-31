@@ -16,15 +16,29 @@
  */
 
 /* ---- Palettes ----
-   Each palette sets frame, text, accent and scheme; the other
-   surfaces are mixed from frame and text below. Sine writes the
-   dropdown value as an attribute on .sine-theme-strings. */
+   Each palette sets frame, text, accent and scheme, in a dark and a
+   light version; the other surfaces are mixed from frame and text.
+   Sine writes the palette dropdown as an attribute on
+   .sine-theme-strings.
+
+   Light or dark comes from the Mode setting (mod.zencard.mode):
+   "light" or "dark" force it; "follow" (the default, also when unset)
+   follows Zen's own setting, zen.view.window.scheme (0 dark, 1 light,
+   2 auto = the system). The same media query is used in content.css. */
+
+/* Dark versions, and the surfaces stepping lighter from the frame */
 :root {
   --zc-frame: #1f1e1d;
   --zc-text: #e8e6dc;
   --zc-accent: #d97757;
   --zc-scheme: dark;
   --zc-radius: 10px;
+
+  --zc-page: color-mix(in srgb, var(--zc-text) 4%, var(--zc-frame));
+  --zc-surface: color-mix(in srgb, var(--zc-text) 8%, var(--zc-frame));
+  --zc-raised: color-mix(in srgb, var(--zc-text) 12%, var(--zc-frame));
+  --zc-line: color-mix(in srgb, var(--zc-text) 13%, var(--zc-frame));
+  --zc-muted: color-mix(in srgb, var(--zc-text) 55%, var(--zc-frame));
 }
 
 :root:has(.sine-theme-strings[mod-zencard-palette="ink"]) {
@@ -39,44 +53,50 @@
   --zc-accent: #5fd4a4;
 }
 
-:root:has(.sine-theme-strings[mod-zencard-palette="paper"]) {
-  --zc-frame: #e9e7df;
-  --zc-text: #1f1e1d;
-  --zc-accent: #c96442;
-  --zc-scheme: light;
+/* Light versions: deeper accents so they stay readable on light
+   surfaces, and the page and surfaces stepping towards white */
+@media -moz-pref("mod.zencard.mode", "light") or ((not -moz-pref("mod.zencard.mode", "dark")) and (-moz-pref("zen.view.window.scheme", 1) or (-moz-pref("zen.view.window.scheme", 2) and (not (-moz-system-dark-theme))))) {
+  :root {
+    --zc-frame: #efede6;
+    --zc-text: #1f1e1d;
+    --zc-accent: #c96442;
+    --zc-scheme: light;
+
+    --zc-page: color-mix(in srgb, white 60%, var(--zc-frame));
+    --zc-surface: color-mix(in srgb, white 45%, var(--zc-frame));
+    --zc-raised: color-mix(in srgb, white 70%, var(--zc-frame));
+  }
+
+  :root:has(.sine-theme-strings[mod-zencard-palette="ink"]) {
+    --zc-frame: #ececec;
+    --zc-text: #1a1a1a;
+    --zc-accent: #2f6fdb;
+  }
+
+  :root:has(.sine-theme-strings[mod-zencard-palette="slate"]) {
+    --zc-frame: #e7ebef;
+    --zc-text: #15181c;
+    --zc-accent: #168a5e;
+  }
 }
 
+/* Custom palette: its own colors, and its own light switch instead of
+   the Mode setting */
 :root:has(.sine-theme-strings[mod-zencard-palette="custom"]) {
   --zc-frame: var(--mod-zencard-frame, #1f1e1d);
   --zc-text: var(--mod-zencard-text, #e8e6dc);
   --zc-accent: var(--mod-zencard-accent, #d97757);
+  --zc-scheme: dark;
+
+  --zc-page: color-mix(in srgb, var(--zc-text) 4%, var(--zc-frame));
+  --zc-surface: color-mix(in srgb, var(--zc-text) 8%, var(--zc-frame));
+  --zc-raised: color-mix(in srgb, var(--zc-text) 12%, var(--zc-frame));
 }
 
 @media -moz-pref("mod.zencard.customlight") {
   :root:has(.sine-theme-strings[mod-zencard-palette="custom"]) {
     --zc-scheme: light;
-  }
-}
 
-/* Surfaces mixed from frame and text: on dark palettes each step
-   is a little lighter than the frame */
-:root {
-  --zc-page: color-mix(in srgb, var(--zc-text) 4%, var(--zc-frame));
-  --zc-surface: color-mix(in srgb, var(--zc-text) 8%, var(--zc-frame));
-  --zc-raised: color-mix(in srgb, var(--zc-text) 12%, var(--zc-frame));
-  --zc-line: color-mix(in srgb, var(--zc-text) 13%, var(--zc-frame));
-  --zc-muted: color-mix(in srgb, var(--zc-text) 55%, var(--zc-frame));
-}
-
-/* On light palettes the page and surfaces step towards white instead */
-:root:has(.sine-theme-strings[mod-zencard-palette="paper"]) {
-  --zc-page: color-mix(in srgb, white 60%, var(--zc-frame));
-  --zc-surface: color-mix(in srgb, white 45%, var(--zc-frame));
-  --zc-raised: color-mix(in srgb, white 70%, var(--zc-frame));
-}
-
-@media -moz-pref("mod.zencard.customlight") {
-  :root:has(.sine-theme-strings[mod-zencard-palette="custom"]) {
     --zc-page: color-mix(in srgb, white 60%, var(--zc-frame));
     --zc-surface: color-mix(in srgb, white 45%, var(--zc-frame));
     --zc-raised: color-mix(in srgb, white 70%, var(--zc-frame));

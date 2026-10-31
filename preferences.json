@@ -7,11 +7,44 @@
     "defaultValue": "warm",
     "placeholder": false,
     "options": [
-      { "label": "Warm graphite", "value": "warm" },
-      { "label": "Neutral ink", "value": "ink" },
-      { "label": "Cool slate", "value": "slate" },
-      { "label": "Paper (light)", "value": "paper" },
-      { "label": "Custom (use the colors below)", "value": "custom" }
+      {
+        "label": "Warm graphite",
+        "value": "warm"
+      },
+      {
+        "label": "Neutral ink",
+        "value": "ink"
+      },
+      {
+        "label": "Cool slate",
+        "value": "slate"
+      },
+      {
+        "label": "Custom (use the colors below)",
+        "value": "custom"
+      }
+    ]
+  },
+  {
+    "property": "mod.zencard.mode",
+    "label": "Mode",
+    "type": "dropdown",
+    "value": "string",
+    "defaultValue": "follow",
+    "placeholder": false,
+    "options": [
+      {
+        "label": "Follow Zen's light/dark setting",
+        "value": "follow"
+      },
+      {
+        "label": "Always dark",
+        "value": "dark"
+      },
+      {
+        "label": "Always light",
+        "value": "light"
+      }
     ]
   },
   {
@@ -34,7 +67,7 @@
   },
   {
     "property": "mod.zencard.customlight",
-    "label": "Custom palette is light (light background, dark text)",
+    "label": "Custom palette is light (the Mode setting does not apply to the Custom palette)",
     "type": "checkbox",
     "defaultValue": false
   },
@@ -46,9 +79,18 @@
     "defaultValue": "system",
     "placeholder": false,
     "options": [
-      { "label": "System (Zen's default)", "value": "system" },
-      { "label": "Serif", "value": "serif" },
-      { "label": "Mono", "value": "mono" }
+      {
+        "label": "System (Zen's default)",
+        "value": "system"
+      },
+      {
+        "label": "Serif",
+        "value": "serif"
+      },
+      {
+        "label": "Mono",
+        "value": "mono"
+      }
     ]
   },
   {
@@ -59,12 +101,30 @@
     "defaultValue": "fill",
     "placeholder": false,
     "options": [
-      { "label": "Soft fill", "value": "fill" },
-      { "label": "Outline", "value": "outline" },
-      { "label": "Accent tint", "value": "tint" },
-      { "label": "Inverted", "value": "inverted" },
-      { "label": "Text only", "value": "text" },
-      { "label": "Accent dot", "value": "dot" }
+      {
+        "label": "Soft fill",
+        "value": "fill"
+      },
+      {
+        "label": "Outline",
+        "value": "outline"
+      },
+      {
+        "label": "Accent tint",
+        "value": "tint"
+      },
+      {
+        "label": "Inverted",
+        "value": "inverted"
+      },
+      {
+        "label": "Text only",
+        "value": "text"
+      },
+      {
+        "label": "Accent dot",
+        "value": "dot"
+      }
     ]
   },
   {
@@ -75,9 +135,18 @@
     "defaultValue": "ghost",
     "placeholder": false,
     "options": [
-      { "label": "Centered, no background (domain only)", "value": "ghost" },
-      { "label": "Centered compact (domain only)", "value": "centered" },
-      { "label": "Full width (Zen's default)", "value": "full" }
+      {
+        "label": "Centered, no background (domain only)",
+        "value": "ghost"
+      },
+      {
+        "label": "Centered compact (domain only)",
+        "value": "centered"
+      },
+      {
+        "label": "Full width (Zen's default)",
+        "value": "full"
+      }
     ]
   },
   {

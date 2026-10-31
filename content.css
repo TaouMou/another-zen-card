@@ -6,21 +6,28 @@
  *  page, about:addons, about:config and similar) the theme's palette.
  *
  *  Sine loads this as a user sheet into content pages. Sine's settings
- *  don't reach content pages, so the palette is read with -moz-pref.
- *  The Custom palette can't pass its colors here and falls back to
- *  Warm graphite. Only these about: pages are matched, never websites
- *  or about:blank frames inside them.
+ *  don't reach content pages, so the palette and mode are read with
+ *  -moz-pref. The Custom palette can't pass its colors here and falls
+ *  back to Warm graphite (following the Mode setting). Only these
+ *  about: pages are matched, never websites or about:blank frames
+ *  inside them.
  * =================================================================
  */
 
 @-moz-document url-prefix("about:preferences"), url-prefix("about:settings"), url-prefix("about:addons"), url-prefix("about:config"), url-prefix("about:support"), url-prefix("about:profiles"), url-prefix("about:downloads"), url-prefix("about:logins"), url-prefix("about:processes") {
-  /* ---- Palettes (same values as chrome.css) ---- */
+  /* ---- Palettes (same values and light/dark rule as chrome.css) ---- */
   :root {
     --zc-frame: #1f1e1d;
     --zc-text: #e8e6dc;
     --zc-accent: #d97757;
     --zc-on-accent: #1f1e1d;
     --zc-scheme: dark;
+
+    --zc-page: color-mix(in srgb, var(--zc-text) 4%, var(--zc-frame));
+    --zc-surface: color-mix(in srgb, var(--zc-text) 8%, var(--zc-frame));
+    --zc-raised: color-mix(in srgb, var(--zc-text) 12%, var(--zc-frame));
+    --zc-line: color-mix(in srgb, var(--zc-text) 13%, var(--zc-frame));
+    --zc-muted: color-mix(in srgb, var(--zc-text) 62%, var(--zc-frame));
   }
 
   @media -moz-pref("mod.zencard.palette", "ink") {
@@ -41,29 +48,33 @@
     }
   }
 
-  @media -moz-pref("mod.zencard.palette", "paper") {
+  @media -moz-pref("mod.zencard.mode", "light") or ((not -moz-pref("mod.zencard.mode", "dark")) and (-moz-pref("zen.view.window.scheme", 1) or (-moz-pref("zen.view.window.scheme", 2) and (not (-moz-system-dark-theme))))) {
     :root {
-      --zc-frame: #e9e7df;
+      --zc-frame: #efede6;
       --zc-text: #1f1e1d;
       --zc-accent: #c96442;
       --zc-on-accent: #ffffff;
       --zc-scheme: light;
-    }
-  }
 
-  :root {
-    --zc-page: color-mix(in srgb, var(--zc-text) 4%, var(--zc-frame));
-    --zc-surface: color-mix(in srgb, var(--zc-text) 8%, var(--zc-frame));
-    --zc-raised: color-mix(in srgb, var(--zc-text) 12%, var(--zc-frame));
-    --zc-line: color-mix(in srgb, var(--zc-text) 13%, var(--zc-frame));
-    --zc-muted: color-mix(in srgb, var(--zc-text) 62%, var(--zc-frame));
-  }
-
-  @media -moz-pref("mod.zencard.palette", "paper") {
-    :root {
       --zc-page: color-mix(in srgb, white 60%, var(--zc-frame));
       --zc-surface: color-mix(in srgb, white 45%, var(--zc-frame));
       --zc-raised: color-mix(in srgb, white 70%, var(--zc-frame));
+    }
+
+    @media -moz-pref("mod.zencard.palette", "ink") {
+      :root {
+        --zc-frame: #ececec;
+        --zc-text: #1a1a1a;
+        --zc-accent: #2f6fdb;
+      }
+    }
+
+    @media -moz-pref("mod.zencard.palette", "slate") {
+      :root {
+        --zc-frame: #e7ebef;
+        --zc-text: #15181c;
+        --zc-accent: #168a5e;
+      }
     }
   }
 

@@ -13,6 +13,7 @@ A solid, glass-free theme for Zen Browser, installed through the Sine mod manage
 
 - Mod CSS is loaded as a **user sheet**. Zen's own rules are author rules, so every override of Zen needs `!important`; a normal declaration loses even to a less specific Zen rule.
 - **Dropdown** settings appear as attributes on `.sine-theme-strings` (`mod.zencard.palette` → `[mod-zencard-palette="warm"]`); match them with `:root:has(.sine-theme-strings[...])`. **String** settings become `--mod-zencard-*` variables on `:root`. **Checkboxes** are read with `@media -moz-pref("...")`.
+- Text prefs can also be compared in CSS with `-moz-pref("name", "value")` (allowed in Sine's sheets because user-origin sheets get chrome rules). `content.css` relies on this, since Sine's attributes and variables don't reach content pages. Light/dark uses one media query in both files: `mod.zencard.mode`, else Zen's `zen.view.window.scheme` (0 dark, 1 light, 2 auto with `-moz-system-dark-theme`).
 - Write CSS so the state before Sine has saved any pref is the intended default (checkbox names are phrased so "off" is the default; dropdown defaults are the selectors' fallback).
 - Scripts only run for mods outside Sine's store when `sine.allow-unsafe-js` is on. The CSS must still look right without the script.
 - Sine updates a mod only when `updatedAt` in `theme.json` is newer than the installed copy. **On every push, set `updatedAt` to the current UTC time as a full ISO timestamp** and bump `version`.
