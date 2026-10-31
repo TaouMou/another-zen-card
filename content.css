@@ -588,6 +588,15 @@
       }
     }
 
+    /* Sine inverts the icon for its solid accent fill, which left it near
+       black on the tint; draw it in the button's text color instead */
+    & .auto-update-toggle[enabled]::before {
+      width: 30px !important;
+      filter: none !important;
+      background: currentColor !important;
+      mask: url("chrome://userscripts/content/assets/images/update.svg") center / 16px no-repeat !important;
+    }
+
     & .sineMarketplaceItemButton {
       flex: 1 !important;
     }
