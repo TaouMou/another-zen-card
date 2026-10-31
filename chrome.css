@@ -1190,6 +1190,21 @@
   --panel-item-active-bgcolor: var(--zc-raised) !important;
 }
 
+/* Panels (the app menu, site panel, extensions, downloads) get Windows
+   11's translucent backdrop (mica) from Zen, like the context menus: an
+   empty grey box for a moment before the first one after startup was
+   drawn, and Zen drops their border and corners for it. The theme
+   paints them instead. */
+:root:not([zen-private-window="true"]) panel[type="arrow"]:not(#feature-callout) {
+  appearance: none !important;
+  --panel-background-color: var(--zc-page) !important;
+  --panel-border-color: var(--zc-line) !important;
+
+  &::part(content) {
+    border-radius: var(--panel-border-radius) !important;
+  }
+}
+
 /* Extension popups (uBlock, SponsorBlock...): the page inside didn't
    follow the panel's frame, leaving a wedge of the panel's background
    (or the page itself) showing in each corner. Zen gives elements
