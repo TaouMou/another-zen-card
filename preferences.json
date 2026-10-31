@@ -1,5 +1,9 @@
 [
   {
+    "type": "separator",
+    "label": "Colors"
+  },
+  {
     "property": "mod.zencard.palette",
     "label": "Palette",
     "type": "dropdown",
@@ -48,28 +52,39 @@
     ]
   },
   {
+    "type": "separator",
+    "label": "Custom palette"
+  },
+  {
     "property": "mod.zencard.frame",
     "label": "Custom background color",
     "type": "string",
-    "defaultValue": "#1f1e1d"
+    "defaultValue": "#1f1e1d",
+    "border": "value"
   },
   {
     "property": "mod.zencard.text",
     "label": "Custom text color",
     "type": "string",
-    "defaultValue": "#e8e6dc"
+    "defaultValue": "#e8e6dc",
+    "border": "value"
   },
   {
     "property": "mod.zencard.accent",
     "label": "Custom accent color",
     "type": "string",
-    "defaultValue": "#d97757"
+    "defaultValue": "#d97757",
+    "border": "value"
   },
   {
     "property": "mod.zencard.customlight",
     "label": "Custom palette is light (the Mode setting does not apply to the Custom palette)",
     "type": "checkbox",
     "defaultValue": false
+  },
+  {
+    "type": "separator",
+    "label": "Interface"
   },
   {
     "property": "mod.zencard.font",
@@ -148,6 +163,10 @@
         "value": "full"
       }
     ]
+  },
+  {
+    "type": "separator",
+    "label": "Behavior"
   },
   {
     "property": "mod.zencard.nositetint",

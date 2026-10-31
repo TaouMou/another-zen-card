@@ -771,6 +771,39 @@
   }
 }
 
+/* ---- Context menus ----
+   Right-click menus and dropdowns become cards like the sidebar: the
+   page color, the theme's border and corners, and tighter even padding.
+   The hovered item looks like the active tab (soft fill and thin
+   border), and icons are muted until their item is hovered. */
+:root:not([zen-private-window="true"]) menupopup {
+  --panel-background: var(--zc-page) !important;
+  --panel-background-color: var(--zc-page) !important;
+  --panel-color: var(--zc-text) !important;
+  --panel-border-color: var(--zc-line) !important;
+  --panel-border-radius: 10px !important;
+  --panel-padding: 4px !important;
+  --panel-separator-color: var(--zc-line) !important;
+  --menuitem-icon-fill: color-mix(in srgb, currentColor 65%, transparent) !important;
+
+  & > :is(menuitem, menu) {
+    border-radius: 6px !important;
+    corner-shape: round !important;
+    transition: background-color 0.15s ease !important;
+
+    &[_moz-menuactive]:not([disabled]) {
+      background-color: var(--zc-surface) !important;
+      color: var(--zc-text) !important;
+      box-shadow: inset 0 0 0 1px var(--zc-line) !important;
+      fill: currentColor !important;
+    }
+  }
+
+  & > menuseparator {
+    padding-inline: 6px !important;
+  }
+}
+
 /* ---- Interface font ---- */
 :root:has(.sine-theme-strings[mod-zencard-font="serif"]) {
   font-family: Georgia, "Times New Roman", serif !important;
