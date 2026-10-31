@@ -309,6 +309,31 @@
   }
 }
 
+/* ---- Toolbar buttons ----
+   Back, forward, reload and the other toolbar buttons are bare icons,
+   in every layout: no box on hover, the icon dims at rest and brightens
+   on hover or while its menu is open, like the address bar text. The
+   icons follow currentColor, so they also follow the site-colored strip. */
+:root:not([zen-private-window="true"]) #nav-bar .toolbarbutton-1 {
+  --toolbarbutton-hover-background: transparent !important;
+  --toolbarbutton-active-background: transparent !important;
+  --toolbarbutton-icon-fill: color-mix(in srgb, currentColor 55%, transparent) !important;
+
+  & > :is(.toolbarbutton-icon, .toolbarbutton-badge-stack) {
+    background-color: transparent !important;
+    transition: fill 0.2s ease !important;
+  }
+
+  &:is(:hover, [open="true"]):not([disabled="true"]) {
+    --toolbarbutton-icon-fill: currentColor !important;
+  }
+}
+
+/* Room between the first button and the card's edge */
+:root:not([zen-single-toolbar="true"]):not([zen-private-window="true"]) #nav-bar {
+  padding-inline: 6px !important;
+}
+
 /* ---- Site-colored toolbar ----
    card-tint.uc.js sets --zc-site, --zc-site-text and [zc-site-tint]
    on :root. The toolbar then takes the color of the top of the page
