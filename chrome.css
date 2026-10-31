@@ -221,7 +221,14 @@
   --toolbar-field-color: var(--zc-site-text) !important;
   --zen-toolbar-element-bg: color-mix(in srgb, var(--zc-site-text) 10%, var(--zc-site)) !important;
   --zen-toolbar-element-bg-hover: color-mix(in srgb, var(--zc-site-text) 16%, var(--zc-site)) !important;
+  --toolbar-bgcolor: var(--zc-site) !important;
   transition: background-color 0.25s ease !important;
+
+  /* Firefox paints the nav bar with --toolbar-bgcolor on top of the strip */
+  & #zen-appcontent-navbar-container,
+  & #nav-bar {
+    background: transparent !important;
+  }
 
   & #urlbar[breakout-extend] .urlbar-background {
     background-color: color-mix(in srgb, var(--zc-site-text) 4%, var(--zc-site)) !important;
