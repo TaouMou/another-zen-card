@@ -3,7 +3,8 @@
 // @description    Colors the card's toolbar with the color along the top edge of the page,
 //                 shows only the domain in the centered address bar, cross-fades the
 //                 Library, moves the window buttons into the sidebar-only layout's top row,
-//                 and opens extension popups from the Extensions button.
+//                 opens extension popups from the Extensions button, and themes the
+//                 settings dialogs.
 // @include        main
 // ==/UserScript==
 
@@ -291,8 +292,38 @@
       ?.setAttribute("addon-webext-overflowbutton", "unified-extensions-button");
   }
 
+  // ---- Settings dialogs and prompts ----
+  // Sine only loads content.css into content pages. The dialogs opened
+  // from settings and the browser's prompts are chrome:// pages in
+  // their own frames, so register the installed content.css for every
+  // document once; its @-moz-document rule limits it to the settings
+  // pages and these dialogs. It stays registered until Zen restarts.
+  const MOD_ID = "2bf83ae5-3622-4522-9174-fe2d6825a333";
+
+  function registerDialogStyles() {
+    try {
+      const file = Services.dirsvc.get("UChrm", Ci.nsIFile);
+      file.append("sine-mods");
+      file.append(MOD_ID);
+      file.append("content.css");
+      if (!file.exists()) {
+        return;
+      }
+      const sss = Cc["@mozilla.org/content/style-sheet-service;1"].getService(
+        Ci.nsIStyleSheetService
+      );
+      const uri = Services.io.newFileURI(file);
+      if (!sss.sheetRegistered(uri, sss.USER_SHEET)) {
+        sss.loadAndRegisterSheet(uri, sss.USER_SHEET);
+      }
+    } catch (e) {
+      console.error("Another Zen Card: couldn't style the settings dialogs", e);
+    }
+  }
+
   function init() {
     anchorExtensionPopups();
+    registerDialogStyles();
 
     windowButtonsObserver.observe(root, {
       attributes: true,

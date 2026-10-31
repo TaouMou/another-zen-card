@@ -11,10 +11,15 @@
  *  back to Warm graphite (following the Mode setting). Only these
  *  about: pages are matched, never websites or about:blank frames
  *  inside them.
+ *
+ *  The dialogs opened from settings (Import browser data, Fonts,
+ *  Exceptions...) and the browser's prompts are separate chrome://
+ *  pages that Sine doesn't style; card-tint.uc.js registers this file
+ *  for every document so the chrome:// prefixes below reach them.
  * =================================================================
  */
 
-@-moz-document url-prefix("about:preferences"), url-prefix("about:settings"), url-prefix("about:addons"), url-prefix("about:config"), url-prefix("about:support"), url-prefix("about:profiles"), url-prefix("about:downloads"), url-prefix("about:logins"), url-prefix("about:processes") {
+@-moz-document url-prefix("about:preferences"), url-prefix("about:settings"), url-prefix("about:addons"), url-prefix("about:config"), url-prefix("about:support"), url-prefix("about:profiles"), url-prefix("about:downloads"), url-prefix("about:logins"), url-prefix("about:processes"), url-prefix("chrome://browser/content/preferences/"), url-prefix("chrome://browser/content/migration/"), url-prefix("chrome://browser/content/sanitize"), url-prefix("chrome://pippki/content/"), url-prefix("chrome://global/content/commonDialog") {
   /* ---- Palettes (same values and light/dark rule as chrome.css) ---- */
   :root {
     --zc-frame: #1f1e1d;
@@ -468,5 +473,53 @@
         color: var(--zc-on-accent) !important;
       }
     }
+  }
+
+  /* ---- Settings dialogs ----
+     The box around Import browser data, Fonts, Exceptions and the other
+     settings dialogs: a card like Sine's dialog, with a divider under
+     the title and a bare close button. Zen gives it squircle corners, a
+     grey outline and a drop shadow. The dialog's own page inside is
+     themed by the rest of this file. */
+  .dialogBox {
+    background-color: var(--zc-page) !important;
+    background-clip: border-box !important;
+    color: var(--zc-text) !important;
+    border: 1px solid var(--zc-line) !important;
+    outline: none !important;
+    border-radius: 12px !important;
+    corner-shape: round !important;
+    box-shadow: 0 24px 60px -24px rgb(0 0 0 / 0.55) !important;
+    overflow: clip !important;
+  }
+
+  .dialogTitleBar {
+    padding: 8px 8px 8px 16px !important;
+    border-bottom: 1px solid var(--zc-line) !important;
+  }
+
+  .dialogTitle {
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    text-align: start !important;
+  }
+
+  .dialogClose {
+    margin: 0 !important;
+    border-radius: 8px !important;
+    corner-shape: round !important;
+    background-color: transparent !important;
+    opacity: 0.65 !important;
+    transition: background-color 0.2s ease, opacity 0.2s ease !important;
+
+    &:hover {
+      background-color: var(--zc-surface) !important;
+      opacity: 1 !important;
+    }
+  }
+
+  .dialogFrame {
+    border-radius: 0 0 11px 11px !important;
+    corner-shape: round !important;
   }
 }

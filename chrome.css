@@ -1193,6 +1193,21 @@
   }
 }
 
+/* ---- Prompts ----
+   Dialogs a site or the browser opens over a tab ("Leave page?",
+   alerts...) use the same box as the settings dialogs; give it the same
+   card. The prompt's page inside is themed by content.css. */
+:root:not([zen-private-window="true"]) .dialogBox {
+  background-color: var(--zc-page) !important;
+  color: var(--zc-text) !important;
+  border: 1px solid var(--zc-line) !important;
+  outline: none !important;
+  border-radius: 12px !important;
+  corner-shape: round !important;
+  box-shadow: 0 24px 60px -24px rgb(0 0 0 / 0.55) !important;
+  overflow: clip !important;
+}
+
 /* ---- Interface font ---- */
 :root:has(.sine-theme-strings[mod-zencard-font="serif"]) {
   font-family: Georgia, "Times New Roman", serif !important;
