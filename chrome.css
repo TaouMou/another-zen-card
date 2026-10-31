@@ -226,10 +226,22 @@
   }
 }
 
-/* Centered, no background (the default): the box only shows on hover
-   or while you type, so at rest the domain sits on the bare toolbar */
-:root:not([zen-single-toolbar="true"]):not([zen-private-window="true"]):not(:has(.sine-theme-strings[mod-zencard-urlbar="full"])):not(:has(.sine-theme-strings[mod-zencard-urlbar="centered"])) #urlbar:not([breakout-extend]):not([focused="true"]):not(:hover) .urlbar-background {
-  background-color: transparent !important;
+/* Centered, no background (the default): at rest the domain sits on the
+   bare toolbar. Hovering fades in a faint see-through wash of the text
+   color (as Zia does), so the strip's color still shows through. */
+:root:not([zen-single-toolbar="true"]):not([zen-private-window="true"]):not(:has(.sine-theme-strings[mod-zencard-urlbar="full"])):not(:has(.sine-theme-strings[mod-zencard-urlbar="centered"])) #urlbar:not([breakout-extend]) {
+  & > .urlbar-background {
+    background-color: transparent !important;
+    transition: background-color 0.2s ease !important;
+  }
+
+  &:is(:hover, [focused="true"]) > .urlbar-background {
+    background-color: color-mix(in srgb, currentColor 7%, transparent) !important;
+  }
+
+  & #zen-site-data-icon-button {
+    transition: opacity 0.2s ease !important;
+  }
 }
 
 /* ---- Site-colored toolbar ----
