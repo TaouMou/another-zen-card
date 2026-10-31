@@ -148,6 +148,18 @@
     background: var(--zc-frame) !important;
   }
 
+  /* The list has two dividers: Firefox's own before "Extensions and
+     themes" (24px above and below) and Zen's before "Accessibility", a
+     plain <hr> with its own margins and inset border. Zen's matches
+     Firefox's: a 1px line with 24px on each side (20px plus the list's
+     4px gap). */
+  #categories > .nav-separator {
+    height: 1px !important;
+    margin: 20px 0 !important;
+    border: 0 !important;
+    background-color: var(--zc-line) !important;
+  }
+
   /* ---- Components ----
      One set of components for every page and dialog this file reaches,
      so a button, field, dropdown, checkbox, toggle, box or dialog looks
@@ -271,8 +283,9 @@
        without the accent line along its left edge */
     --page-nav-button-indicator-width: 0px !important;
     --page-nav-button-indicator-background-color: transparent !important;
-    /* and a thin line between the list and the page, in the card color */
-    --page-nav-border-color: var(--zc-line) !important;
+    /* no line between the list and the page; dividers in the line color */
+    --page-nav-border-color: transparent !important;
+    --page-nav-hr-background-color: var(--zc-line) !important;
   }
 
   /* Zen imports its theme into these pages, which gives every element
