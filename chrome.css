@@ -1193,12 +1193,13 @@
 /* Panels (the app menu, site panel, extensions, downloads) get Windows
    11's translucent backdrop (mica) from Zen, like the context menus: an
    empty grey box for a moment before the first one after startup was
-   drawn, and Zen drops their border and corners for it. The theme
-   paints them instead. */
+   drawn, and Firefox and Zen drop their border and corners (radius 0)
+   for it. The theme paints them instead, with the menus' corners. */
 :root:not([zen-private-window="true"]) panel[type="arrow"]:not(#feature-callout) {
   appearance: none !important;
   --panel-background-color: var(--zc-page) !important;
   --panel-border-color: var(--zc-line) !important;
+  --panel-border-radius: 10px !important;
 
   &::part(content) {
     border-radius: var(--panel-border-radius) !important;
