@@ -969,6 +969,98 @@
   }
 }
 
+/* ---- Panels ----
+   Hovered rows in every panel (site panel, extensions, app menu) get
+   the active-tab fill, like the context menus. */
+:root:not([zen-private-window="true"]) panel {
+  --panel-item-hover-bgcolor: var(--zc-surface) !important;
+  --panel-item-active-bgcolor: var(--zc-raised) !important;
+}
+
+/* Site panel (the button in the address bar): share, screenshot, boost
+   and bookmark become bare icons that brighten on hover, like the
+   toolbar buttons, above a divider. Section titles are small and muted.
+   A boosted site keeps its boost button in the accent. */
+:root:not([zen-private-window="true"]) #zen-unified-site-data-panel {
+  & #zen-site-data-header {
+    margin-inline: 8px !important;
+    padding-inline: 1px !important;
+    border-bottom: 1px solid var(--zc-line) !important;
+
+    & toolbarbutton {
+      color: var(--zc-muted) !important;
+      transition: color 0.2s ease !important;
+
+      &::before {
+        border: none !important;
+        border-radius: 8px !important;
+        corner-shape: round !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        transform: none !important;
+        transition: background-color 0.2s ease !important;
+      }
+
+      &:hover {
+        color: var(--zc-text) !important;
+
+        &::before {
+          background: var(--zc-surface) !important;
+        }
+      }
+
+      &.active {
+        color: var(--zc-accent) !important;
+
+        &::before {
+          background: color-mix(in srgb, var(--zc-accent) 18%, transparent) !important;
+        }
+      }
+    }
+  }
+
+  & .zen-site-data-section-header > label:first-child {
+    color: var(--zc-muted) !important;
+    font-size: 11px !important;
+    font-weight: 400 !important;
+  }
+
+  & #zen-site-data-footer {
+    border-top-color: var(--zc-line) !important;
+  }
+}
+
+/* Extensions panel (the separate toolbar button, when Zen's
+   zen.theme.hide-unified-extensions-button is off): one row per
+   extension with the active-tab hover, a muted header and muted
+   status text. */
+:root:not([zen-private-window="true"]) #unified-extensions-panel {
+  & .panel-header > h1 {
+    font-size: 13px !important;
+    font-weight: 400 !important;
+    color: var(--zc-muted) !important;
+  }
+
+  & .unified-extensions-item {
+    border-radius: 8px !important;
+    corner-shape: round !important;
+    transition: background-color 0.15s ease !important;
+
+    &:hover {
+      background-color: var(--zc-surface) !important;
+      box-shadow: inset 0 0 0 1px var(--zc-line) !important;
+    }
+
+    & :is(.unified-extensions-item-action-button, .unified-extensions-item-menu-button):hover {
+      background-color: transparent !important;
+    }
+
+    & :is(.unified-extensions-item-message, .unified-extensions-item-message-hover) {
+      color: var(--zc-muted) !important;
+    }
+  }
+}
+
 /* ---- Interface font ---- */
 :root:has(.sine-theme-strings[mod-zencard-font="serif"]) {
   font-family: Georgia, "Times New Roman", serif !important;
