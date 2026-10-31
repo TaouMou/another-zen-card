@@ -153,7 +153,8 @@
      - buttons: a soft fill with a thin border, normal weight; the main
        action filled with the accent
      - fields and dropdowns: inset, darker than the page, thin border
-     - checkboxes, radios and toggles: the accent when on
+     - checkboxes, radios and toggles: an outline when off; a light
+       accent tint, accent outline and accent mark when on
      - boxes and cards: the page color, thin border, 12px corners
      The few native elements that ignore the tokens are styled below.
      Each Firefox component (moz-select, moz-button, moz-toggle...)
@@ -202,18 +203,21 @@
     --select-text-color: var(--zc-text) !important;
     --select-font-weight: 400 !important;
 
-    --checkbox-unchecked-bgcolor: var(--zc-frame) !important;
+    --checkbox-unchecked-bgcolor: transparent !important;
     --checkbox-border-color: var(--zc-line-strong) !important;
-    --checkbox-checked-bgcolor: var(--zc-accent) !important;
-    --checkbox-checked-hover-bgcolor: color-mix(in srgb, var(--zc-accent) 85%, var(--zc-text)) !important;
-    --checkbox-checked-color: var(--zc-on-accent) !important;
-    --toggle-background-color: var(--zc-frame) !important;
-    --toggle-background-color-hover: var(--zc-frame) !important;
+    --checkbox-checked-bgcolor: color-mix(in srgb, var(--zc-accent) 18%, transparent) !important;
+    --checkbox-checked-hover-bgcolor: color-mix(in srgb, var(--zc-accent) 26%, transparent) !important;
+    --checkbox-checked-color: var(--zc-accent) !important;
+    --toggle-background-color: transparent !important;
+    --toggle-background-color-hover: var(--zc-surface) !important;
+    --toggle-background-color-active: var(--zc-raised) !important;
     --toggle-border-color: var(--zc-line-strong) !important;
+    --toggle-border-color-hover: color-mix(in srgb, var(--zc-text) 40%, var(--zc-frame)) !important;
     --toggle-dot-background-color: var(--zc-muted) !important;
-    --toggle-background-color-pressed: var(--zc-accent) !important;
-    --toggle-background-color-pressed-hover: color-mix(in srgb, var(--zc-accent) 85%, var(--zc-text)) !important;
-    --toggle-dot-background-color-on-pressed: var(--zc-on-accent) !important;
+    --toggle-background-color-pressed: color-mix(in srgb, var(--zc-accent) 18%, transparent) !important;
+    --toggle-background-color-pressed-hover: color-mix(in srgb, var(--zc-accent) 26%, transparent) !important;
+    --toggle-background-color-pressed-active: color-mix(in srgb, var(--zc-accent) 32%, transparent) !important;
+    --toggle-dot-background-color-on-pressed: var(--zc-accent) !important;
 
     --box-border: 1px solid var(--zc-line) !important;
     --box-button-background-color: transparent !important;
@@ -242,6 +246,63 @@
   *::before,
   *::after {
     corner-shape: round !important;
+  }
+
+  /* Checkboxes and radios are drawn by the system (tinted only through
+     accent-color) and the toggle sets its own border when on, so these
+     are drawn here: an outline when off; a light accent tint, an accent
+     outline and an accent check or dot when on. */
+  :is(input[type="checkbox"], input[type="radio"], .checkbox-check, .radio-check) {
+    appearance: none !important;
+    box-sizing: border-box !important;
+    width: 16px !important;
+    height: 16px !important;
+    border: 1px solid var(--zc-line-strong) !important;
+    border-radius: 4px !important;
+    background: transparent no-repeat center !important;
+    -moz-context-properties: fill !important;
+    fill: var(--zc-accent) !important;
+  }
+
+  :is(input[type="radio"], .radio-check) {
+    border-radius: 50% !important;
+  }
+
+  :is(input[type="checkbox"], input[type="radio"], .checkbox-check, .radio-check):hover {
+    border-color: color-mix(in srgb, var(--zc-text) 40%, var(--zc-frame)) !important;
+  }
+
+  :is(input[type="checkbox"]:checked, input[type="checkbox"]:indeterminate, input[type="radio"]:checked, .checkbox-check[checked], .radio-check[selected]) {
+    border-color: var(--zc-accent) !important;
+    background-color: color-mix(in srgb, var(--zc-accent) 18%, transparent) !important;
+  }
+
+  :is(input[type="checkbox"]:checked, .checkbox-check[checked]) {
+    background-image: url("chrome://global/skin/icons/check.svg") !important;
+    background-size: 12px !important;
+  }
+
+  input[type="checkbox"]:indeterminate {
+    background-image: linear-gradient(var(--zc-accent), var(--zc-accent)) !important;
+    background-size: 8px 2px !important;
+  }
+
+  :is(input[type="radio"]:checked, .radio-check[selected]) {
+    background-image: radial-gradient(circle, var(--zc-accent) 3.5px, transparent 4px) !important;
+  }
+
+  :is(input[type="checkbox"], input[type="radio"]):disabled,
+  :is(.checkbox-check, .radio-check)[disabled] {
+    opacity: 0.5 !important;
+  }
+
+  :is(input[type="checkbox"], input[type="radio"]):focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--zc-accent) 70%, transparent) !important;
+    outline-offset: 1px !important;
+  }
+
+  moz-toggle[pressed]::part(button) {
+    border-color: var(--zc-accent) !important;
   }
 
   /* Dialogs (Import browser data, Sine's dialogs and the settings

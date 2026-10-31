@@ -152,7 +152,8 @@
    The same components as the settings pages (content.css), through
    Firefox's design tokens, which its panels, prompts and notification
    buttons read: soft bordered buttons at normal weight with the main
-   action in the accent, inset fields, accent checkboxes and toggles.
+   action in the accent, inset fields, and checkboxes and toggles
+   in a light accent tint with an accent outline when on.
    Firefox's components declare these tokens again on themselves, which
    hides the window's values from them, so they are set on each
    component too. */
@@ -181,15 +182,26 @@
   --input-border-color: var(--zc-line) !important;
   --input-text-color: var(--zc-text) !important;
   --border-color-interactive: var(--zc-line-strong) !important;
-  --checkbox-unchecked-bgcolor: var(--zc-frame) !important;
+  --checkbox-unchecked-bgcolor: transparent !important;
   --checkbox-border-color: var(--zc-line-strong) !important;
-  --checkbox-checked-bgcolor: var(--zc-accent) !important;
-  --checkbox-checked-color: var(--zc-frame) !important;
-  --toggle-background-color: var(--zc-frame) !important;
+  --checkbox-checked-bgcolor: color-mix(in srgb, var(--zc-accent) 18%, transparent) !important;
+  --checkbox-checked-hover-bgcolor: color-mix(in srgb, var(--zc-accent) 26%, transparent) !important;
+  --checkbox-checked-color: var(--zc-accent) !important;
+  --toggle-background-color: transparent !important;
+  --toggle-background-color-hover: var(--zc-surface) !important;
+  --toggle-background-color-active: var(--zc-raised) !important;
   --toggle-border-color: var(--zc-line-strong) !important;
+  --toggle-border-color-hover: color-mix(in srgb, var(--zc-text) 40%, var(--zc-frame)) !important;
   --toggle-dot-background-color: var(--zc-muted) !important;
-  --toggle-background-color-pressed: var(--zc-accent) !important;
-  --toggle-dot-background-color-on-pressed: var(--zc-frame) !important;
+  --toggle-background-color-pressed: color-mix(in srgb, var(--zc-accent) 18%, transparent) !important;
+  --toggle-background-color-pressed-hover: color-mix(in srgb, var(--zc-accent) 26%, transparent) !important;
+  --toggle-background-color-pressed-active: color-mix(in srgb, var(--zc-accent) 32%, transparent) !important;
+  --toggle-dot-background-color-on-pressed: var(--zc-accent) !important;
+}
+
+/* The toggle sets its own border when on; give it the accent outline */
+:root:not([zen-private-window="true"]) moz-toggle[pressed]::part(button) {
+  border-color: var(--zc-accent) !important;
 }
 
 /* Text on the accent is white in light mode, where the frame is light */
@@ -197,8 +209,6 @@
   :root:not([zen-private-window="true"]) {
     --button-text-color-primary: white !important;
     --button-text-color-primary-hover: white !important;
-    --checkbox-checked-color: white !important;
-    --toggle-dot-background-color-on-pressed: white !important;
   }
 }
 
