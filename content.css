@@ -25,7 +25,6 @@
     --zc-frame: #1f1e1d;
     --zc-text: #e8e6dc;
     --zc-accent: #d97757;
-    --zc-on-accent: #1f1e1d;
     --zc-scheme: dark;
 
     --zc-page: color-mix(in srgb, var(--zc-text) 4%, var(--zc-frame));
@@ -40,7 +39,6 @@
       --zc-frame: #141414;
       --zc-text: #e6e6e6;
       --zc-accent: #6aa6ff;
-      --zc-on-accent: #141414;
     }
   }
 
@@ -49,7 +47,6 @@
       --zc-frame: #14171b;
       --zc-text: #e3e7ec;
       --zc-accent: #5fd4a4;
-      --zc-on-accent: #14171b;
     }
   }
 
@@ -58,7 +55,6 @@
       --zc-frame: #efede6;
       --zc-text: #1f1e1d;
       --zc-accent: #c96442;
-      --zc-on-accent: #ffffff;
       --zc-scheme: light;
 
       --zc-page: color-mix(in srgb, white 60%, var(--zc-frame));
@@ -112,9 +108,9 @@
     --in-content-button-background: var(--zc-surface) !important;
     --in-content-button-background-hover: var(--zc-raised) !important;
     --in-content-button-text-color: var(--zc-text) !important;
-    --in-content-primary-button-background: var(--zc-accent) !important;
-    --in-content-primary-button-background-hover: color-mix(in srgb, var(--zc-accent) 85%, var(--zc-text)) !important;
-    --in-content-primary-button-text-color: var(--zc-on-accent) !important;
+    --in-content-primary-button-background: color-mix(in srgb, var(--zc-accent) 14%, transparent) !important;
+    --in-content-primary-button-background-hover: color-mix(in srgb, var(--zc-accent) 22%, transparent) !important;
+    --in-content-primary-button-text-color: color-mix(in srgb, var(--zc-accent) 80%, var(--zc-text)) !important;
 
     /* Firefox design tokens */
     --background-color-canvas: var(--zc-page) !important;
@@ -128,7 +124,6 @@
     --color-accent-primary-active: color-mix(in srgb, var(--zc-accent) 70%, var(--zc-text)) !important;
     --button-background-color: var(--zc-surface) !important;
     --button-background-color-hover: var(--zc-raised) !important;
-    --button-text-color-primary: var(--zc-on-accent) !important;
     --link-color: var(--zc-accent) !important;
     --focus-outline-color: var(--zc-accent) !important;
     --table-row-background-color: var(--zc-page) !important;
@@ -151,7 +146,7 @@
      the parts inside their shadow DOM) read these design tokens, so most
      of the look is set here once:
      - buttons: a soft fill with a thin border, normal weight; the main
-       action filled with the accent
+       action in a light accent tint with a soft accent border
      - fields and dropdowns: inset, darker than the page, thin border
      - checkboxes, radios and toggles: an outline when off; a light
        accent tint, accent outline and accent mark when on
@@ -163,6 +158,14 @@
   :root,
   * {
     --zc-line-strong: color-mix(in srgb, var(--zc-text) 25%, var(--zc-frame));
+    /* The main action: a light accent tint, a soft accent border and
+       accent text, like a checked checkbox */
+    --zc-tint: color-mix(in srgb, var(--zc-accent) 14%, transparent);
+    --zc-tint-hover: color-mix(in srgb, var(--zc-accent) 22%, transparent);
+    --zc-tint-active: color-mix(in srgb, var(--zc-accent) 28%, transparent);
+    --zc-tint-line: color-mix(in srgb, var(--zc-accent) 35%, transparent);
+    --zc-tint-line-hover: color-mix(in srgb, var(--zc-accent) 50%, transparent);
+    --zc-tint-text: color-mix(in srgb, var(--zc-accent) 80%, var(--zc-text));
 
     --border-radius-small: 6px !important;
     --border-radius-medium: 8px !important;
@@ -181,12 +184,15 @@
     --button-border-color-hover: var(--zc-line-strong) !important;
     --button-text-color: var(--zc-text) !important;
     --button-text-color-hover: var(--zc-text) !important;
-    --button-background-color-primary: var(--zc-accent) !important;
-    --button-background-color-primary-hover: color-mix(in srgb, var(--zc-accent) 85%, var(--zc-text)) !important;
-    --button-background-color-primary-active: color-mix(in srgb, var(--zc-accent) 70%, var(--zc-text)) !important;
-    --button-border-color-primary: transparent !important;
-    --button-text-color-primary: var(--zc-on-accent) !important;
-    --button-text-color-primary-hover: var(--zc-on-accent) !important;
+    --button-background-color-primary: var(--zc-tint) !important;
+    --button-background-color-primary-hover: var(--zc-tint-hover) !important;
+    --button-background-color-primary-active: var(--zc-tint-active) !important;
+    --button-border-color-primary: var(--zc-tint-line) !important;
+    --button-border-color-primary-hover: var(--zc-tint-line-hover) !important;
+    --button-border-color-primary-active: var(--zc-tint-line-hover) !important;
+    --button-text-color-primary: var(--zc-tint-text) !important;
+    --button-text-color-primary-hover: var(--zc-tint-text) !important;
+    --button-text-color-primary-active: var(--zc-tint-text) !important;
     --button-background-color-ghost: transparent !important;
     --button-background-color-ghost-hover: var(--zc-surface) !important;
     --button-border-color-ghost: transparent !important;
@@ -504,22 +510,20 @@
       }
     }
 
-    & .auto-update-toggle[enabled] {
-      background-color: var(--zc-accent) !important;
-      color: var(--zc-on-accent) !important;
-      box-shadow: none !important;
+    & :is(.auto-update-toggle[enabled], .sineMarketplaceItemButton) {
+      background-color: var(--zc-tint) !important;
+      color: var(--zc-tint-text) !important;
+      box-shadow: inset 0 0 0 1px var(--zc-tint-line) !important;
+      opacity: 1 !important;
+
+      &:hover {
+        background-color: var(--zc-tint-hover) !important;
+        box-shadow: inset 0 0 0 1px var(--zc-tint-line-hover) !important;
+      }
     }
 
     & .sineMarketplaceItemButton {
       flex: 1 !important;
-      background-color: var(--zc-accent) !important;
-      color: var(--zc-on-accent) !important;
-      box-shadow: none !important;
-      font-weight: 500 !important;
-
-      &:hover {
-        background-color: color-mix(in srgb, var(--zc-accent) 85%, var(--zc-text)) !important;
-      }
     }
 
     & :is(.sineCKSOption-input, input[type="text"]):not(dialog *) {

@@ -152,7 +152,7 @@
    The same components as the settings pages (content.css), through
    Firefox's design tokens, which its panels, prompts and notification
    buttons read: soft bordered buttons at normal weight with the main
-   action in the accent, inset fields, and checkboxes and toggles
+   action in a light accent tint, inset fields, and checkboxes and toggles
    in a light accent tint with an accent outline when on.
    Firefox's components declare these tokens again on themselves, which
    hides the window's values from them, so they are set on each
@@ -160,6 +160,12 @@
 :root:not([zen-private-window="true"]),
 :root:not([zen-private-window="true"]) :is(moz-button, moz-select, moz-toggle, moz-checkbox, moz-radio, moz-input-text, moz-input-search, moz-box-item, moz-box-button, moz-box-link, moz-box-group, moz-card, moz-message-bar, moz-button-group) {
   --zc-line-strong: color-mix(in srgb, var(--zc-text) 25%, var(--zc-frame));
+  --zc-tint: color-mix(in srgb, var(--zc-accent) 14%, transparent);
+  --zc-tint-hover: color-mix(in srgb, var(--zc-accent) 22%, transparent);
+  --zc-tint-active: color-mix(in srgb, var(--zc-accent) 28%, transparent);
+  --zc-tint-line: color-mix(in srgb, var(--zc-accent) 35%, transparent);
+  --zc-tint-line-hover: color-mix(in srgb, var(--zc-accent) 50%, transparent);
+  --zc-tint-text: color-mix(in srgb, var(--zc-accent) 80%, var(--zc-text));
 
   --button-border-radius: 8px !important;
   --input-border-radius: 8px !important;
@@ -171,12 +177,15 @@
   --button-border-color-hover: var(--zc-line-strong) !important;
   --button-text-color: var(--zc-text) !important;
   --button-text-color-hover: var(--zc-text) !important;
-  --button-background-color-primary: var(--zc-accent) !important;
-  --button-background-color-primary-hover: color-mix(in srgb, var(--zc-accent) 85%, var(--zc-text)) !important;
-  --button-background-color-primary-active: color-mix(in srgb, var(--zc-accent) 70%, var(--zc-text)) !important;
-  --button-border-color-primary: transparent !important;
-  --button-text-color-primary: var(--zc-frame) !important;
-  --button-text-color-primary-hover: var(--zc-frame) !important;
+  --button-background-color-primary: var(--zc-tint) !important;
+  --button-background-color-primary-hover: var(--zc-tint-hover) !important;
+  --button-background-color-primary-active: var(--zc-tint-active) !important;
+  --button-border-color-primary: var(--zc-tint-line) !important;
+  --button-border-color-primary-hover: var(--zc-tint-line-hover) !important;
+  --button-border-color-primary-active: var(--zc-tint-line-hover) !important;
+  --button-text-color-primary: var(--zc-tint-text) !important;
+  --button-text-color-primary-hover: var(--zc-tint-text) !important;
+  --button-text-color-primary-active: var(--zc-tint-text) !important;
   --button-background-color-ghost-hover: var(--zc-surface) !important;
   --input-background-color: var(--zc-frame) !important;
   --input-border-color: var(--zc-line) !important;
@@ -202,14 +211,6 @@
 /* The toggle sets its own border when on; give it the accent outline */
 :root:not([zen-private-window="true"]) moz-toggle[pressed]::part(button) {
   border-color: var(--zc-accent) !important;
-}
-
-/* Text on the accent is white in light mode, where the frame is light */
-@media -moz-pref("mod.zencard.mode", "light") or ((not -moz-pref("mod.zencard.mode", "dark")) and (-moz-pref("zen.view.window.scheme", 1) or (-moz-pref("zen.view.window.scheme", 2) and (not (-moz-system-dark-theme))))) {
-  :root:not([zen-private-window="true"]) {
-    --button-text-color-primary: white !important;
-    --button-text-color-primary-hover: white !important;
-  }
 }
 
 /* Zen gives every element squircle corners, while the theme's cards and
@@ -1031,7 +1032,7 @@
 /* Sine's toasts ("A mod utilizing JS has been disabled", mod updates...)
    are filled with Zen's accent too. Same card as Zen's toasts, with a
    reload icon in the accent bubble (Sine's notices are mostly about
-   restarting or updating), and the action button filled with the accent
+   restarting or updating), and the action button in the accent tint
    like Sine's Install buttons. Sine fades the description in, so its
    opacity is left alone. */
 :root:not([zen-private-window="true"]) .sineToastManager .sineToast {
@@ -1071,24 +1072,18 @@
     flex: none !important;
     margin-left: 6px !important;
     padding: 5px 12px !important;
-    border: none !important;
+    border: 1px solid var(--zc-tint-line) !important;
     border-radius: 8px !important;
     corner-shape: round !important;
-    background: var(--zc-accent) !important;
-    color: var(--zc-frame) !important;
-    font-weight: 500 !important;
+    background: var(--zc-tint) !important;
+    color: var(--zc-tint-text) !important;
+    font-weight: 400 !important;
     transition: background-color 0.2s ease !important;
 
     &:hover {
-      background: color-mix(in srgb, var(--zc-accent) 85%, var(--zc-text)) !important;
+      background: var(--zc-tint-hover) !important;
+      border-color: var(--zc-tint-line-hover) !important;
     }
-  }
-}
-
-/* In light mode the frame is light, so text on the accent is white */
-@media -moz-pref("mod.zencard.mode", "light") or ((not -moz-pref("mod.zencard.mode", "dark")) and (-moz-pref("zen.view.window.scheme", 1) or (-moz-pref("zen.view.window.scheme", 2) and (not (-moz-system-dark-theme))))) {
-  :root:not([zen-private-window="true"]) .sineToastManager .sineToast button {
-    color: white !important;
   }
 }
 
