@@ -33,6 +33,9 @@ Zen's source (`zen-browser/desktop`) is the reference: check selectors there bef
 - The card rule's selector outranked the site-tint rule; the tint selector repeats every condition of the card rule so it wins.
 - Firefox paints `#nav-bar` with `--toolbar-bgcolor`, which covered the strip; it is made transparent while tinted.
 - Variables like `--toolbar-field-color` resolve on `:root`, so they must be redeclared on the strip to follow the site text color.
+- With `layout.css.corner-shape.enabled`, Zen gives every element squircle corners; anything along a card edge needs `corner-shape: round`, and children inside a 1px border need `radius - 1px`.
+- `#zen-sidebar-splitter` is absolutely positioned and takes no space; the gap between sidebar and page comes from margins.
+- Moving this folder with the app dropped the `.git` folders; reconnect with `git init`, `git remote add`, `git fetch` and `git reset origin/main` (keeps files).
 
 ## Working with the user
 
