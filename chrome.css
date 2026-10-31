@@ -313,9 +313,16 @@
    window): a Spotlight-style card. A larger field with an accent caret
    instead of an accent outline, results at normal weight with muted
    addresses and group labels, and the selected result in a light accent
-   tint with an accent icon (Zen fills it with the accent and white text). */
+   tint with an accent icon (Zen fills it with the accent and white text).
+   It lives inside the toolbar strip, so it would inherit the site color's
+   text and color scheme; it always uses the theme's own colors instead. */
 :root:not([zen-private-window="true"]) #urlbar[open][zen-floating-urlbar="true"] {
   --urlbar-container-height: 64px !important;
+  --toolbox-textcolor: var(--zc-text) !important;
+  --toolbar-field-color: var(--zc-text) !important;
+  --toolbar-field-focus-color: var(--zc-text) !important;
+  color: var(--zc-text) !important;
+  color-scheme: var(--zc-scheme) !important;
 
   & > .urlbar-background {
     background-color: var(--zc-page) !important;
@@ -505,7 +512,7 @@
     background: transparent !important;
   }
 
-  & #urlbar[breakout-extend] .urlbar-background {
+  & #urlbar[breakout-extend]:not([zen-floating-urlbar="true"]) .urlbar-background {
     background-color: color-mix(in srgb, var(--zc-site-text) 4%, var(--zc-site)) !important;
   }
 }
