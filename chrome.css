@@ -229,7 +229,8 @@
     text-align: center !important;
   }
 
-  & #urlbar:not([breakout-extend]):not(:hover) #zen-site-data-icon-button {
+  /* Site settings and copy-URL buttons only show on hover */
+  & #urlbar:not([breakout-extend]):not(:hover) :is(#zen-site-data-icon-button, #zen-copy-url-button) {
     opacity: 0 !important;
   }
 }
@@ -247,7 +248,7 @@
     background-color: color-mix(in srgb, currentColor 7%, transparent) !important;
   }
 
-  & #zen-site-data-icon-button {
+  & :is(#zen-site-data-icon-button, #zen-copy-url-button) {
     transition: opacity 0.2s ease !important;
   }
 }
