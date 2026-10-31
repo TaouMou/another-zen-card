@@ -345,6 +345,52 @@
   margin-inline: 0 !important;
 }
 
+/* ---- Window buttons ----
+   Minimize, maximize and close (Windows and Linux) become three small
+   dots: two muted ones and an accent one for close, no glyphs. Each keeps
+   a full-height click area wider than the dot, and maximize still opens
+   Windows 11's snap layouts on hover. The muted dots follow currentColor,
+   so they also follow the site-colored strip. */
+@media not (-moz-platform: macos) {
+  :root:not([zen-private-window="true"]) {
+    & .titlebar-buttonbox {
+      padding-inline: 6px !important;
+    }
+
+    & .titlebar-button {
+      appearance: none !important;
+      list-style-image: none !important;
+      width: 22px !important;
+      min-width: 0 !important;
+      padding: 0 !important;
+      align-items: center !important;
+      justify-content: center !important;
+      background: transparent !important;
+
+      & > .toolbarbutton-icon {
+        width: 12px !important;
+        height: 12px !important;
+        border-radius: 50% !important;
+        corner-shape: round !important;
+        background-color: color-mix(in srgb, currentColor 22%, transparent) !important;
+        transition: background-color 0.2s ease !important;
+      }
+
+      &:hover > .toolbarbutton-icon {
+        background-color: color-mix(in srgb, currentColor 50%, transparent) !important;
+      }
+    }
+
+    & .titlebar-close > .toolbarbutton-icon {
+      background-color: var(--zc-accent) !important;
+    }
+
+    & .titlebar-close:hover > .toolbarbutton-icon {
+      background-color: color-mix(in srgb, var(--zc-accent) 75%, var(--zc-text)) !important;
+    }
+  }
+}
+
 /* ---- Site-colored toolbar ----
    card-tint.uc.js sets --zc-site, --zc-site-text and [zc-site-tint]
    on :root. The toolbar then takes the color of the top of the page
