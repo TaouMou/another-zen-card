@@ -263,6 +263,32 @@
   }
 }
 
+/* Sidebar-only layout: the address bar sits in the sidebar card as an
+   inset field, darker than the card with the card's border, like the
+   space switcher's track. Zen already shows only the domain here. The
+   site settings and copy buttons appear on hover. */
+:root[zen-single-toolbar="true"]:not([zen-private-window="true"]) #urlbar:not([breakout-extend]) {
+  & > .urlbar-background {
+    background-color: var(--zc-frame) !important;
+    box-shadow: inset 0 0 0 1px var(--zc-line) !important;
+    border-radius: 8px !important;
+    corner-shape: round !important;
+    transition: box-shadow 0.2s ease !important;
+  }
+
+  &:is(:hover, [focused="true"]) > .urlbar-background {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--zc-text) 25%, var(--zc-frame)) !important;
+  }
+
+  & :is(#zen-site-data-icon-button, #zen-copy-url-button) {
+    transition: opacity 0.2s ease !important;
+  }
+
+  &:not(:hover) :is(#zen-site-data-icon-button, #zen-copy-url-button) {
+    opacity: 0 !important;
+  }
+}
+
 /* ---- Site-colored toolbar ----
    card-tint.uc.js sets --zc-site, --zc-site-text and [zc-site-tint]
    on :root. The toolbar then takes the color of the top of the page
@@ -438,9 +464,11 @@
 }
 
 /* Segmented space switcher: the space icons sit in one rounded track,
-   and the current space gets the selected tab's fill and border. Left
-   to Zen when there are too many spaces to fit (icons-overflow). */
-:root[zen-sidebar-expanded="true"]:not([zen-private-window="true"]) #zen-workspaces-button:not([icons-overflow]) {
+   and the current space gets the selected tab's fill and border. With
+   the sidebar collapsed Zen stacks the icons, so the track turns
+   vertical. Left to Zen when there are too many spaces to fit
+   (icons-overflow). */
+:root:not([zen-private-window="true"]) #zen-workspaces-button:not([icons-overflow]) {
   width: auto !important;
   margin-inline: auto !important;
   padding: 2px !important;
@@ -450,6 +478,7 @@
 
   & toolbarbutton {
     width: 28px !important;
+    min-width: 0 !important;
     max-width: 28px !important;
     height: 24px !important;
     border-radius: 6px !important;
