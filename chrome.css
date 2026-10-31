@@ -1025,8 +1025,43 @@
     font-weight: 400 !important;
   }
 
+  /* Footer (connection, reader mode, more): bare buttons like the
+     header. Zen paints every state but "secure" red, including pages
+     from an extension; only a page that isn't secure keeps the warning. */
   & #zen-site-data-footer {
     border-top-color: var(--zc-line) !important;
+
+    & toolbarbutton {
+      background: transparent !important;
+      color: var(--zc-muted) !important;
+      border-radius: 8px !important;
+      corner-shape: round !important;
+      transform: none !important;
+      transition: background-color 0.2s ease, color 0.2s ease !important;
+
+      &:hover {
+        background: var(--zc-surface) !important;
+        color: var(--zc-text) !important;
+      }
+    }
+
+    & #zen-site-data-security-info {
+      & > * {
+        opacity: 1 !important;
+      }
+
+      & * {
+        color: inherit !important;
+      }
+
+      & .toolbarbutton-text {
+        font-weight: 400 !important;
+      }
+
+      &[identity="not-secure"] {
+        color: light-dark(var(--color-red-70), var(--color-red-30)) !important;
+      }
+    }
   }
 }
 
