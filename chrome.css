@@ -1129,10 +1129,17 @@
      (pure white); use the theme's text color like the tabs */
   --panel-text-color: var(--zc-text) !important;
   --panel-border-color: var(--zc-line) !important;
-  --panel-border-radius: 10px !important;
+  --panel-border-radius: var(--zc-radius) !important;
   --panel-padding: 4px !important;
   --panel-separator-color: var(--zc-line) !important;
   --menuitem-icon-fill: color-mix(in srgb, currentColor 55%, transparent) !important;
+
+  /* The sidebar's corners. Zen's mica rule sets the frame's radius to 0
+     directly, so the variable alone doesn't reach it. */
+  &::part(content) {
+    border-radius: var(--panel-border-radius) !important;
+    corner-shape: round !important;
+  }
 
   & > :is(menuitem, menu) {
     border-radius: 6px !important;
@@ -1194,12 +1201,13 @@
    11's translucent backdrop (mica) from Zen, like the context menus: an
    empty grey box for a moment before the first one after startup was
    drawn, and Firefox and Zen drop their border and corners (radius 0)
-   for it. The theme paints them instead, with the menus' corners. */
+   for it. The theme paints them instead, with the sidebar's corners
+   like the menus. */
 :root:not([zen-private-window="true"]) panel[type="arrow"]:not(#feature-callout) {
   appearance: none !important;
   --panel-background-color: var(--zc-page) !important;
   --panel-border-color: var(--zc-line) !important;
-  --panel-border-radius: 10px !important;
+  --panel-border-radius: var(--zc-radius) !important;
 
   &::part(content) {
     border-radius: var(--panel-border-radius) !important;
