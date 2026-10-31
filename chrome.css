@@ -385,6 +385,12 @@
   }
 }
 
+/* While the floating bar is open, Zen marks the small bar's spot with an
+   empty box; leave the spot bare instead */
+:root:not([zen-private-window="true"]) #urlbar-container:has(> #urlbar[open][zen-floating-urlbar="true"]) {
+  background: transparent !important;
+}
+
 /* ---- Toolbar buttons ----
    Back, forward, reload and the other toolbar buttons are bare icons,
    in every layout: no box on hover, the icon dims at rest and brightens
