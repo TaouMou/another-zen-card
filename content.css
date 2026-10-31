@@ -225,6 +225,11 @@
     --card-border-color: var(--zc-line) !important;
     --card-box-shadow: none !important;
     --card-box-shadow-hover: none !important;
+
+    /* Settings list: the current page keeps its accent text and tint,
+       without the accent line along its left edge */
+    --page-nav-button-indicator-width: 0px !important;
+    --page-nav-button-indicator-background-color: transparent !important;
   }
 
   /* Zen imports its theme into these pages, which gives every element
