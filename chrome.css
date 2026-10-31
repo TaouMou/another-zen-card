@@ -1075,6 +1075,14 @@
 :root:not([zen-private-window="true"]) #unified-extensions-panel {
   --uei-icon-size: 18px !important;
 
+  /* A fixed width: sized to its content, the panel grew and jumped
+     whenever a hovered row showed its status */
+  & panelview {
+    width: 360px !important;
+    min-width: 360px !important;
+    max-width: 360px !important;
+  }
+
   & .panel-header > h1 {
     font-size: 13px !important;
     font-weight: 400 !important;
