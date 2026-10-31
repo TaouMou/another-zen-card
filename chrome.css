@@ -1028,6 +1028,12 @@
   }
 }
 
+/* Dropdowns show their chosen value at normal weight; it is drawn
+   inside the dropdown's shadow DOM, hence ::part */
+:root:not([zen-private-window="true"]) menulist::part(label) {
+  font-weight: 400 !important;
+}
+
 /* Dropdown lists (as in settings): the current choice keeps its normal
    text with a small accent check in front; every row leaves room for it */
 :root:not([zen-private-window="true"]) menulist > menupopup > :is(menuitem, menu) {
