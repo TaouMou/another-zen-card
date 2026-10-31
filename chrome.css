@@ -771,6 +771,70 @@
   }
 }
 
+/* Sine's toasts ("A mod utilizing JS has been disabled", mod updates...)
+   are filled with Zen's accent too. Same card as Zen's toasts, with a
+   reload icon in the accent bubble (Sine's notices are mostly about
+   restarting or updating), and the action button filled with the accent
+   like Sine's Install buttons. Sine fades the description in, so its
+   opacity is left alone. */
+:root:not([zen-private-window="true"]) .sineToastManager .sineToast {
+  height: auto !important;
+  min-height: 30px !important;
+  gap: 10px !important;
+  padding: 10px 10px 10px 12px !important;
+  border: 1px solid var(--zc-line) !important;
+  border-radius: 12px !important;
+  corner-shape: round !important;
+  background: var(--zc-surface) !important;
+  color: var(--zc-text) !important;
+
+  &::before {
+    content: "" !important;
+    flex: none !important;
+    width: 22px !important;
+    height: 22px !important;
+    border-radius: 50% !important;
+    background: color-mix(in srgb, var(--zc-accent) 18%, transparent) url("chrome://browser/skin/zen-icons/reload.svg") center / 12px no-repeat !important;
+    -moz-context-properties: fill !important;
+    fill: var(--zc-accent) !important;
+  }
+
+  & span:not(.description) {
+    font-size: 13px !important;
+    font-weight: 500 !important;
+  }
+
+  & .description {
+    margin-top: 1px !important;
+    color: var(--zc-muted) !important;
+    font-size: 11.5px !important;
+  }
+
+  & button {
+    flex: none !important;
+    margin-left: 6px !important;
+    padding: 5px 12px !important;
+    border: none !important;
+    border-radius: 8px !important;
+    corner-shape: round !important;
+    background: var(--zc-accent) !important;
+    color: var(--zc-frame) !important;
+    font-weight: 500 !important;
+    transition: background-color 0.2s ease !important;
+
+    &:hover {
+      background: color-mix(in srgb, var(--zc-accent) 85%, var(--zc-text)) !important;
+    }
+  }
+}
+
+/* In light mode the frame is light, so text on the accent is white */
+@media -moz-pref("mod.zencard.mode", "light") or ((not -moz-pref("mod.zencard.mode", "dark")) and (-moz-pref("zen.view.window.scheme", 1) or (-moz-pref("zen.view.window.scheme", 2) and (not (-moz-system-dark-theme))))) {
+  :root:not([zen-private-window="true"]) .sineToastManager .sineToast button {
+    color: white !important;
+  }
+}
+
 /* ---- Context menus ----
    Right-click menus and dropdowns become cards like the sidebar: the
    page color, the theme's border and corners, and tighter even padding.
