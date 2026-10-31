@@ -977,12 +977,26 @@
   --panel-item-active-bgcolor: var(--zc-raised) !important;
 }
 
-/* Extension popups (uBlock, SponsorBlock...) inherit the panel's corner
-   radius, but Zen gives every element squircle corners while the
-   panel's own frame (inside its shadow DOM) stays round, so the page
-   poked out at the corners. Keep the popup's layers round too. */
-:root:not([zen-private-window="true"]) panel :is(panelmultiview, .panel-viewcontainer, .panel-viewstack, panelview, .webextension-popup-stack, .webextension-popup-browser) {
-  corner-shape: round !important;
+/* Extension popups (uBlock, SponsorBlock...): the page inside didn't
+   follow the panel's frame, leaving a wedge of the panel's background
+   (or the page itself) showing in each corner. Zen gives elements
+   squircle corners, and the page took the frame's full radius although
+   it sits inside the frame's 1px border. Make the frame and every layer
+   inside it round, and the page 1px tighter than the frame. */
+:root:not([zen-private-window="true"]) panel {
+  &::part(content) {
+    corner-shape: round !important;
+  }
+
+  & :is(panelmultiview, .panel-viewcontainer, .panel-viewstack, panelview) {
+    corner-shape: round !important;
+  }
+
+  & :is(.webextension-popup-stack, .webextension-popup-browser) {
+    border-radius: calc(var(--panel-border-radius) - 1px) !important;
+    corner-shape: round !important;
+    overflow: clip !important;
+  }
 }
 
 /* Site panel (the button in the address bar): share, screenshot, boost
