@@ -619,15 +619,16 @@
   }
 }
 
-/* Library button: a plain icon in the text color, like the gear beside
-   it. Zen draws it from a 36-frame strip whose glow is hard-coded white
-   in dark mode; holding the strip on its first frame (glow at 0 opacity)
-   leaves only the context-fill shapes. Zen's library.svg is no way out:
-   it runs its own glow fade-out every time it is drawn. The download
-   badge is a separate element and keeps animating. */
+/* Library button: the theme's own grid icon instead of Zen's animated
+   strip (its glow is hard-coded white in dark mode, and Zen's static
+   library.svg replays a glow fade-out every time it is drawn). The icon
+   is a mask filled with the text color, at the same strength as the
+   gear beside it. The download badge is a separate element and keeps
+   animating. */
 :root:not([zen-private-window="true"]) #zen-library-button .zen-library-sprite::before {
-  -moz-context-properties: fill, fill-opacity !important;
-  fill: currentColor !important;
+  width: 100% !important;
+  background: color-mix(in srgb, currentColor 70%, transparent) !important;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linejoin='round'%3E%3Crect x='4' y='4' width='6.5' height='6.5' rx='1.5'/%3E%3Crect x='13.5' y='4' width='6.5' height='6.5' rx='1.5'/%3E%3Crect x='4' y='13.5' width='6.5' height='6.5' rx='1.5'/%3E%3Crect x='13.5' y='13.5' width='6.5' height='6.5' rx='1.5'/%3E%3C/svg%3E") center / 100% 100% no-repeat !important;
   animation: none !important;
   transform: none !important;
 }
