@@ -18,8 +18,11 @@
 /* ---- Palettes ----
    Each palette sets frame, text, accent and scheme, in a dark and a
    light version; the other surfaces are mixed from frame and text.
-   Sine writes the palette dropdown as an attribute on
-   .sine-theme-strings.
+   Sine's dropdown settings are read with -moz-pref, not through the
+   attributes Sine writes on .sine-theme-strings: matching those needs
+   :root:has(), which makes Firefox re-check the whole window whenever
+   elements are added (it slowed the first context menu after startup).
+   Each palette is a plain :root rule, so the order below decides.
 
    Light or dark comes from the Mode setting (mod.zencard.mode):
    "light" or "dark" force it; "follow" (the default, also when unset)
@@ -41,16 +44,20 @@
   --zc-muted: color-mix(in srgb, var(--zc-text) 55%, var(--zc-frame));
 }
 
-:root:has(.sine-theme-strings[mod-zencard-palette="ink"]) {
-  --zc-frame: #141414;
-  --zc-text: #e6e6e6;
-  --zc-accent: #6aa6ff;
+@media -moz-pref("mod.zencard.palette", "ink") {
+  :root {
+    --zc-frame: #141414;
+    --zc-text: #e6e6e6;
+    --zc-accent: #6aa6ff;
+  }
 }
 
-:root:has(.sine-theme-strings[mod-zencard-palette="slate"]) {
-  --zc-frame: #14171b;
-  --zc-text: #e3e7ec;
-  --zc-accent: #5fd4a4;
+@media -moz-pref("mod.zencard.palette", "slate") {
+  :root {
+    --zc-frame: #14171b;
+    --zc-text: #e3e7ec;
+    --zc-accent: #5fd4a4;
+  }
 }
 
 /* Light versions: deeper accents so they stay readable on light
@@ -67,39 +74,45 @@
     --zc-raised: color-mix(in srgb, white 70%, var(--zc-frame));
   }
 
-  :root:has(.sine-theme-strings[mod-zencard-palette="ink"]) {
-    --zc-frame: #ececec;
-    --zc-text: #1a1a1a;
-    --zc-accent: #2f6fdb;
+  @media -moz-pref("mod.zencard.palette", "ink") {
+    :root {
+      --zc-frame: #ececec;
+      --zc-text: #1a1a1a;
+      --zc-accent: #2f6fdb;
+    }
   }
 
-  :root:has(.sine-theme-strings[mod-zencard-palette="slate"]) {
-    --zc-frame: #e7ebef;
-    --zc-text: #15181c;
-    --zc-accent: #168a5e;
+  @media -moz-pref("mod.zencard.palette", "slate") {
+    :root {
+      --zc-frame: #e7ebef;
+      --zc-text: #15181c;
+      --zc-accent: #168a5e;
+    }
   }
 }
 
 /* Custom palette: its own colors, and its own light switch instead of
    the Mode setting */
-:root:has(.sine-theme-strings[mod-zencard-palette="custom"]) {
-  --zc-frame: var(--mod-zencard-frame, #1f1e1d);
-  --zc-text: var(--mod-zencard-text, #e8e6dc);
-  --zc-accent: var(--mod-zencard-accent, #d97757);
-  --zc-scheme: dark;
+@media -moz-pref("mod.zencard.palette", "custom") {
+  :root {
+    --zc-frame: var(--mod-zencard-frame, #1f1e1d);
+    --zc-text: var(--mod-zencard-text, #e8e6dc);
+    --zc-accent: var(--mod-zencard-accent, #d97757);
+    --zc-scheme: dark;
 
-  --zc-page: color-mix(in srgb, var(--zc-text) 4%, var(--zc-frame));
-  --zc-surface: color-mix(in srgb, var(--zc-text) 8%, var(--zc-frame));
-  --zc-raised: color-mix(in srgb, var(--zc-text) 12%, var(--zc-frame));
-}
+    --zc-page: color-mix(in srgb, var(--zc-text) 4%, var(--zc-frame));
+    --zc-surface: color-mix(in srgb, var(--zc-text) 8%, var(--zc-frame));
+    --zc-raised: color-mix(in srgb, var(--zc-text) 12%, var(--zc-frame));
+  }
 
-@media -moz-pref("mod.zencard.customlight") {
-  :root:has(.sine-theme-strings[mod-zencard-palette="custom"]) {
-    --zc-scheme: light;
+  @media -moz-pref("mod.zencard.customlight") {
+    :root {
+      --zc-scheme: light;
 
-    --zc-page: color-mix(in srgb, white 60%, var(--zc-frame));
-    --zc-surface: color-mix(in srgb, white 45%, var(--zc-frame));
-    --zc-raised: color-mix(in srgb, white 70%, var(--zc-frame));
+      --zc-page: color-mix(in srgb, white 60%, var(--zc-frame));
+      --zc-surface: color-mix(in srgb, white 45%, var(--zc-frame));
+      --zc-raised: color-mix(in srgb, white 70%, var(--zc-frame));
+    }
   }
 }
 
@@ -302,19 +315,21 @@
    card-tint.uc.js also trims the text to just the domain. The floating
    bar that opens when you type is positioned by Zen on its own, so it
    keeps its full width. */
-:root:not([zen-single-toolbar="true"]):not([zen-private-window="true"]):not(:has(.sine-theme-strings[mod-zencard-urlbar="full"])) {
-  & #urlbar-container {
-    max-width: min(560px, 48%) !important;
-    margin-inline: auto !important;
-  }
+@media not -moz-pref("mod.zencard.urlbar", "full") {
+  :root:not([zen-single-toolbar="true"]):not([zen-private-window="true"]) {
+    & #urlbar-container {
+      max-width: min(560px, 48%) !important;
+      margin-inline: auto !important;
+    }
 
-  & #urlbar:not([breakout-extend]) .urlbar-input {
-    text-align: center !important;
-  }
+    & #urlbar:not([breakout-extend]) .urlbar-input {
+      text-align: center !important;
+    }
 
-  /* Site settings and copy-URL buttons only show on hover */
-  & #urlbar:not([breakout-extend]):not(:hover) :is(#zen-site-data-icon-button, #zen-copy-url-button) {
-    opacity: 0 !important;
+    /* Site settings and copy-URL buttons only show on hover */
+    & #urlbar:not([breakout-extend]):not(:hover) :is(#zen-site-data-icon-button, #zen-copy-url-button) {
+      opacity: 0 !important;
+    }
   }
 }
 
@@ -322,27 +337,29 @@
    toolbar, slightly dimmed. Hovering brings it to full brightness and
    fades in the buttons; no box ever appears. While typing (when Zen
    doesn't float the bar) a faint wash shows where the field is. */
-:root:not([zen-single-toolbar="true"]):not([zen-private-window="true"]):not(:has(.sine-theme-strings[mod-zencard-urlbar="full"])):not(:has(.sine-theme-strings[mod-zencard-urlbar="centered"])) #urlbar:not([breakout-extend]) {
-  & > .urlbar-background {
-    background-color: transparent !important;
-    transition: background-color 0.2s ease !important;
-  }
+@media not (-moz-pref("mod.zencard.urlbar", "full") or -moz-pref("mod.zencard.urlbar", "centered")) {
+  :root:not([zen-single-toolbar="true"]):not([zen-private-window="true"]) #urlbar:not([breakout-extend]) {
+    & > .urlbar-background {
+      background-color: transparent !important;
+      transition: background-color 0.2s ease !important;
+    }
 
-  &[focused="true"] > .urlbar-background {
-    background-color: color-mix(in srgb, currentColor 7%, transparent) !important;
-  }
+    &[focused="true"] > .urlbar-background {
+      background-color: color-mix(in srgb, currentColor 7%, transparent) !important;
+    }
 
-  & .urlbar-input {
-    opacity: 0.7 !important;
-    transition: opacity 0.2s ease !important;
-  }
+    & .urlbar-input {
+      opacity: 0.7 !important;
+      transition: opacity 0.2s ease !important;
+    }
 
-  &:is(:hover, [focused="true"]) .urlbar-input {
-    opacity: 1 !important;
-  }
+    &:is(:hover, [focused="true"]) .urlbar-input {
+      opacity: 1 !important;
+    }
 
-  & :is(#zen-site-data-icon-button, #zen-copy-url-button) {
-    transition: opacity 0.2s ease !important;
+    & :is(#zen-site-data-icon-button, #zen-copy-url-button) {
+      transition: opacity 0.2s ease !important;
+    }
   }
 }
 
@@ -636,62 +653,72 @@
   box-shadow: inset 0 0 0 1px var(--zc-line) !important;
 }
 
-:root:not([zen-private-window="true"]):has(.sine-theme-strings[mod-zencard-tabstyle="outline"]) .tabbrowser-tab[visuallyselected]:not([zen-essential]) > .tab-stack > .tab-background {
-  background: transparent !important;
+@media -moz-pref("mod.zencard.tabstyle", "outline") {
+  :root:not([zen-private-window="true"]) .tabbrowser-tab[visuallyselected]:not([zen-essential]) > .tab-stack > .tab-background {
+    background: transparent !important;
+  }
 }
 
-:root:not([zen-private-window="true"]):has(.sine-theme-strings[mod-zencard-tabstyle="tint"]) .tabbrowser-tab[visuallyselected]:not([zen-essential]) > .tab-stack > .tab-background {
-  background: color-mix(in srgb, var(--zc-accent) 18%, var(--zc-frame)) !important;
-  box-shadow: none !important;
-}
-
-:root:not([zen-private-window="true"]):has(.sine-theme-strings[mod-zencard-tabstyle="inverted"]) .tabbrowser-tab[visuallyselected]:not([zen-essential]) {
-  & > .tab-stack > .tab-background {
-    background: var(--zc-text) !important;
+@media -moz-pref("mod.zencard.tabstyle", "tint") {
+  :root:not([zen-private-window="true"]) .tabbrowser-tab[visuallyselected]:not([zen-essential]) > .tab-stack > .tab-background {
+    background: color-mix(in srgb, var(--zc-accent) 18%, var(--zc-frame)) !important;
     box-shadow: none !important;
   }
-
-  & .tab-content {
-    color: var(--zc-frame) !important;
-  }
 }
 
-:root:not([zen-private-window="true"]):has(.sine-theme-strings[mod-zencard-tabstyle="text"]) {
-  & .tabbrowser-tab[visuallyselected]:not([zen-essential]) {
+@media -moz-pref("mod.zencard.tabstyle", "inverted") {
+  :root:not([zen-private-window="true"]) .tabbrowser-tab[visuallyselected]:not([zen-essential]) {
     & > .tab-stack > .tab-background {
-      background: transparent !important;
+      background: var(--zc-text) !important;
       box-shadow: none !important;
     }
 
-    & .tab-label {
-      font-weight: 600 !important;
+    & .tab-content {
+      color: var(--zc-frame) !important;
     }
-  }
-
-  & .tabbrowser-tab:not([visuallyselected]):not([zen-essential]) .tab-label {
-    color: var(--zc-muted) !important;
   }
 }
 
-:root:not([zen-private-window="true"]):has(.sine-theme-strings[mod-zencard-tabstyle="dot"]) .tabbrowser-tab[visuallyselected]:not([zen-essential]) {
-  & > .tab-stack > .tab-background {
-    position: relative !important;
-  }
+@media -moz-pref("mod.zencard.tabstyle", "text") {
+  :root:not([zen-private-window="true"]) {
+    & .tabbrowser-tab[visuallyselected]:not([zen-essential]) {
+      & > .tab-stack > .tab-background {
+        background: transparent !important;
+        box-shadow: none !important;
+      }
 
-  & > .tab-stack > .tab-background::after {
-    content: "" !important;
-    position: absolute !important;
-    inset-inline-end: 12px !important;
-    top: calc(50% - 3px) !important;
-    width: 6px !important;
-    height: 6px !important;
-    border-radius: 50% !important;
-    background: var(--zc-accent) !important;
-  }
+      & .tab-label {
+        font-weight: 600 !important;
+      }
+    }
 
-  /* The close button takes that spot on hover */
-  &:hover > .tab-stack > .tab-background::after {
-    opacity: 0 !important;
+    & .tabbrowser-tab:not([visuallyselected]):not([zen-essential]) .tab-label {
+      color: var(--zc-muted) !important;
+    }
+  }
+}
+
+@media -moz-pref("mod.zencard.tabstyle", "dot") {
+  :root:not([zen-private-window="true"]) .tabbrowser-tab[visuallyselected]:not([zen-essential]) {
+    & > .tab-stack > .tab-background {
+      position: relative !important;
+    }
+
+    & > .tab-stack > .tab-background::after {
+      content: "" !important;
+      position: absolute !important;
+      inset-inline-end: 12px !important;
+      top: calc(50% - 3px) !important;
+      width: 6px !important;
+      height: 6px !important;
+      border-radius: 50% !important;
+      background: var(--zc-accent) !important;
+    }
+
+    /* The close button takes that spot on hover */
+    &:hover > .tab-stack > .tab-background::after {
+      opacity: 0 !important;
+    }
   }
 }
 
@@ -1302,10 +1329,14 @@
 }
 
 /* ---- Interface font ---- */
-:root:has(.sine-theme-strings[mod-zencard-font="serif"]) {
-  font-family: Georgia, "Times New Roman", serif !important;
+@media -moz-pref("mod.zencard.font", "serif") {
+  :root {
+    font-family: Georgia, "Times New Roman", serif !important;
+  }
 }
 
-:root:has(.sine-theme-strings[mod-zencard-font="mono"]) {
-  font-family: "Cascadia Mono", Consolas, ui-monospace, monospace !important;
+@media -moz-pref("mod.zencard.font", "mono") {
+  :root {
+    font-family: "Cascadia Mono", Consolas, ui-monospace, monospace !important;
+  }
 }
