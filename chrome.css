@@ -211,8 +211,9 @@
    on :root. The toolbar then takes the color of the top of the page
    and drops its divider, so it flows into the site's header. The
    field variables are redeclared here because the :root ones resolve
-   against the theme text color. */
-:root[zc-site-tint]:not([zen-single-toolbar="true"]):not([zen-compact-mode="true"]):not([zen-private-window="true"]) #zen-appcontent-navbar-wrapper {
+   against the theme text color. The selector repeats every condition
+   of the card rule above (plus [zc-site-tint]) so it outranks it. */
+:root[zc-site-tint]:not([zen-single-toolbar="true"]):not([zen-compact-mode="true"]):not([inDOMFullscreen="true"]):not([popup-window]):not([zen-private-window="true"]) #zen-appcontent-navbar-wrapper {
   background: var(--zc-site) !important;
   border-bottom-color: transparent !important;
   color: var(--zc-site-text) !important;
