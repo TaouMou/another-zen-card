@@ -456,6 +456,20 @@
   }
 }
 
+/* Library button: Zen draws it as a colored 36-frame animation strip.
+   Replace it with Zen's plain line icon so it matches the gear beside
+   it. The download badge is a separate element and keeps animating. */
+:root:not([zen-private-window="true"]) #zen-library-button .zen-library-sprite {
+  background: url("chrome://browser/skin/zen-icons/library.svg") center / 16px no-repeat !important;
+  -moz-context-properties: fill, fill-opacity !important;
+  fill: currentColor !important;
+  scale: 1 !important;
+
+  &::before {
+    display: none !important;
+  }
+}
+
 /* ---- Interface font ---- */
 :root:has(.sine-theme-strings[mod-zencard-font="serif"]) {
   font-family: Georgia, "Times New Roman", serif !important;
