@@ -1,0 +1,252 @@
+/*
+ * =================================================================
+ *  Another Zen Card - a solid, glass-free theme for Zen
+ *
+ *  - Fixed palettes instead of the workspace gradient
+ *  - Page and top toolbar become one outlined card
+ *    (needs the "Sidebar and top toolbar" layout; in the
+ *    sidebar-only layout the page alone becomes the card)
+ *  - Accent used sparingly: loading bar, active tab line,
+ *    focused address bar
+ *
+ *  Sine loads mod CSS as a user sheet, so overrides of Zen's own
+ *  styles must be !important to win.
+ *  Private windows keep Zen's own look.
+ * =================================================================
+ */
+
+/* ---- Palettes ----
+   Each palette sets frame, text, accent and scheme; the other
+   surfaces are mixed from frame and text below. Sine writes the
+   dropdown value as an attribute on .sine-theme-strings. */
+:root {
+  --zc-frame: #1f1e1d;
+  --zc-text: #e8e6dc;
+  --zc-accent: #d97757;
+  --zc-scheme: dark;
+  --zc-radius: 10px;
+}
+
+:root:has(.sine-theme-strings[mod-zencard-palette="ink"]) {
+  --zc-frame: #141414;
+  --zc-text: #e6e6e6;
+  --zc-accent: #6aa6ff;
+}
+
+:root:has(.sine-theme-strings[mod-zencard-palette="slate"]) {
+  --zc-frame: #14171b;
+  --zc-text: #e3e7ec;
+  --zc-accent: #5fd4a4;
+}
+
+:root:has(.sine-theme-strings[mod-zencard-palette="paper"]) {
+  --zc-frame: #e9e7df;
+  --zc-text: #1f1e1d;
+  --zc-accent: #c96442;
+  --zc-scheme: light;
+}
+
+:root:has(.sine-theme-strings[mod-zencard-palette="custom"]) {
+  --zc-frame: var(--mod-zencard-frame, #1f1e1d);
+  --zc-text: var(--mod-zencard-text, #e8e6dc);
+  --zc-accent: var(--mod-zencard-accent, #d97757);
+}
+
+@media -moz-pref("mod.zencard.customlight") {
+  :root:has(.sine-theme-strings[mod-zencard-palette="custom"]) {
+    --zc-scheme: light;
+  }
+}
+
+/* Surfaces mixed from frame and text: on dark palettes each step
+   is a little lighter than the frame */
+:root {
+  --zc-page: color-mix(in srgb, var(--zc-text) 4%, var(--zc-frame));
+  --zc-surface: color-mix(in srgb, var(--zc-text) 8%, var(--zc-frame));
+  --zc-raised: color-mix(in srgb, var(--zc-text) 12%, var(--zc-frame));
+  --zc-line: color-mix(in srgb, var(--zc-text) 13%, var(--zc-frame));
+}
+
+/* On light palettes the page and surfaces step towards white instead */
+:root:has(.sine-theme-strings[mod-zencard-palette="paper"]) {
+  --zc-page: color-mix(in srgb, white 60%, var(--zc-frame));
+  --zc-surface: color-mix(in srgb, white 45%, var(--zc-frame));
+  --zc-raised: color-mix(in srgb, white 70%, var(--zc-frame));
+}
+
+@media -moz-pref("mod.zencard.customlight") {
+  :root:has(.sine-theme-strings[mod-zencard-palette="custom"]) {
+    --zc-page: color-mix(in srgb, white 60%, var(--zc-frame));
+    --zc-surface: color-mix(in srgb, white 45%, var(--zc-frame));
+    --zc-raised: color-mix(in srgb, white 70%, var(--zc-frame));
+  }
+}
+
+/* ---- Feed the palette into Zen's own variables ---- */
+:root:not([zen-private-window="true"]) {
+  --zen-primary-color: var(--zc-accent) !important;
+  --toolbox-textcolor: var(--zc-text) !important;
+  --toolbar-color-scheme: var(--zc-scheme) !important;
+
+  --zen-colors-primary: var(--zc-surface) !important;
+  --zen-colors-secondary: var(--zc-raised) !important;
+  --zen-colors-tertiary: var(--zc-page) !important;
+  --zen-colors-border: var(--zc-line) !important;
+  --zen-colors-border-contrast: var(--zc-line) !important;
+  --zen-colors-input-bg: var(--zc-surface) !important;
+  --zen-colors-primary-foreground: var(--zc-text) !important;
+  --zen-urlbar-background: var(--zc-surface) !important;
+  --zen-dialog-background: var(--zc-page) !important;
+  --zen-themed-toolbar-bg-transparent: var(--zc-frame) !important;
+  --zen-toolbar-element-bg: var(--zc-surface) !important;
+  --zen-toolbar-element-bg-hover: var(--zc-raised) !important;
+  --toolbar-field-background-color: var(--zc-surface) !important;
+  --zen-big-shadow: none !important;
+
+  /* Menus and popups */
+  --arrowpanel-background: var(--zc-page) !important;
+  --arrowpanel-color: var(--zc-text) !important;
+  --arrowpanel-border-color: var(--zc-line) !important;
+  --panel-separator-color: var(--zc-line) !important;
+  --menu-background-color: var(--zc-page) !important;
+  --menu-color: var(--zc-text) !important;
+  --menu-border-color: var(--zc-line) !important;
+  --menuitem-hover-background-color: var(--zc-surface) !important;
+}
+
+/* Solid window background: no gradient, no grain, no see-through */
+:root:not([zen-private-window="true"]) {
+  & #zen-main-app-wrapper {
+    background: var(--zc-frame) !important;
+  }
+
+  & .zen-browser-generic-background {
+    --zen-main-browser-background: var(--zc-frame) !important;
+    --zen-main-browser-background-old: var(--zc-frame) !important;
+    --zen-main-browser-background-toolbar: var(--zc-frame) !important;
+    --zen-main-browser-background-toolbar-old: var(--zc-frame) !important;
+    --zen-background-opacity: 1 !important;
+    --zen-grainy-background-opacity: 0 !important;
+  }
+
+  & .zen-browser-grain {
+    display: none !important;
+  }
+}
+
+/* Light or dark controls to match the palette (not web pages) */
+:root:not([zen-private-window="true"]) {
+  &,
+  & #browser,
+  & panel,
+  & menupopup {
+    color-scheme: var(--zc-scheme) !important;
+  }
+}
+
+/* ---- The card ---- */
+
+/* Layout with a top toolbar: toolbar and page share one outlined card.
+   No overflow clipping on the wrapper, so the address bar's dropdown
+   can still extend past it. */
+:root:not([zen-single-toolbar="true"]):not([zen-compact-mode="true"]):not([inDOMFullscreen="true"]):not([popup-window]):not([zen-private-window="true"]) {
+  & #zen-appcontent-wrapper {
+    margin: var(--zen-element-separation) !important;
+    margin-inline-start: 0 !important;
+    background: var(--zc-page) !important;
+    border: 1px solid var(--zc-line) !important;
+    border-radius: var(--zc-radius) !important;
+    corner-shape: round !important;
+  }
+
+  &[zen-right-side="true"] #zen-appcontent-wrapper {
+    margin-inline-start: var(--zen-element-separation) !important;
+    margin-inline-end: 0 !important;
+  }
+
+  & #zen-appcontent-navbar-wrapper {
+    background: var(--zc-page) !important;
+    border-bottom: 1px solid var(--zc-line) !important;
+    border-radius: var(--zc-radius) var(--zc-radius) 0 0 !important;
+  }
+
+  & #zen-tabbox-wrapper {
+    margin: 0 !important;
+  }
+
+  & #tabbrowser-tabbox #tabbrowser-tabpanels .browserSidebarContainer:not(.zen-glance-overlay) {
+    box-shadow: none !important;
+    corner-shape: round !important;
+    border-radius: 0 0 calc(var(--zc-radius) - 1px) calc(var(--zc-radius) - 1px) !important;
+  }
+}
+
+/* Sidebar-only layout: the page alone becomes the outlined card */
+:root[zen-single-toolbar="true"]:not([zen-compact-mode="true"]):not([inDOMFullscreen="true"]):not([popup-window]):not([zen-private-window="true"]) {
+  & #tabbrowser-tabbox #tabbrowser-tabpanels .browserSidebarContainer:not(.zen-glance-overlay) {
+    box-shadow: none !important;
+    border: 1px solid var(--zc-line) !important;
+    corner-shape: round !important;
+    border-radius: var(--zc-radius) !important;
+  }
+}
+
+/* ---- Address bar ----
+   Its resting and hover colors already come from
+   --zen-toolbar-element-bg(-hover) above. */
+:root:not([zen-private-window="true"]) {
+  & #urlbar[breakout-extend] .urlbar-background {
+    background-color: var(--zc-page) !important;
+  }
+
+  & #urlbar:is([focused="true"], [breakout-extend]) > .urlbar-background {
+    outline: 1px solid color-mix(in srgb, var(--zc-accent) 70%, transparent) !important;
+    outline-offset: -1px !important;
+  }
+}
+
+/* ---- Tabs ---- */
+:root:not([zen-private-window="true"]) {
+  & zen-workspace {
+    --tab-background-color-selected: var(--zc-surface) !important;
+    --tab-box-shadow-selected: none !important;
+    --tab-text-color-selected: var(--zc-text) !important;
+  }
+
+  & .tabbrowser-tab[zen-essential="true"] {
+    --tab-background-color-selected: var(--zc-raised) !important;
+  }
+
+  & .tabbrowser-tab[zen-essential="true"] .tab-background {
+    --zen-essential-tab-selected-bg: var(--zc-raised) !important;
+    --zen-essential-tab-selected-bg-hover: var(--zc-raised) !important;
+  }
+}
+
+/* Active tab line: an accent edge on the selected tab */
+@media not -moz-pref("mod.zencard.noactiveline") {
+  :root:not([zen-private-window="true"]) .tabbrowser-tab[visuallyselected]:not([zen-essential]) > .tab-stack > .tab-background {
+    box-shadow: inset 3px 0 0 var(--zc-accent) !important;
+  }
+
+  :root[zen-right-side="true"]:not([zen-private-window="true"]) .tabbrowser-tab[visuallyselected]:not([zen-essential]) > .tab-stack > .tab-background {
+    box-shadow: inset -3px 0 0 var(--zc-accent) !important;
+  }
+}
+
+/* Ghost tabs: tabs that aren't loaded yet are faded and grey */
+@media not -moz-pref("mod.zencard.noghosttabs") {
+  .tabbrowser-tab[pending="true"]:not([zen-essential]):not([visuallyselected]) .tab-content {
+    opacity: 0.5 !important;
+    filter: grayscale(1) !important;
+  }
+}
+
+/* ---- Interface font ---- */
+:root:has(.sine-theme-strings[mod-zencard-font="serif"]) {
+  font-family: Georgia, "Times New Roman", serif !important;
+}
+
+:root:has(.sine-theme-strings[mod-zencard-font="mono"]) {
+  font-family: "Cascadia Mono", Consolas, ui-monospace, monospace !important;
+}

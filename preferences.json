@@ -1,0 +1,66 @@
+[
+  {
+    "property": "mod.zencard.palette",
+    "label": "Palette",
+    "type": "dropdown",
+    "value": "string",
+    "defaultValue": "warm",
+    "placeholder": false,
+    "options": [
+      { "label": "Warm graphite", "value": "warm" },
+      { "label": "Neutral ink", "value": "ink" },
+      { "label": "Cool slate", "value": "slate" },
+      { "label": "Paper (light)", "value": "paper" },
+      { "label": "Custom (use the colors below)", "value": "custom" }
+    ]
+  },
+  {
+    "property": "mod.zencard.frame",
+    "label": "Custom background color",
+    "type": "string",
+    "defaultValue": "#1f1e1d"
+  },
+  {
+    "property": "mod.zencard.text",
+    "label": "Custom text color",
+    "type": "string",
+    "defaultValue": "#e8e6dc"
+  },
+  {
+    "property": "mod.zencard.accent",
+    "label": "Custom accent color",
+    "type": "string",
+    "defaultValue": "#d97757"
+  },
+  {
+    "property": "mod.zencard.customlight",
+    "label": "Custom palette is light (light background, dark text)",
+    "type": "checkbox",
+    "defaultValue": false
+  },
+  {
+    "property": "mod.zencard.font",
+    "label": "Interface font",
+    "type": "dropdown",
+    "value": "string",
+    "defaultValue": "system",
+    "placeholder": false,
+    "options": [
+      { "label": "System (Zen's default)", "value": "system" },
+      { "label": "Serif", "value": "serif" },
+      { "label": "Mono", "value": "mono" }
+    ]
+  },
+  {
+    "property": "mod.zencard.noactiveline",
+    "label": "Hide the accent line on the active tab",
+    "type": "checkbox",
+    "defaultValue": false
+  },
+  {
+    "property": "mod.zencard.noghosttabs",
+    "label": "Don't fade tabs that aren't loaded yet",
+    "type": "checkbox",
+    "defaultValue": false
+  }
+]

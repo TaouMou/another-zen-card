@@ -1,0 +1,17 @@
+{
+  "id": "2bf83ae5-3622-4522-9174-fe2d6825a333",
+  "name": "Another Zen Card",
+  "description": "A solid, glass-free theme: fixed palettes instead of the workspace gradient, the page and toolbar as one outlined card, and the accent kept for a few small touches.",
+  "homepage": "https://github.com/TaouMou/another-zen-card",
+  "style": {
+    "chrome": "https://raw.githubusercontent.com/TaouMou/another-zen-card/main/chrome.css"
+  },
+  "readme": "https://raw.githubusercontent.com/TaouMou/another-zen-card/main/README.md",
+  "preferences": "https://raw.githubusercontent.com/TaouMou/another-zen-card/main/preferences.json",
+  "author": "TaouMou",
+  "version": "0.1.0",
+  "tags": ["Theme"],
+  "createdAt": "2026-10-31",
+  "updatedAt": "2026-10-31",
+  "fork": ["zen"]
+}
