@@ -48,6 +48,8 @@ The theme replaces the colors from Zen's theme picker, so changes made there won
 | Interface font | System |
 | Don't fade tabs that aren't loaded yet | Off |
 
+For a separate Extensions button in the toolbar (instead of extensions inside the address bar's site panel), set `zen.theme.hide-unified-extensions-button` to `false` in `about:config` and restart Zen. The theme styles both panels.
+
 ## Works well with
 
 - [Another Zen Load Bar](https://github.com/TaouMou/another-zen-load-bar): turn off its custom color to follow this theme's accent.
