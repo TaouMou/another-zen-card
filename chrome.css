@@ -139,8 +139,12 @@
    The same components as the settings pages (content.css), through
    Firefox's design tokens, which its panels, prompts and notification
    buttons read: soft bordered buttons at normal weight with the main
-   action in the accent, inset fields, accent checkboxes and toggles. */
-:root:not([zen-private-window="true"]) {
+   action in the accent, inset fields, accent checkboxes and toggles.
+   Firefox's components declare these tokens again on themselves, which
+   hides the window's values from them, so they are set on each
+   component too. */
+:root:not([zen-private-window="true"]),
+:root:not([zen-private-window="true"]) :is(moz-button, moz-select, moz-toggle, moz-checkbox, moz-radio, moz-input-text, moz-input-search, moz-box-item, moz-box-button, moz-box-link, moz-box-group, moz-card, moz-message-bar, moz-button-group) {
   --zc-line-strong: color-mix(in srgb, var(--zc-text) 25%, var(--zc-frame));
 
   --button-border-radius: 8px !important;

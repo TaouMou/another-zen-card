@@ -155,8 +155,12 @@
      - fields and dropdowns: inset, darker than the page, thin border
      - checkboxes, radios and toggles: the accent when on
      - boxes and cards: the page color, thin border, 12px corners
-     The few native elements that ignore the tokens are styled below. */
-  :root {
+     The few native elements that ignore the tokens are styled below.
+     Each Firefox component (moz-select, moz-button, moz-toggle...)
+     declares these tokens again on itself, which hides the page's
+     values from it, so they are set on every element, not just :root. */
+  :root,
+  * {
     --zc-line-strong: color-mix(in srgb, var(--zc-text) 25%, var(--zc-frame));
 
     --border-radius-small: 6px !important;
