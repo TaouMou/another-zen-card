@@ -1,7 +1,8 @@
 // ==UserScript==
 // @name           Another Zen Card: site-colored toolbar
 // @description    Colors the card's toolbar with the color along the top edge of the page,
-//                 and shows only the domain in the centered address bar.
+//                 shows only the domain in the centered address bar, cross-fades the
+//                 Library, and moves the window buttons into the sidebar-only layout's top row.
 // @include        main
 // ==/UserScript==
 
@@ -225,7 +226,54 @@
 
   const libraryFadeObserver = new MutationObserver(syncLibraryFade);
 
+  // ---- Window buttons in the sidebar ----
+  // In the sidebar-only layout Zen puts the window buttons in a strip
+  // above the page. Move them into the sidebar's top row, beside back,
+  // forward and reload, and mark :root so chrome.css can close that
+  // strip. Zen puts them back whenever it rebuilds the layout, so watch
+  // for that. Only for a left sidebar with the buttons on the right
+  // (Windows), outside compact mode.
+  let windowButtonsHome = null;
+
+  const dotsInSidebar = () =>
+    root.getAttribute("zen-single-toolbar") === "true" &&
+    root.getAttribute("zen-compact-mode") !== "true" &&
+    root.getAttribute("zen-right-side") !== "true" &&
+    root.getAttribute("zen-window-buttons-reversed") !== "true";
+
+  function placeWindowButtons() {
+    const buttons = window.gZenVerticalTabsManager?.actualWindowButtons;
+    const topButtons = document.getElementById("zen-sidebar-top-buttons");
+    if (!buttons || !topButtons) {
+      return;
+    }
+    if (dotsInSidebar()) {
+      if (buttons.parentElement !== topButtons) {
+        windowButtonsHome = buttons.parentElement;
+        topButtons.append(buttons);
+      }
+      root.setAttribute("zc-window-dots-in-sidebar", "true");
+    } else {
+      if (buttons.parentElement === topButtons && windowButtonsHome) {
+        windowButtonsHome.append(buttons);
+      }
+      root.removeAttribute("zc-window-dots-in-sidebar");
+    }
+  }
+
+  const windowButtonsObserver = new MutationObserver(placeWindowButtons);
+
   function init() {
+    windowButtonsObserver.observe(root, {
+      attributes: true,
+      attributeFilter: ["zen-single-toolbar", "zen-compact-mode", "zen-right-side"],
+    });
+    const navbarContainer = document.getElementById("zen-appcontent-navbar-container");
+    if (navbarContainer) {
+      windowButtonsObserver.observe(navbarContainer, { childList: true });
+    }
+    placeWindowButtons();
+
     libraryFadeObserver.observe(gNavToolbox, { attributes: true, attributeFilter: ["style"] });
     root.setAttribute("zc-library-fade", "true");
 
@@ -247,6 +295,7 @@
         gBrowser.tabContainer.removeEventListener("TabSelect", onTabSelect);
         Services.prefs.removeObserver(PREF_OFF, prefObserver);
         libraryFadeObserver.disconnect();
+        windowButtonsObserver.disconnect();
         if (originalTrim) {
           gURLBar._zenTrimURL = originalTrim;
           Services.prefs.removeObserver(PREF_URLBAR, urlbarPrefObserver);

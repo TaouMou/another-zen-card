@@ -391,6 +391,19 @@
   }
 }
 
+/* Sidebar-only layout: card-tint.uc.js moves the dots into the sidebar's
+   top row, beside back, forward and reload. The strip above the page that
+   held them is then empty, so it shrinks to the usual gap (unless the
+   bookmarks toolbar lives there). */
+:root[zc-window-dots-in-sidebar]:not([zen-has-bookmarks]):not([zen-private-window="true"]) #zen-appcontent-navbar-wrapper {
+  height: var(--zen-element-separation) !important;
+  min-height: var(--zen-element-separation) !important;
+
+  & #zen-appcontent-navbar-container {
+    min-height: 0 !important;
+  }
+}
+
 /* ---- Site-colored toolbar ----
    card-tint.uc.js sets --zc-site, --zc-site-text and [zc-site-tint]
    on :root. The toolbar then takes the color of the top of the page
