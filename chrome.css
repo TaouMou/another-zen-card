@@ -135,6 +135,65 @@
   --menuitem-hover-background-color: var(--zc-surface) !important;
 }
 
+/* ---- Components ----
+   The same components as the settings pages (content.css), through
+   Firefox's design tokens, which its panels, prompts and notification
+   buttons read: soft bordered buttons at normal weight with the main
+   action in the accent, inset fields, accent checkboxes and toggles. */
+:root:not([zen-private-window="true"]) {
+  --zc-line-strong: color-mix(in srgb, var(--zc-text) 25%, var(--zc-frame));
+
+  --button-border-radius: 8px !important;
+  --input-border-radius: 8px !important;
+  --button-font-weight: 400 !important;
+  --button-background-color: var(--zc-surface) !important;
+  --button-background-color-hover: var(--zc-raised) !important;
+  --button-background-color-active: color-mix(in srgb, var(--zc-text) 16%, var(--zc-frame)) !important;
+  --button-border-color: var(--zc-line) !important;
+  --button-border-color-hover: var(--zc-line-strong) !important;
+  --button-text-color: var(--zc-text) !important;
+  --button-text-color-hover: var(--zc-text) !important;
+  --button-background-color-primary: var(--zc-accent) !important;
+  --button-background-color-primary-hover: color-mix(in srgb, var(--zc-accent) 85%, var(--zc-text)) !important;
+  --button-background-color-primary-active: color-mix(in srgb, var(--zc-accent) 70%, var(--zc-text)) !important;
+  --button-border-color-primary: transparent !important;
+  --button-text-color-primary: var(--zc-frame) !important;
+  --button-text-color-primary-hover: var(--zc-frame) !important;
+  --button-background-color-ghost-hover: var(--zc-surface) !important;
+  --input-background-color: var(--zc-frame) !important;
+  --input-border-color: var(--zc-line) !important;
+  --input-text-color: var(--zc-text) !important;
+  --border-color-interactive: var(--zc-line-strong) !important;
+  --checkbox-unchecked-bgcolor: var(--zc-frame) !important;
+  --checkbox-border-color: var(--zc-line-strong) !important;
+  --checkbox-checked-bgcolor: var(--zc-accent) !important;
+  --checkbox-checked-color: var(--zc-frame) !important;
+  --toggle-background-color: var(--zc-frame) !important;
+  --toggle-border-color: var(--zc-line-strong) !important;
+  --toggle-dot-background-color: var(--zc-muted) !important;
+  --toggle-background-color-pressed: var(--zc-accent) !important;
+  --toggle-dot-background-color-on-pressed: var(--zc-frame) !important;
+}
+
+/* Text on the accent is white in light mode, where the frame is light */
+@media -moz-pref("mod.zencard.mode", "light") or ((not -moz-pref("mod.zencard.mode", "dark")) and (-moz-pref("zen.view.window.scheme", 1) or (-moz-pref("zen.view.window.scheme", 2) and (not (-moz-system-dark-theme))))) {
+  :root:not([zen-private-window="true"]) {
+    --button-text-color-primary: white !important;
+    --button-text-color-primary-hover: white !important;
+    --checkbox-checked-color: white !important;
+    --toggle-dot-background-color-on-pressed: white !important;
+  }
+}
+
+/* Zen gives every element squircle corners, while the theme's cards and
+   the insides of Firefox's components (shadow DOM) are round, so edges
+   and hover fills never lined up. Plain round corners everywhere. */
+:root:not([zen-private-window="true"]) *,
+:root:not([zen-private-window="true"]) *::before,
+:root:not([zen-private-window="true"]) *::after {
+  corner-shape: round !important;
+}
+
 /* Solid window background: no gradient, no grain, no see-through */
 :root:not([zen-private-window="true"]) {
   & #zen-main-app-wrapper {

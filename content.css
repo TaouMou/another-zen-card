@@ -144,6 +144,113 @@
     background: var(--zc-frame) !important;
   }
 
+  /* ---- Components ----
+     One set of components for every page and dialog this file reaches,
+     so a button, field, dropdown, checkbox, toggle, box or dialog looks
+     the same wherever it appears. Firefox's own components (including
+     the parts inside their shadow DOM) read these design tokens, so most
+     of the look is set here once:
+     - buttons: a soft fill with a thin border, normal weight; the main
+       action filled with the accent
+     - fields and dropdowns: inset, darker than the page, thin border
+     - checkboxes, radios and toggles: the accent when on
+     - boxes and cards: the page color, thin border, 12px corners
+     The few native elements that ignore the tokens are styled below. */
+  :root {
+    --zc-line-strong: color-mix(in srgb, var(--zc-text) 25%, var(--zc-frame));
+
+    --border-radius-small: 6px !important;
+    --border-radius-medium: 8px !important;
+    --border-radius-large: 12px !important;
+    --button-border-radius: 8px !important;
+    --input-border-radius: 8px !important;
+    --select-border-radius: 8px !important;
+    --box-border-radius: 12px !important;
+    --card-border-radius: 12px !important;
+
+    --button-font-weight: 400 !important;
+    --button-background-color: var(--zc-surface) !important;
+    --button-background-color-hover: var(--zc-raised) !important;
+    --button-background-color-active: color-mix(in srgb, var(--zc-text) 16%, var(--zc-frame)) !important;
+    --button-border-color: var(--zc-line) !important;
+    --button-border-color-hover: var(--zc-line-strong) !important;
+    --button-text-color: var(--zc-text) !important;
+    --button-text-color-hover: var(--zc-text) !important;
+    --button-background-color-primary: var(--zc-accent) !important;
+    --button-background-color-primary-hover: color-mix(in srgb, var(--zc-accent) 85%, var(--zc-text)) !important;
+    --button-background-color-primary-active: color-mix(in srgb, var(--zc-accent) 70%, var(--zc-text)) !important;
+    --button-border-color-primary: transparent !important;
+    --button-text-color-primary: var(--zc-on-accent) !important;
+    --button-text-color-primary-hover: var(--zc-on-accent) !important;
+    --button-background-color-ghost: transparent !important;
+    --button-background-color-ghost-hover: var(--zc-surface) !important;
+    --button-border-color-ghost: transparent !important;
+
+    --input-background-color: var(--zc-frame) !important;
+    --input-border-color: var(--zc-line) !important;
+    --input-text-color: var(--zc-text) !important;
+    --border-color-interactive: var(--zc-line-strong) !important;
+    --border-color-interactive-hover: color-mix(in srgb, var(--zc-text) 40%, var(--zc-frame)) !important;
+    --select-background-color: var(--zc-frame) !important;
+    --select-background-color-hover: var(--zc-frame) !important;
+    --select-border-color: var(--zc-line) !important;
+    --select-border-color-hover: var(--zc-line-strong) !important;
+    --select-text-color: var(--zc-text) !important;
+    --select-font-weight: 400 !important;
+
+    --checkbox-unchecked-bgcolor: var(--zc-frame) !important;
+    --checkbox-border-color: var(--zc-line-strong) !important;
+    --checkbox-checked-bgcolor: var(--zc-accent) !important;
+    --checkbox-checked-hover-bgcolor: color-mix(in srgb, var(--zc-accent) 85%, var(--zc-text)) !important;
+    --checkbox-checked-color: var(--zc-on-accent) !important;
+    --toggle-background-color: var(--zc-frame) !important;
+    --toggle-background-color-hover: var(--zc-frame) !important;
+    --toggle-border-color: var(--zc-line-strong) !important;
+    --toggle-dot-background-color: var(--zc-muted) !important;
+    --toggle-background-color-pressed: var(--zc-accent) !important;
+    --toggle-background-color-pressed-hover: color-mix(in srgb, var(--zc-accent) 85%, var(--zc-text)) !important;
+    --toggle-dot-background-color-on-pressed: var(--zc-on-accent) !important;
+
+    --box-border: 1px solid var(--zc-line) !important;
+    --box-button-background-color: transparent !important;
+    --box-button-background-color-hover: var(--zc-surface) !important;
+    --box-button-background-color-active: var(--zc-raised) !important;
+    --box-button-text-color: var(--zc-text) !important;
+    --box-button-text-color-hover: var(--zc-text) !important;
+    --card-background-color: var(--zc-page) !important;
+    --card-border-color: var(--zc-line) !important;
+    --card-box-shadow: none !important;
+    --card-box-shadow-hover: none !important;
+  }
+
+  /* Zen imports its theme into these pages, which gives every element
+     squircle corners; the insides of Firefox's components (in shadow
+     DOM) stay round, so a box and its hover fill had different corners.
+     Plain round corners everywhere. */
+  *,
+  *::before,
+  *::after {
+    corner-shape: round !important;
+  }
+
+  /* Dialogs (Import browser data, Sine's dialogs and the settings
+     dialogs' box below) share one card. Sine forces every dialog on its
+     page to 60% of the window with 20px padding and a scrollbar; size
+     them to their content instead. */
+  dialog {
+    background: var(--zc-page) !important;
+    color: var(--zc-text) !important;
+    border: 1px solid var(--zc-line) !important;
+    outline: none !important;
+    border-radius: 12px !important;
+    box-shadow: 0 24px 60px -24px rgb(0 0 0 / 0.55) !important;
+    min-width: 0 !important;
+    width: fit-content !important;
+    max-width: min(860px, 92vw) !important;
+    padding: 20px !important;
+    overflow-y: auto !important;
+  }
+
   /* ---- Sine's mod settings dialog ----
      A card like the browser's sidebar and page: the theme's border and
      corners, a quiet header with a bare close button, dropdowns and text
@@ -152,12 +259,6 @@
      color typed in them ("border": "value" in preferences.json), so
      their default border only applies when Sine hasn't set one. */
   dialog.sineItemPreferenceDialog {
-    --checkbox-unchecked-bgcolor: var(--zc-frame);
-    --checkbox-border-color: color-mix(in srgb, var(--zc-text) 30%, var(--zc-frame));
-    --checkbox-checked-bgcolor: var(--zc-accent);
-    --checkbox-checked-hover-bgcolor: color-mix(in srgb, var(--zc-accent) 85%, var(--zc-text));
-    --checkbox-checked-color: var(--zc-on-accent);
-
     background: var(--zc-page) !important;
     color: var(--zc-text) !important;
     border: 1px solid var(--zc-line) !important;
@@ -422,7 +523,7 @@
      the settings dialogs): inset fields like the sidebar's address field,
      at normal weight. Zen and Sine make their text bold, so the weight
      covers the field's label and its list too. */
-  menulist {
+  :is(menulist, select:not([size], [multiple])) {
     appearance: none !important;
     min-height: 30px !important;
     padding-block: 0 !important;
@@ -442,7 +543,8 @@
   }
 
   menulist,
-  menulist * {
+  menulist *,
+  select {
     font-weight: 400 !important;
   }
 
