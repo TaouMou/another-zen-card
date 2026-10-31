@@ -1029,6 +1029,12 @@
    The hovered item looks like the active tab (soft fill and thin
    border), and icons are muted until their item is hovered. */
 :root:not([zen-private-window="true"]) menupopup {
+  /* On Windows 11 Firefox gives menus Windows' own translucent backdrop
+     (mica). The theme paints the menu itself, so the backdrop only
+     showed as an empty grey box for a frame before the first menu after
+     startup was drawn. Without it the menu window stays see-through
+     until its content is ready. */
+  appearance: none !important;
   --panel-background: var(--zc-page) !important;
   --panel-background-color: var(--zc-page) !important;
   --panel-color: var(--zc-text) !important;
