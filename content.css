@@ -546,10 +546,16 @@
     }
   }
 
-  /* The chosen value is drawn inside the dropdown's shadow DOM, so it
-     needs ::part to drop the bold */
+  /* The chosen value is drawn inside the dropdown's shadow DOM, whose
+     label box is set to --font-weight-semibold; reset that token on the
+     dropdown and the parts themselves */
+  menulist {
+    --font-weight-semibold: 400 !important;
+  }
+
   menulist,
   menulist *,
+  menulist::part(label-box),
   menulist::part(label),
   select {
     font-weight: 400 !important;

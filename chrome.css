@@ -1034,8 +1034,13 @@
 
 /* Dropdowns show their chosen value at normal weight; it is drawn
    inside the dropdown's shadow DOM, hence ::part */
-:root:not([zen-private-window="true"]) menulist::part(label) {
-  font-weight: 400 !important;
+:root:not([zen-private-window="true"]) menulist {
+  --font-weight-semibold: 400 !important;
+
+  &::part(label-box),
+  &::part(label) {
+    font-weight: 400 !important;
+  }
 }
 
 /* Dropdown lists (as in settings): the current choice keeps its normal
