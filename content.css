@@ -314,8 +314,10 @@
   /* Dialogs (Import browser data, Sine's dialogs and the settings
      dialogs' box below) share one card. Sine forces every dialog on its
      page to 60% of the window with 20px padding and a scrollbar; size
-     them to their content instead. */
-  dialog {
+     them to their content instead. Only HTML dialogs (they have [open]
+     while shown): the settings dialog pages themselves are XUL <dialog>
+     elements, and the card would shrink them inside their box. */
+  dialog[open] {
     background: var(--zc-page) !important;
     color: var(--zc-text) !important;
     border: 1px solid var(--zc-line) !important;
