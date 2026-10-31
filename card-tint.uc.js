@@ -2,7 +2,8 @@
 // @name           Another Zen Card: site-colored toolbar
 // @description    Colors the card's toolbar with the color along the top edge of the page,
 //                 shows only the domain in the centered address bar, cross-fades the
-//                 Library, and moves the window buttons into the sidebar-only layout's top row.
+//                 Library, moves the window buttons into the sidebar-only layout's top row,
+//                 and opens extension popups from the Extensions button.
 // @include        main
 // ==/UserScript==
 
@@ -263,7 +264,27 @@
 
   const windowButtonsObserver = new MutationObserver(placeWindowButtons);
 
+  // ---- Extension popups ----
+  // With Zen's zen.theme.hide-unified-extensions-button off, extensions
+  // get their own toolbar button, but Zen still points the toolbar's
+  // extension popups at its site button in the address bar, so they
+  // open in the middle of the toolbar. Point them back at the
+  // Extensions button.
+  function anchorExtensionPopups() {
+    if (
+      Services.prefs.getBoolPref("zen.theme.hide-unified-extensions-button", true) ||
+      !document.getElementById("unified-extensions-button")
+    ) {
+      return;
+    }
+    document
+      .getElementById("nav-bar")
+      ?.setAttribute("addon-webext-overflowbutton", "unified-extensions-button");
+  }
+
   function init() {
+    anchorExtensionPopups();
+
     windowButtonsObserver.observe(root, {
       attributes: true,
       attributeFilter: ["zen-single-toolbar", "zen-compact-mode", "zen-right-side"],

@@ -1155,6 +1155,9 @@
 
     & > .toolbarbutton-icon {
       padding: 4px !important;
+      border-color: transparent !important;
+      background-color: transparent !important;
+      box-shadow: none !important;
       color: var(--zc-muted) !important;
     }
 
