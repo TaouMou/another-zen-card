@@ -546,6 +546,23 @@
   }
 }
 
+/* The sidebar's own buttons (the menu, workspaces, downloads...) when
+   they aren't in the toolbar above: Zen fills both the button and its
+   icon on hover, which showed as a wide pill behind a square. One
+   square fill with the theme's corners instead. */
+:root:not([zen-private-window="true"]) :is(#zen-sidebar-top-buttons, #zen-sidebar-foot-buttons) .toolbarbutton-1:not(#nav-bar *) {
+  background: transparent !important;
+  box-shadow: none !important;
+  --toolbarbutton-hover-background: var(--zc-surface) !important;
+  --toolbarbutton-active-background: var(--zc-raised) !important;
+  --toolbarbutton-border-radius: 8px !important;
+
+  & > :is(.toolbarbutton-icon, .toolbarbutton-badge-stack) {
+    border-radius: 8px !important;
+    corner-shape: round !important;
+  }
+}
+
 /* Room between the first button and the card's edge */
 :root:not([zen-single-toolbar="true"]):not([zen-private-window="true"]) #nav-bar {
   padding-inline: 6px !important;
@@ -681,6 +698,37 @@
   & .tabbrowser-tab[zen-essential="true"] .tab-background {
     --zen-essential-tab-selected-bg: var(--zc-raised) !important;
     --zen-essential-tab-selected-bg-hover: var(--zc-raised) !important;
+  }
+}
+
+/* Collapsed sidebar: Firefox shows a tab's close button as a small round
+   badge hanging off its top corner. Instead, hovering a tab swaps its
+   icon for the close mark, in the same spot and color. */
+:root:not([zen-private-window="true"]) #navigator-toolbox:not([zen-sidebar-expanded="true"]) .tabbrowser-tab:not([pinned], [zen-essential]) {
+  & .tab-close-button {
+    inset: 0 !important;
+    margin: auto !important;
+    width: 16px !important;
+    height: 16px !important;
+    padding: 2px !important;
+    background: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+    color: inherit !important;
+    fill: currentColor !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  &:hover {
+    & .tab-close-button {
+      opacity: 1 !important;
+      pointer-events: auto !important;
+    }
+
+    & .tab-icon-stack {
+      opacity: 0 !important;
+    }
   }
 }
 
