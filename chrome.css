@@ -334,6 +334,17 @@
   padding-inline: 6px !important;
 }
 
+/* With the sidebar collapsed, Zen widens the toolbar and pulls it left
+   over the sidebar so the buttons sit at the window's edge. Here the
+   toolbar is inside the page card, so that pull pushed the first button
+   against the card's border; keep the toolbar within the card. */
+:root:not([zen-sidebar-expanded="true"]):not([zen-single-toolbar="true"]):not([zen-compact-mode="true"]):not([zen-private-window="true"]) #nav-bar {
+  flex: 1 !important;
+  width: auto !important;
+  min-width: 0 !important;
+  margin-inline: 0 !important;
+}
+
 /* ---- Site-colored toolbar ----
    card-tint.uc.js sets --zc-site, --zc-site-text and [zc-site-tint]
    on :root. The toolbar then takes the color of the top of the page
