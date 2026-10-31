@@ -17,9 +17,9 @@
   "readme": "README.md",
   "preferences": "preferences.json",
   "author": "TaouMou",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "tags": ["Theme"],
   "createdAt": "2026-10-31",
-  "updatedAt": "2026-10-31T13:43:07Z",
+  "updatedAt": "2026-10-31T14:07:09Z",
   "fork": ["zen"]
 }

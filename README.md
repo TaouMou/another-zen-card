@@ -4,6 +4,7 @@ A solid, glass-free theme for [Zen Browser](https://zen-browser.app).
 
 - **Fixed palettes** instead of the workspace gradient: no transparency, blur, grain or gradients
 - **One card**: the top toolbar and the page share one outlined card
+- **Panel sidebar**: the sidebar is its own outlined card beside the page, with a quiet space label, a segmented space switcher and plain line icons in the footer
 - **Site-colored toolbar**: the toolbar takes the color of the top of the page, so it flows into the site's header (a small script; can be turned off)
 - **Centered address bar**: just the domain in the middle of the toolbar, with no box until you hover or type (the domain-only part uses the script). A boxed version and Zen's full-width bar are also available
 - **Six active tab styles**: soft fill with a thin border, outline, accent tint, inverted, text only, accent dot
