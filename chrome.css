@@ -325,8 +325,9 @@
   corner-shape: round !important;
 }
 
-/* Sidebar-only layout: the page alone becomes the outlined card */
-:root[zen-single-toolbar="true"]:not([zen-compact-mode="true"]):not([inDOMFullscreen="true"]):not([popup-window]):not([zen-private-window="true"]) {
+/* Sidebar-only layout: the page alone becomes the outlined card, also in
+   compact mode */
+:root[zen-single-toolbar="true"]:not([inDOMFullscreen="true"]):not([popup-window]):not([zen-private-window="true"]) {
   & #tabbrowser-tabbox #tabbrowser-tabpanels .browserSidebarContainer:not(.zen-glance-overlay) {
     box-shadow: none !important;
     border: 1px solid var(--zc-line) !important;
@@ -902,8 +903,8 @@
 /* ---- Sidebar ---- */
 
 /* Panel card: the sidebar is its own outlined card beside the page card,
-   with the same border and corners. Compact mode keeps Zen's floating
-   sidebar. */
+   with the same border and corners. In compact mode it is drawn by the
+   floating card below instead. */
 :root:not([zen-compact-mode="true"]):not([inDOMFullscreen="true"]):not([popup-window]):not([zen-private-window="true"]) #navigator-toolbox {
   margin: var(--zen-element-separation) !important;
   background: var(--zc-page) !important;
@@ -914,6 +915,25 @@
   /* The frame-colored toolbar background would cover the card */
   & #zen-toolbar-background {
     visibility: hidden !important;
+  }
+}
+
+/* Compact mode: the sidebar that slides in is the same card, plus a soft
+   shadow to lift it off the page it covers. Zen paints that panel with
+   #zen-toolbar-background (a glassy fill, an outline on its ::before and
+   ::after layers, and a big shadow); the layers go and the element itself
+   becomes the card. */
+:root[zen-compact-mode="true"]:not([zen-private-window="true"]) #navigator-toolbox #zen-toolbar-background {
+  background: var(--zc-page) !important;
+  border: 1px solid var(--zc-line) !important;
+  border-radius: var(--zc-radius) !important;
+  corner-shape: round !important;
+  box-shadow: 0 6px 18px light-dark(rgb(0 0 0 / 0.12), rgb(0 0 0 / 0.45)) !important;
+  backdrop-filter: none !important;
+
+  &::before,
+  &::after {
+    display: none !important;
   }
 }
 
