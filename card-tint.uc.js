@@ -212,17 +212,43 @@
   // As the Library opens, Zen fades the sidebar out with an inline opacity
   // (1 to 0 during its spring) and back in as it closes, then clears it.
   // Mirror that onto the Library as --zc-library-fade so chrome.css can
-  // fade the Library in over the page instead of sliding it.
+  // fade the Library in over the page instead of sliding it. In compact
+  // mode Zen slides the floating sidebar out instead, with an inline
+  // translateX(calc(-100% * progress)), which the style may read back
+  // simplified (translateX(-40%)); read the progress from it, mark
+  // the sidebar [zc-library-fading] and give chrome.css the sidebar's
+  // opacity as --zc-toolbox-fade on :root (not on the sidebar, whose
+  // style this observer watches).
   function syncLibraryFade() {
     const library = document.querySelector("zen-library");
     if (!library) {
       return;
     }
+    let progress = null;
     const sidebarOpacity = gNavToolbox.style.opacity;
-    if (sidebarOpacity === "") {
+    const transform = gNavToolbox.style.transform;
+    const slide = transform.startsWith("translateX(")
+      ? /\*\s*([\d.e-]+)/.exec(transform) || /([-\d.e]+)%/.exec(transform)
+      : null;
+    if (sidebarOpacity !== "") {
+      progress = 1 - parseFloat(sidebarOpacity);
+    } else if (slide) {
+      const value = Math.abs(parseFloat(slide[1]));
+      progress = slide[0].endsWith("%") ? value / 100 : value;
+    }
+
+    if (progress === null) {
       library.style.removeProperty("--zc-library-fade");
     } else {
-      library.style.setProperty("--zc-library-fade", String(1 - parseFloat(sidebarOpacity)));
+      library.style.setProperty("--zc-library-fade", String(progress));
+    }
+
+    if (progress !== null && slide) {
+      root.style.setProperty("--zc-toolbox-fade", String(1 - progress));
+      gNavToolbox.setAttribute("zc-library-fading", "true");
+    } else {
+      root.style.removeProperty("--zc-toolbox-fade");
+      gNavToolbox.removeAttribute("zc-library-fading");
     }
   }
 

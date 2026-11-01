@@ -36,6 +36,8 @@
   --zc-accent: #d97757;
   --zc-scheme: dark;
   --zc-radius: 10px;
+  /* Under cards that slide in over the page (compact mode) */
+  --zc-float-shadow: light-dark(rgb(0 0 0 / 0.12), rgb(0 0 0 / 0.45));
 
   --zc-page: color-mix(in srgb, var(--zc-text) 4%, var(--zc-frame));
   --zc-surface: color-mix(in srgb, var(--zc-text) 8%, var(--zc-frame));
@@ -284,8 +286,9 @@
 
 /* Layout with a top toolbar: toolbar and page share one outlined card.
    No overflow clipping on the wrapper, so the address bar's dropdown
-   can still extend past it. */
-:root:not([zen-single-toolbar="true"]):not([zen-compact-mode="true"]):not([inDOMFullscreen="true"]):not([popup-window]):not([zen-private-window="true"]) {
+   can still extend past it. Also in compact mode; when compact mode
+   hides the toolbar, the Compact mode section splits them again. */
+:root:not([zen-single-toolbar="true"]):not([inDOMFullscreen="true"]):not([popup-window]):not([zen-private-window="true"]) {
   & #zen-appcontent-wrapper {
     margin: var(--zen-element-separation) !important;
     margin-inline-start: 0 !important;
@@ -595,7 +598,7 @@
    over the sidebar so the buttons sit at the window's edge. Here the
    toolbar is inside the page card, so that pull pushed the first button
    against the card's border; keep the toolbar within the card. */
-:root:not([zen-sidebar-expanded="true"]):not([zen-single-toolbar="true"]):not([zen-compact-mode="true"]):not([zen-private-window="true"]) #nav-bar {
+:root:not([zen-sidebar-expanded="true"]):not([zen-single-toolbar="true"]):not([zen-private-window="true"]) #nav-bar {
   flex: 1 !important;
   width: auto !important;
   min-width: 0 !important;
@@ -675,10 +678,10 @@
    and drops its divider, so it flows into the site's header. The
    field variables are redeclared here because the :root ones resolve
    against the theme text color. The selector repeats every condition
-   of the card rule above (plus [zc-site-tint]) so it outranks it. Not
-   in compact mode: there the bar isn't part of a card, and a tinted bar
-   above the frame's gap around the page looked detached. */
-:root[zc-site-tint]:not([zen-single-toolbar="true"]):not([zen-compact-mode="true"]):not([inDOMFullscreen="true"]):not([popup-window]):not([zen-private-window="true"]) #zen-appcontent-navbar-wrapper {
+   of the card rule above (plus [zc-site-tint]) so it outranks it. When
+   compact mode hides the toolbar, the bar floats on its own and keeps
+   the theme color (Compact mode section). */
+:root[zc-site-tint]:not([zen-single-toolbar="true"]):not([inDOMFullscreen="true"]):not([popup-window]):not([zen-private-window="true"]) #zen-appcontent-navbar-wrapper {
   background: var(--zc-site) !important;
   border-bottom-color: transparent !important;
   color: var(--zc-site-text) !important;
@@ -706,6 +709,159 @@
 
 :root[zc-site-tint="light"]:not([zen-private-window="true"]) #zen-appcontent-navbar-wrapper {
   color-scheme: light !important;
+}
+
+/* ---- Compact mode ----
+   Zen's three options: hide the sidebar (zen.view.compact.hide-tabbar),
+   the toolbar (zen.view.compact.hide-toolbar), or both. The sidebar-only
+   layout always hides the sidebar. Whatever stays docked keeps its usual
+   card; whatever slides in becomes a card of its own with a soft shadow,
+   to lift it off the page it covers. */
+
+/* The sidebar slides in: Zen floats the toolbox under the same
+   condition. */
+@media -moz-pref("zen.view.compact.hide-tabbar") or -moz-pref("zen.view.use-single-toolbar") {
+  :root[zen-compact-mode="true"]:not([zen-private-window="true"]) {
+    /* Zen paints the floating panel with #zen-toolbar-background (a
+       glassy fill, an outline on its ::before and ::after layers, and a
+       big shadow); the layers go and the element itself becomes the
+       card. */
+    & #navigator-toolbox #zen-toolbar-background {
+      background: var(--zc-page) !important;
+      border: 1px solid var(--zc-line) !important;
+      border-radius: var(--zc-radius) !important;
+      corner-shape: round !important;
+      box-shadow: 0 6px 18px var(--zc-float-shadow) !important;
+      backdrop-filter: none !important;
+
+      &::before,
+      &::after {
+        display: none !important;
+      }
+    }
+
+    /* It stops short of the top and bottom, so it floats as a panel
+       rather than running the window's full height. The card is the
+       background of #titlebar, so margins on #titlebar shrink both. Zen
+       docks the sidebar while [animate] is set; that state is left
+       alone. */
+    & #navigator-toolbox:not([animate="true"]) #titlebar {
+      margin-block: calc(var(--zen-element-separation) * 3) !important;
+    }
+
+    /* While it's hidden, a short bar in the gap beside the page shows
+       where to hover. Zen leaves the toolbox's last few pixels on
+       screen as the hover zone; the bar sits in them. */
+    & #navigator-toolbox::after {
+      content: "" !important;
+      position: absolute !important;
+      inset-inline-end: 0 !important;
+      top: calc(50% - 20px) !important;
+      width: 3px !important;
+      height: 40px !important;
+      border-radius: 2px !important;
+      background: var(--zc-line) !important;
+      pointer-events: none !important;
+      transition: opacity 0.15s ease !important;
+    }
+
+    &[zen-right-side="true"] #navigator-toolbox::after {
+      inset-inline: 0 auto !important;
+    }
+
+    & #navigator-toolbox:is([animate="true"], [zen-has-hover], [zen-user-show], [zen-has-empty-tab], [flash-popup], [has-popup-menu], [movingtab], [zen-compact-mode-active])::after,
+    &[zen-renaming-tab="true"] #navigator-toolbox::after {
+      opacity: 0 !important;
+    }
+  }
+
+  /* With the top toolbar, the page card fills the sidebar's spot */
+  :root[zen-compact-mode="true"]:not([zen-single-toolbar="true"]):not([inDOMFullscreen="true"]):not([popup-window]):not([zen-private-window="true"]) #zen-appcontent-wrapper {
+    margin-inline: var(--zen-element-separation) !important;
+  }
+}
+
+/* The sidebar stays docked (only the toolbar is hidden): the usual
+   panel card. */
+@media not (-moz-pref("zen.view.compact.hide-tabbar") or -moz-pref("zen.view.use-single-toolbar")) {
+  :root[zen-compact-mode="true"]:not([inDOMFullscreen="true"]):not([popup-window]):not([zen-private-window="true"]) #navigator-toolbox {
+    margin: var(--zen-element-separation) !important;
+    background: var(--zc-page) !important;
+    border: 1px solid var(--zc-line) !important;
+    border-radius: var(--zc-radius) !important;
+    corner-shape: round !important;
+
+    & #zen-toolbar-background {
+      visibility: hidden !important;
+    }
+  }
+}
+
+/* The toolbar slides in: the page is a card of its own, and the toolbar
+   drops in above it as a floating card in the theme color (no site
+   tint). Zen keeps the bar's wrapper in the layout, a gap's height while
+   hidden and the toolbar's height while shown, so the page moves down
+   to make room. The wrapper stays the gap above the card and grows by
+   one more gap below it; its inner container is the card, and Zen
+   already fades that in and out. The wrapper clips what it paints
+   (contain: paint), so the card's shadow is kept small enough to fit
+   in that gap. */
+@media -moz-pref("zen.view.compact.hide-toolbar") {
+  :root[zen-compact-mode="true"]:not([zen-single-toolbar="true"]):not([inDOMFullscreen="true"]):not([popup-window]):not([zen-private-window="true"]) {
+    & #zen-appcontent-wrapper {
+      margin-top: 0 !important;
+      background: transparent !important;
+      border: none !important;
+    }
+
+    & #zen-appcontent-navbar-wrapper {
+      box-sizing: border-box !important;
+      padding-top: var(--zen-element-separation) !important;
+      background: transparent !important;
+      border-bottom: none !important;
+      border-radius: 0 !important;
+    }
+
+    & #zen-appcontent-navbar-wrapper:is([zen-has-hover], [has-popup-menu], [zen-compact-mode-active]) {
+      height: calc(var(--zen-toolbar-height-with-bookmarks) + var(--zen-element-separation) * 2) !important;
+      padding-bottom: var(--zen-element-separation) !important;
+    }
+
+    & #zen-appcontent-navbar-wrapper #zen-appcontent-navbar-container {
+      flex: 1 !important;
+      background: var(--zc-page) !important;
+      border: 1px solid var(--zc-line) !important;
+      border-radius: var(--zc-radius) !important;
+      corner-shape: round !important;
+      box-shadow: 0 2px 5px var(--zc-float-shadow) !important;
+    }
+
+    & #zen-appcontent-navbar-wrapper #nav-bar {
+      background: transparent !important;
+    }
+
+    & #tabbrowser-tabbox #tabbrowser-tabpanels .browserSidebarContainer:not(.zen-glance-overlay) {
+      border: 1px solid var(--zc-line) !important;
+      border-radius: var(--zc-radius) !important;
+    }
+
+    /* The site tint stays on the docked bar only. Each of its variables
+       goes back to what the wrapper inherits. */
+    &[zc-site-tint] #zen-appcontent-navbar-wrapper {
+      background: transparent !important;
+      color: inherit !important;
+      color-scheme: inherit !important;
+      --toolbox-textcolor: inherit !important;
+      --toolbar-field-color: inherit !important;
+      --zen-toolbar-element-bg: inherit !important;
+      --zen-toolbar-element-bg-hover: inherit !important;
+      --toolbar-bgcolor: inherit !important;
+
+      & #urlbar[breakout-extend]:not([zen-floating-urlbar="true"]) .urlbar-background {
+        background-color: var(--zc-page) !important;
+      }
+    }
+  }
 }
 
 /* ---- Tabs ---- */
@@ -905,8 +1061,8 @@
 /* ---- Sidebar ---- */
 
 /* Panel card: the sidebar is its own outlined card beside the page card,
-   with the same border and corners. In compact mode it is drawn by the
-   floating card below instead. */
+   with the same border and corners. Compact mode has its own rules (the
+   Compact mode section). */
 :root:not([zen-compact-mode="true"]):not([inDOMFullscreen="true"]):not([popup-window]):not([zen-private-window="true"]) #navigator-toolbox {
   margin: var(--zen-element-separation) !important;
   background: var(--zc-page) !important;
@@ -918,33 +1074,6 @@
   & #zen-toolbar-background {
     visibility: hidden !important;
   }
-}
-
-/* Compact mode: the sidebar that slides in is the same card, plus a soft
-   shadow to lift it off the page it covers. Zen paints that panel with
-   #zen-toolbar-background (a glassy fill, an outline on its ::before and
-   ::after layers, and a big shadow); the layers go and the element itself
-   becomes the card. */
-:root[zen-compact-mode="true"]:not([zen-private-window="true"]) #navigator-toolbox #zen-toolbar-background {
-  background: var(--zc-page) !important;
-  border: 1px solid var(--zc-line) !important;
-  border-radius: var(--zc-radius) !important;
-  corner-shape: round !important;
-  box-shadow: 0 6px 18px light-dark(rgb(0 0 0 / 0.12), rgb(0 0 0 / 0.45)) !important;
-  backdrop-filter: none !important;
-
-  &::before,
-  &::after {
-    display: none !important;
-  }
-}
-
-/* It also stops short of the top and bottom, so it floats as a panel
-   rather than running the window's full height. The card is the
-   background of #titlebar, so margins on #titlebar shrink both. Zen
-   docks the sidebar while [animate] is set; that state is left alone. */
-:root[zen-compact-mode="true"]:not([zen-private-window="true"]) #navigator-toolbox:not([animate="true"]) #titlebar {
-  margin-block: calc(var(--zen-element-separation) * 3) !important;
 }
 
 /* Header: the space name as a small muted label. The space's icon (or
@@ -1090,8 +1219,8 @@
    moves the page wrapper). It needs a solid background now that it sits
    on top of the page. card-tint.uc.js mirrors Zen's sidebar fade onto
    --zc-library-fade, so it cross-fades with the sidebar both ways; without
-   the script the Library simply appears. Compact mode keeps Zen's slide. */
-:root:not([zen-compact-mode="true"]):not([zen-private-window="true"]) {
+   the script the Library simply appears. */
+:root:not([zen-private-window="true"]) {
   & zen-library {
     transform: none !important;
     background: var(--zc-frame) !important;
@@ -1109,6 +1238,15 @@
 
   &[zc-library-fade] zen-library[transitioning] {
     opacity: var(--zc-library-fade, 0) !important;
+  }
+
+  /* In compact mode Zen slides the floating sidebar away instead of
+     fading it; the script marks it while that runs, and it fades like
+     the docked one. It can't be clicked while the Library covers it. */
+  & #navigator-toolbox[zc-library-fading] {
+    transform: none !important;
+    opacity: var(--zc-toolbox-fade, 0) !important;
+    pointer-events: none !important;
   }
 
   & :is(#zen-appcontent-wrapper, #zen-toast-container) {
