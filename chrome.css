@@ -798,14 +798,16 @@
 }
 
 /* The toolbar slides in: the page is a card of its own, and the toolbar
-   drops in above it as a floating card in the theme color (no site
-   tint). Zen keeps the bar's wrapper in the layout, a gap's height while
-   hidden and the toolbar's height while shown, so the page moves down
-   to make room. The wrapper stays the gap above the card and grows by
-   one more gap below it; its inner container is the card, and Zen
-   already fades that in and out. The wrapper clips what it paints
-   (contain: paint), so the card's shadow is kept small enough to fit
-   in that gap. */
+   floats over the top of it as a card in the theme color (no site
+   tint), like the sidebar. Zen grows the bar's wrapper from a gap's
+   height to the toolbar's and pulls the page up by the difference, so
+   the page holds still while the bar pushes in. Here the wrapper stays
+   a gap's height (the gap above the page card) and the page isn't
+   pulled, so nothing moves; its inner container is the card, placed
+   over the page's top edge. Zen already fades the container in and out
+   with the wrapper's hover attributes; it also drops in a few pixels,
+   and can't be clicked while hidden. The wrapper's clipping goes so the
+   card can leave it. */
 @media -moz-pref("zen.view.compact.hide-toolbar") {
   :root[zen-compact-mode="true"]:not([zen-single-toolbar="true"]):not([inDOMFullscreen="true"]):not([popup-window]):not([zen-private-window="true"]) {
     & #zen-appcontent-wrapper {
@@ -815,25 +817,37 @@
     }
 
     & #zen-appcontent-navbar-wrapper {
-      box-sizing: border-box !important;
-      padding-top: var(--zen-element-separation) !important;
+      position: relative !important;
+      z-index: 3 !important;
+      height: var(--zen-element-separation) !important;
+      overflow: visible !important;
+      contain: none !important;
       background: transparent !important;
       border-bottom: none !important;
       border-radius: 0 !important;
     }
 
-    & #zen-appcontent-navbar-wrapper:is([zen-has-hover], [has-popup-menu], [zen-compact-mode-active]) {
-      height: calc(var(--zen-toolbar-height-with-bookmarks) + var(--zen-element-separation) * 2) !important;
-      padding-bottom: var(--zen-element-separation) !important;
+    & #tabbrowser-tabpanels[has-toolbar-hovered] .browserContainer {
+      margin-top: 0 !important;
     }
 
     & #zen-appcontent-navbar-wrapper #zen-appcontent-navbar-container {
-      flex: 1 !important;
+      position: absolute !important;
+      inset: var(--zen-element-separation) 0 auto !important;
+      height: var(--zen-toolbar-height-with-bookmarks) !important;
       background: var(--zc-page) !important;
       border: 1px solid var(--zc-line) !important;
       border-radius: var(--zc-radius) !important;
       corner-shape: round !important;
-      box-shadow: 0 2px 5px var(--zc-float-shadow) !important;
+      box-shadow: 0 6px 18px var(--zc-float-shadow) !important;
+      translate: 0 -6px !important;
+      pointer-events: none !important;
+      transition: opacity var(--zen-hidden-toolbar-transition), translate var(--zen-hidden-toolbar-transition) !important;
+    }
+
+    & #zen-appcontent-navbar-wrapper:is([zen-has-hover], [has-popup-menu], [zen-compact-mode-active]) #zen-appcontent-navbar-container {
+      translate: none !important;
+      pointer-events: auto !important;
     }
 
     & #zen-appcontent-navbar-wrapper #nav-bar {
