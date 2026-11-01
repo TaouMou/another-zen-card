@@ -662,6 +662,25 @@
   }
 }
 
+/* Sidebar footer: Zen spreads its buttons across it (space-between),
+   which Customize Toolbar doesn't show. Pack them instead and let
+   Flexible Spaces make the gaps, so Customize shows the footer as it
+   is; a Flexible Space here may grow past Firefox's 112px to reach
+   across. */
+:root:not([zen-private-window="true"]) #navigator-toolbox[zen-sidebar-expanded="true"] #zen-sidebar-foot-buttons {
+  justify-content: flex-start !important;
+
+  & > :is(toolbarspring, toolbarpaletteitem[id^="wrapper-customizableui-special-spring"]) {
+    max-width: none !important;
+  }
+}
+
+/* With one space Zen hides the space switcher (dont-show), but Customize
+   Toolbar still showed its empty frame, pushing the other buttons aside */
+:root[customizing]:not([zen-private-window="true"]) #zen-sidebar-foot-buttons > toolbarpaletteitem:has(> #zen-workspaces-button[dont-show="true"]) {
+  display: none !important;
+}
+
 /* Collapsed sidebar: Zen sizes it from the tab width (48px, plus 6px on
    each side), which made the tabs wide, flat pills. At 38px they come
    out about square. Firefox sizes the tabs and the new-tab button
