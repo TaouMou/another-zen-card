@@ -1715,6 +1715,20 @@ slot[part="content"]:only-child {
   & #zen-site-data-footer {
     border-top-color: var(--zc-line) !important;
 
+    /* With every section empty (an extension's page, say), the footer
+       sits right under the header, whose line already divides them.
+       Zen hides empty sections with [hidden], and the extensions one
+       through a pref when extensions have their own toolbar button. */
+    #zen-unified-site-data-panel:not(:has(.zen-site-data-section:not([hidden]))) & {
+      border-top-color: transparent !important;
+    }
+
+    @media not -moz-pref("zen.theme.hide-unified-extensions-button") {
+      #zen-unified-site-data-panel:not(:has(.zen-site-data-section:not([hidden], #zen-site-data-section-addons))) & {
+        border-top-color: transparent !important;
+      }
+    }
+
     & toolbarbutton {
       background: transparent !important;
       color: var(--zc-muted) !important;
