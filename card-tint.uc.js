@@ -355,6 +355,26 @@
     }
   };
 
+  // Items from Zen's hidden tab strip show up wrapped twice in the
+  // palette (chrome.css now hides them). Dragging one into a toolbar
+  // saved its inner wrapper ("wrapper-...") as a toolbar item: an
+  // invisible node that makes Firefox refuse every later drop there.
+  // No real item id starts with "wrapper-", so drop those from the
+  // saved layout. Firefox only removes items marked removable.
+  function removeStrayWrappers() {
+    for (const area of CustomizableUI.areas) {
+      for (const id of CustomizableUI.getWidgetIdsInArea(area)) {
+        if (!id.startsWith("wrapper-")) {
+          continue;
+        }
+        const node = document.getElementById(id);
+        node?.setAttribute("removable", "true");
+        CustomizableUI.removeWidgetFromArea(id);
+        node?.remove();
+      }
+    }
+  }
+
   // ---- Window buttons in the sidebar ----
   // In the sidebar-only layout Zen puts the window buttons in a strip
   // above the page. Move them into the sidebar's top row, beside back,
@@ -468,6 +488,11 @@
 
     // Capturing, so it runs before Customize mode's own dragstart handler
     window.addEventListener("dragstart", onCustomizeDragStart, true);
+    try {
+      removeStrayWrappers();
+    } catch (e) {
+      console.error("Another Zen Card: couldn't clean up the toolbar layout", e);
+    }
 
     gBrowser.addTabsProgressListener(progressListener);
     gBrowser.tabContainer.addEventListener("TabSelect", onTabSelect);
