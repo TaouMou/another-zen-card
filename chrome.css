@@ -850,6 +850,15 @@
       pointer-events: auto !important;
     }
 
+    /* Placed over the page, the container no longer stretches its row,
+       so the toolbar shrank to its buttons; it fills the card instead */
+    & #zen-appcontent-navbar-container > #nav-bar {
+      flex: 1 !important;
+      width: auto !important;
+      min-width: 0 !important;
+      margin-inline: 0 !important;
+    }
+
     & #zen-appcontent-navbar-wrapper #nav-bar {
       background: transparent !important;
     }
