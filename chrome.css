@@ -745,13 +745,29 @@
       }
     }
 
-    /* It stops short of the top and bottom, so it floats as a panel
-       rather than running the window's full height. The card is the
-       background of #titlebar, so margins on #titlebar shrink both. Zen
-       docks the sidebar while [animate] is set; that state is left
-       alone. */
-    & #navigator-toolbox:not([animate="true"]) #titlebar {
-      margin-block: calc(var(--zen-element-separation) * 3) !important;
+    /* Its top and bottom line up with the page card's: a gap from the
+       window's edges. Zen sizes the toolbox from the window's height
+       (from below the toolbar when that stays docked), half a gap past
+       the top and bottom. Zen docks the sidebar while [animate] is set;
+       that state is left alone. */
+    & #navigator-toolbox:not([animate="true"]) {
+      top: var(--zen-element-separation) !important;
+      bottom: var(--zen-element-separation) !important;
+      height: auto !important;
+      margin-top: 0 !important;
+
+      & #titlebar {
+        margin-block: 0 !important;
+      }
+    }
+
+    /* With the toolbar docked, the page and toolbar share one card; the
+       sidebar starts on the line under the toolbar instead of covering
+       the back and forward buttons */
+    @media not -moz-pref("zen.view.compact.hide-toolbar") {
+      &:not([zen-single-toolbar="true"]) #navigator-toolbox:not([animate="true"]) {
+        top: calc(var(--zen-element-separation) + 1px + var(--zen-toolbar-height-with-bookmarks)) !important;
+      }
     }
 
     /* Zen sets the floating toolbox half its padding past the window's
