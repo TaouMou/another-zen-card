@@ -765,12 +765,24 @@
       }
     }
 
-    /* With the toolbar docked, the page and toolbar share one card; the
-       sidebar starts on the line under the toolbar instead of covering
-       the back and forward buttons */
+    /* With the toolbar docked, the page and toolbar share one card, and
+       the sidebar floats inside the page part of it: a gap in from the
+       card's border and from the line under the toolbar, so it covers
+       none of the toolbar */
     @media not -moz-pref("zen.view.compact.hide-toolbar") {
-      &:not([zen-single-toolbar="true"]) #navigator-toolbox:not([animate="true"]) {
-        top: calc(var(--zen-element-separation) + 1px + var(--zen-toolbar-height-with-bookmarks)) !important;
+      &:not([zen-single-toolbar="true"]) {
+        & #navigator-toolbox:not([animate="true"]) {
+          top: calc(var(--zen-element-separation) * 2 + 2px + var(--zen-toolbar-height-with-bookmarks)) !important;
+          bottom: calc(var(--zen-element-separation) * 2 + 1px) !important;
+        }
+
+        &:not([zen-right-side="true"]) #navigator-toolbox:not([animate="true"]) #titlebar {
+          margin-inline-start: calc(var(--zen-element-separation) * 2 + 1px - var(--zen-compact-float) / 2) !important;
+        }
+
+        &[zen-right-side="true"] #navigator-toolbox:not([animate="true"]) #titlebar {
+          margin-inline-end: calc(var(--zen-element-separation) * 2 + 1px - var(--zen-compact-float) / 2) !important;
+        }
       }
     }
 
