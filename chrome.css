@@ -1798,11 +1798,18 @@ slot[part="content"]:only-child {
   }
 
   & #zen-sidebar-top-buttons-customization-target,
-  & toolbarpaletteitem > toolbarspring,
   & #customization-panelHolder > #widget-overflow-fixed-list {
     outline: none !important;
     border: 1px dashed color-mix(in srgb, var(--zc-accent) 55%, transparent) !important;
     background: color-mix(in srgb, var(--zc-accent) 6%, transparent) !important;
+    border-radius: 8px !important;
+    opacity: 1 !important;
+  }
+
+  /* Flexible spaces keep Firefox's outline (inset, so it takes no room
+     while items are dragged around them), in the same dashed accent */
+  & toolbarpaletteitem > toolbarspring {
+    outline: 1px dashed color-mix(in srgb, var(--zc-accent) 55%, transparent) !important;
     border-radius: 8px !important;
     opacity: 1 !important;
   }
@@ -1822,11 +1829,18 @@ slot[part="content"]:only-child {
     color: var(--zc-muted) !important;
   }
 
+  /* Firefox slides palette items aside with a transform transition while
+     an item is dragged over them, and turns it off with [notransition];
+     the hover fade is added to it, not in place of it */
   & #customization-palette toolbarpaletteitem {
     --toolbarbutton-icon-fill: currentColor !important;
     border-radius: 8px !important;
     color: var(--zc-muted) !important;
     transition: background-color 0.2s ease, color 0.2s ease !important;
+
+    &:not([notransition]) {
+      transition: transform var(--drag-drop-transition-duration) ease-in-out, background-color 0.2s ease, color 0.2s ease !important;
+    }
 
     & > :is(toolbarbutton, toolbaritem) {
       color: inherit !important;
