@@ -675,8 +675,11 @@
    and drops its divider, so it flows into the site's header. The
    field variables are redeclared here because the :root ones resolve
    against the theme text color. The selector repeats every condition
-   of the card rule above (plus [zc-site-tint]) so it outranks it. */
-:root[zc-site-tint]:not([zen-single-toolbar="true"]):not([zen-compact-mode="true"]):not([inDOMFullscreen="true"]):not([popup-window]):not([zen-private-window="true"]) #zen-appcontent-navbar-wrapper {
+   of the card rule above (plus [zc-site-tint]) so it outranks it. In
+   compact mode the bar isn't part of a card, so the tint runs edge to
+   edge; while Zen hides the bar, its thin leftover strip stays tinted. */
+:root[zc-site-tint]:not([zen-single-toolbar="true"]):not([zen-compact-mode="true"]):not([inDOMFullscreen="true"]):not([popup-window]):not([zen-private-window="true"]) #zen-appcontent-navbar-wrapper,
+:root[zc-site-tint][zen-compact-mode="true"]:not([zen-single-toolbar="true"]):not([inDOMFullscreen="true"]):not([popup-window]):not([zen-private-window="true"]) #zen-appcontent-navbar-wrapper {
   background: var(--zc-site) !important;
   border-bottom-color: transparent !important;
   color: var(--zc-site-text) !important;
@@ -935,6 +938,14 @@
   &::after {
     display: none !important;
   }
+}
+
+/* It also stops short of the top and bottom, so it floats as a panel
+   rather than running the window's full height. The card is the
+   background of #titlebar, so margins on #titlebar shrink both. Zen
+   docks the sidebar while [animate] is set; that state is left alone. */
+:root[zen-compact-mode="true"]:not([zen-private-window="true"]) #navigator-toolbox:not([animate="true"]) #titlebar {
+  margin-block: calc(var(--zen-element-separation) * 3) !important;
 }
 
 /* Header: the space name as a small muted label. The space's icon (or
