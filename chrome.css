@@ -754,6 +754,18 @@
       margin-block: calc(var(--zen-element-separation) * 3) !important;
     }
 
+    /* Zen sets the floating toolbox half its padding past the window's
+       edge, so the card started a few pixels outside the page card's
+       edge. The difference goes on the card's outer side to line them
+       up. */
+    &:not([zen-right-side="true"]) #navigator-toolbox:not([animate="true"]) #titlebar {
+      margin-inline-start: calc(var(--zen-element-separation) - var(--zen-compact-float) / 2) !important;
+    }
+
+    &[zen-right-side="true"] #navigator-toolbox:not([animate="true"]) #titlebar {
+      margin-inline-end: calc(var(--zen-element-separation) - var(--zen-compact-float) / 2) !important;
+    }
+
     /* Motion, shared with the floating top bar: it fades in while
        moving a few pixels from its edge, and fades back out the same
        way. Zen slides the whole toolbox in from off-screen with a
@@ -870,6 +882,8 @@
     & #zen-appcontent-navbar-wrapper #zen-appcontent-navbar-container {
       position: absolute !important;
       inset: var(--zen-element-separation) 0 auto !important;
+      /* Zen's full width plus the border ran 2px past the page card */
+      width: auto !important;
       height: var(--zen-toolbar-height-with-bookmarks) !important;
       background: var(--zc-page) !important;
       border: 1px solid var(--zc-line) !important;
