@@ -1782,6 +1782,124 @@ slot[part="content"]:only-child {
   }
 }
 
+/* ---- Customize Toolbar ----
+   The palette, the overflow menu and the footer become one outlined card
+   under the window's cards: the instruction as a small muted label,
+   items with the square hover fill, the overflow menu as an inset card
+   (no arrow, no dragon) and Done as the main action. Places items can
+   be dropped (the sidebar's top row, flexible spaces) get a dashed
+   accent outline with a faint tint. */
+:root[customizing]:not([zen-private-window="true"]) {
+  & #zen-sidebar-top-buttons-customization-target,
+  & toolbarpaletteitem > toolbarspring,
+  & #customization-panelHolder > #widget-overflow-fixed-list {
+    outline: none !important;
+    border: 1px dashed color-mix(in srgb, var(--zc-accent) 55%, transparent) !important;
+    background: color-mix(in srgb, var(--zc-accent) 6%, transparent) !important;
+    border-radius: 8px !important;
+    opacity: 1 !important;
+  }
+
+  & #customization-container {
+    margin: 0 var(--zen-element-separation) var(--zen-element-separation) !important;
+    background: var(--zc-page) !important;
+    color: var(--zc-text) !important;
+    border: 1px solid var(--zc-line) !important;
+    border-radius: var(--zc-radius) !important;
+  }
+
+  & #customization-header {
+    margin: 14px 20px 8px !important;
+    font-size: 11px !important;
+    font-weight: 400 !important;
+    color: var(--zc-muted) !important;
+  }
+
+  & #customization-palette toolbarpaletteitem {
+    --toolbarbutton-icon-fill: currentColor !important;
+    border-radius: 8px !important;
+    color: var(--zc-muted) !important;
+    transition: background-color 0.2s ease, color 0.2s ease !important;
+
+    & > :is(toolbarbutton, toolbaritem) {
+      color: inherit !important;
+    }
+
+    &:hover {
+      background-color: var(--zc-surface) !important;
+      color: var(--zc-text) !important;
+    }
+  }
+
+  /* Overflow menu: an inset card in the frame color, like the address
+     field in the sidebar; its item list is the drop zone */
+  & #customization-panelWrapper {
+    & > .panel-arrowbox {
+      display: none !important;
+    }
+
+    & > .panel-arrowcontent {
+      margin-top: 14px !important;
+      background: var(--zc-frame) !important;
+      color: var(--zc-text) !important;
+      border: 1px solid var(--zc-line) !important;
+      border-radius: var(--zc-radius) !important;
+      box-shadow: none !important;
+    }
+  }
+
+  & #customization-panelHeader {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+  }
+
+  & #customization-panelDescription {
+    font-size: 12px !important;
+    color: var(--zc-muted) !important;
+  }
+
+  & #customization-panelHolder > #widget-overflow-fixed-list {
+    margin: 0 12px 4px !important;
+
+    &::before {
+      display: none !important;
+    }
+  }
+
+  & #customization-footer {
+    border-top: 1px solid var(--zc-line) !important;
+    padding: 8px 12px !important;
+  }
+
+  /* XUL buttons don't read the button tokens on their own */
+  & #customization-footer .footer-button {
+    appearance: none !important;
+    padding: 4px 12px !important;
+    background-color: var(--button-background-color) !important;
+    color: var(--button-text-color) !important;
+    border: 1px solid var(--button-border-color) !important;
+    border-radius: var(--button-border-radius) !important;
+    font-weight: 400 !important;
+    transition: background-color 0.2s ease, border-color 0.2s ease !important;
+
+    &:hover {
+      background-color: var(--button-background-color-hover) !important;
+      border-color: var(--button-border-color-hover) !important;
+    }
+
+    &#customization-done-button {
+      background-color: var(--button-background-color-primary) !important;
+      color: var(--button-text-color-primary) !important;
+      border-color: var(--button-border-color-primary) !important;
+
+      &:hover {
+        background-color: var(--button-background-color-primary-hover) !important;
+        border-color: var(--button-border-color-primary-hover) !important;
+      }
+    }
+  }
+}
+
 /* ---- Prompts ----
    Dialogs a site or the browser opens over a tab ("Leave page?",
    alerts...) use the same box as the settings dialogs; give it the same
