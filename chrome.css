@@ -38,6 +38,11 @@
   --zc-radius: 10px;
   /* Under cards that slide in over the page (compact mode) */
   --zc-float-shadow: light-dark(rgb(0 0 0 / 0.12), rgb(0 0 0 / 0.45));
+  /* How they come and go: a fade and a short slide from their edge */
+  --zc-float-shift: 8px;
+  --zc-float-in: 180ms cubic-bezier(0.2, 0, 0, 1);
+  --zc-float-out-duration: 140ms;
+  --zc-float-out: var(--zc-float-out-duration) cubic-bezier(0.4, 0, 1, 1);
 
   --zc-page: color-mix(in srgb, var(--zc-text) 4%, var(--zc-frame));
   --zc-surface: color-mix(in srgb, var(--zc-text) 8%, var(--zc-frame));
@@ -749,6 +754,37 @@
       margin-block: calc(var(--zen-element-separation) * 3) !important;
     }
 
+    /* Motion, shared with the floating top bar: it fades in while
+       moving a few pixels from its edge, and fades back out the same
+       way. Zen slides the whole toolbox in from off-screen with a
+       springy curve; here the toolbox jumps into place at once and the
+       card (#titlebar) does the moving. On the way out the toolbox
+       waits for the card to fade before it jumps away. */
+    & #navigator-toolbox:not([animate="true"]) {
+      transition: translate 0s linear var(--zc-float-out-duration) !important;
+
+      & #titlebar {
+        opacity: 0 !important;
+        translate: calc(-1 * var(--zc-float-shift)) 0 !important;
+        transition: opacity var(--zc-float-out), translate var(--zc-float-out), visibility 0s linear var(--zc-float-out-duration) !important;
+      }
+    }
+
+    &[zen-right-side="true"] #navigator-toolbox:not([animate="true"]) #titlebar {
+      translate: var(--zc-float-shift) 0 !important;
+    }
+
+    & #navigator-toolbox:not([animate="true"]):is([zen-has-hover], [zen-user-show], [zen-has-empty-tab], [flash-popup], [has-popup-menu], [movingtab], [zen-compact-mode-active]),
+    &[zen-renaming-tab="true"] #navigator-toolbox:not([animate="true"]) {
+      transition: none !important;
+
+      & #titlebar {
+        opacity: 1 !important;
+        translate: none !important;
+        transition: opacity var(--zc-float-in), translate var(--zc-float-in) !important;
+      }
+    }
+
     /* While it's hidden, a short bar in the gap beside the page shows
        where to hover. Zen leaves the toolbox's last few pixels on
        screen as the hover zone; the bar sits in them. */
@@ -840,14 +876,15 @@
       border-radius: var(--zc-radius) !important;
       corner-shape: round !important;
       box-shadow: 0 6px 18px var(--zc-float-shadow) !important;
-      translate: 0 -6px !important;
+      translate: 0 calc(-1 * var(--zc-float-shift)) !important;
       pointer-events: none !important;
-      transition: opacity var(--zen-hidden-toolbar-transition), translate var(--zen-hidden-toolbar-transition) !important;
+      transition: opacity var(--zc-float-out), translate var(--zc-float-out) !important;
     }
 
     & #zen-appcontent-navbar-wrapper:is([zen-has-hover], [has-popup-menu], [zen-compact-mode-active]) #zen-appcontent-navbar-container {
       translate: none !important;
       pointer-events: auto !important;
+      transition: opacity var(--zc-float-in), translate var(--zc-float-in) !important;
     }
 
     /* Zen gives the toolbar position: inherit, so it took the card's
