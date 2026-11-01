@@ -7,7 +7,7 @@
   "scripts": {
     "card-tint.uc.js": {
       "name": "Card helpers",
-      "description": "Colors the toolbar from the top of the page, shows only the domain in the centered address bar, cross-fades the Library, moves the window buttons into the sidebar-only layout's top row, opens extension popups from the Extensions button, themes the settings dialogs, and leaves the address bar unfocused at startup.",
+      "description": "Colors the toolbar from the top of the page, shows only the domain in the centered address bar, cross-fades the Library, moves the window buttons into the sidebar, opens extension popups from the Extensions button, themes the settings dialogs, keeps Customize Toolbar in the current layout, and leaves the address bar unfocused at startup.",
       "include": ["chrome://browser/content/browser.xhtml"]
     }
   },
@@ -18,9 +18,9 @@
   "readme": "README.md",
   "preferences": "preferences.json",
   "author": "TaouMou",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "tags": ["Theme"],
   "createdAt": "2026-10-31",
-  "updatedAt": "2026-10-31T21:12:31Z",
+  "updatedAt": "2026-11-01T10:26:38Z",
   "fork": ["zen"]
 }
