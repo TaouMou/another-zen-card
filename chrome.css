@@ -664,9 +664,13 @@
 
 /* Collapsed sidebar: Zen sizes it from the tab width (48px, plus 6px on
    each side), which made the tabs wide, flat pills. At 38px they come
-   out about square. Compact mode keeps Zen's width. */
+   out about square. Firefox sizes the tabs and the new-tab button
+   separately (--tab-collapsed-background-width, also 48px), so that
+   follows, keeping them 6px inside the sidebar on both sides. Compact
+   mode keeps Zen's width. */
 :root:not([zen-sidebar-expanded="true"]):not([zen-compact-mode="true"]):not([zen-private-window="true"]) {
   --tab-min-width: 38px !important;
+  --tab-collapsed-background-width: 38px !important;
 }
 
 /* card-tint.uc.js moves the dots to the start of the sidebar's top row.
