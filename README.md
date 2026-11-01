@@ -8,6 +8,7 @@ A solid, glass-free theme for [Zen Browser](https://zen-browser.app).
 - **Site-colored toolbar**: the toolbar takes the color of the top of the page, so it flows into the site's header (a small script; can be turned off)
 - **Centered address bar**: just the domain in the middle of the toolbar, with no box until you hover or type (the domain-only part uses the script). A boxed version and Zen's full-width bar are also available
 - **Window buttons in the sidebar**: minimize, maximize and close become three small dots at the start of the sidebar's top row, or stacked at the top of a collapsed sidebar (Windows and Linux, sidebar on the left; uses the script)
+- **Customize Toolbar in your layout**: in the sidebar-only layout, Customize shows the toolbar where Zen puts it, in the sidebar; with the sidebar collapsed, the sidebar stays narrow (the script)
 - **Compact mode**: whatever Zen hides (the sidebar, the toolbar or both) comes back as a floating card lined up with the page card, fading in with a short slide; a faint mark at the window's edge shows where the hidden sidebar is, and the address bar no longer takes focus at startup (the script)
 - **Six active tab styles**: soft fill with a thin border, outline, accent tint, inverted, text only, accent dot
 - **Ghost tabs**: tabs that aren't loaded yet are faded and grey

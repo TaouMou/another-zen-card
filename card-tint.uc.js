@@ -478,13 +478,20 @@
     const buttons = window.gZenVerticalTabsManager?.actualWindowButtons;
     const topButtons = document.getElementById("zen-sidebar-top-buttons");
     const titlebar = document.getElementById("titlebar");
-    if (!buttons || !topButtons || !titlebar) {
+    const navBar = document.getElementById("nav-bar");
+    if (!buttons || !topButtons || !titlebar || !navBar) {
       return;
     }
-    const placed = buttons.parentElement === topButtons || buttons.parentElement === titlebar;
+    // In Customize Toolbar, the sidebar-only layout's toolbar is in the
+    // sidebar (see below) and the dots lead it
+    const customizeSingle = root.getAttribute("zc-customize-layout") === "single";
+    const placed =
+      buttons.parentElement === topButtons ||
+      buttons.parentElement === titlebar ||
+      (customizeSingle && buttons.parentElement === navBar);
     if (controlsInSidebar()) {
       const stacked = root.getAttribute("zen-sidebar-expanded") !== "true";
-      const home = stacked ? titlebar : topButtons;
+      const home = customizeSingle ? navBar : stacked ? titlebar : topButtons;
       if (buttons.parentElement !== home || home.firstElementChild !== buttons) {
         if (!placed) {
           windowButtonsHome = buttons.parentElement;
@@ -512,6 +519,70 @@
   };
 
   const windowButtonsObserver = new MutationObserver(placeWindowButtons);
+
+  // ---- Customize Toolbar in the current layout ----
+  // Zen shows Customize Toolbar with the expanded sidebar and a top
+  // toolbar whatever the layout. In the sidebar-only layout, move the top
+  // toolbar into the sidebar under its top row, where Zen shows its
+  // buttons ([zc-customize-layout="single"]; chrome.css wraps the address
+  // bar onto its own line). It's still the same toolbar, so drops there
+  // land where they'll show. With the sidebar collapsed, undo Zen's
+  // forced expansion. Both are put back before Zen rebuilds the layout.
+  let navBarHome = null;
+
+  function onCustomizationReady() {
+    const navBar = document.getElementById("nav-bar");
+    const topButtons = document.getElementById("zen-sidebar-top-buttons");
+    if (!navBar || !topButtons || root.getAttribute("zen-private-window") === "true") {
+      return;
+    }
+    const vertical = Services.prefs.getBoolPref("zen.tabs.vertical", true);
+    const expanded = Services.prefs.getBoolPref("zen.view.sidebar-expanded", true);
+    if (!vertical) {
+      return;
+    }
+    if (!expanded) {
+      gNavToolbox.removeAttribute("zen-sidebar-expanded");
+      root.removeAttribute("zen-sidebar-expanded");
+      return;
+    }
+    if (!Services.prefs.getBoolPref("zen.view.use-single-toolbar", true) || root.hasAttribute("popup-window")) {
+      return;
+    }
+    navBarHome = { parent: navBar.parentNode, next: navBar.nextSibling };
+    topButtons.parentNode.moveBefore(navBar, topButtons.nextSibling);
+    root.setAttribute("zc-customize-layout", "single");
+    placeWindowButtons();
+    // The address bar's line starts under the dots, not under the first button
+    window.requestAnimationFrame(() => {
+      const target = CustomizableUI.getCustomizationTarget(navBar);
+      if (!target) {
+        return;
+      }
+      const contentLeft = element => {
+        const style = window.getComputedStyle(element);
+        return (
+          element.getBoundingClientRect().left +
+          parseFloat(style.borderInlineStartWidth) +
+          parseFloat(style.paddingInlineStart)
+        );
+      };
+      navBar.style.setProperty("--zc-customize-indent", `${contentLeft(target) - contentLeft(navBar)}px`);
+    });
+  }
+
+  function onCustomizationEnding() {
+    if (!navBarHome) {
+      return;
+    }
+    const navBar = document.getElementById("nav-bar");
+    const { parent, next } = navBarHome;
+    navBarHome = null;
+    parent.moveBefore(navBar, next?.parentNode === parent ? next : null);
+    navBar.style.removeProperty("--zc-customize-indent");
+    root.removeAttribute("zc-customize-layout");
+    placeWindowButtons();
+  }
 
   // ---- Extension popups ----
   // With Zen's zen.theme.hide-unified-extensions-button off, extensions
@@ -602,6 +673,8 @@
       window.addEventListener(type, onCustomizeDragOver, true);
     }
     window.addEventListener("popupshowing", onPopupShowing);
+    window.addEventListener("customizationready", onCustomizationReady);
+    window.addEventListener("customizationending", onCustomizationEnding);
     gBrowser.tabContainer.addEventListener("mousedown", onCloseMarkMouseDown, true);
     gBrowser.tabContainer.addEventListener("click", onCloseMarkClick, true);
     root.setAttribute("zc-collapsed-tab-close", "true");
@@ -634,6 +707,8 @@
           window.removeEventListener(type, onCustomizeDragOver, true);
         }
         window.removeEventListener("popupshowing", onPopupShowing);
+        window.removeEventListener("customizationready", onCustomizationReady);
+        window.removeEventListener("customizationending", onCustomizationEnding);
         gBrowser.tabContainer.removeEventListener("mousedown", onCloseMarkMouseDown, true);
         gBrowser.tabContainer.removeEventListener("click", onCloseMarkClick, true);
         windowButtonsObserver.disconnect();

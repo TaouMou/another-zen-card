@@ -368,7 +368,7 @@
    bar that opens when you type is positioned by Zen on its own, so it
    keeps its full width. */
 @media not -moz-pref("mod.zencard.urlbar", "full") {
-  :root:not([zen-single-toolbar="true"]):not([zen-private-window="true"]) {
+  :root:not([zen-single-toolbar="true"], [zc-customize-layout="single"]):not([zen-private-window="true"]) {
     & #urlbar-container {
       max-width: min(560px, 48%) !important;
       margin-inline: auto !important;
@@ -390,7 +390,7 @@
    fades in the buttons; no box ever appears. While typing (when Zen
    doesn't float the bar) a faint wash shows where the field is. */
 @media not (-moz-pref("mod.zencard.urlbar", "full") or -moz-pref("mod.zencard.urlbar", "centered")) {
-  :root:not([zen-single-toolbar="true"]):not([zen-private-window="true"]) #urlbar:not([breakout-extend]) {
+  :root:not([zen-single-toolbar="true"], [zc-customize-layout="single"]):not([zen-private-window="true"]) #urlbar:not([breakout-extend]) {
     & > .urlbar-background {
       background-color: transparent !important;
       transition: background-color 0.2s ease !important;
@@ -418,8 +418,9 @@
 /* Sidebar-only layout: the address bar sits in the sidebar card as an
    inset field, darker than the card with the card's border, like the
    space switcher's track. Zen already shows only the domain here. The
-   site settings and copy buttons appear on hover. */
-:root[zen-single-toolbar="true"]:not([zen-private-window="true"]) #urlbar:not([breakout-extend]) {
+   site settings and copy buttons appear on hover. Also in Customize
+   Toolbar, where card-tint.uc.js moves the toolbar into the sidebar. */
+:root:is([zen-single-toolbar="true"], [zc-customize-layout="single"]):not([zen-private-window="true"]) #urlbar:not([breakout-extend]) {
   & > .urlbar-background {
     background-color: var(--zc-frame) !important;
     box-shadow: inset 0 0 0 1px var(--zc-line) !important;
@@ -747,7 +748,7 @@
    sidebar's top row. The strip above the page that
    held them is then empty, so it shrinks to the usual gap (unless the
    bookmarks toolbar lives there). */
-:root[zc-window-dots-in-sidebar]:not([zen-has-bookmarks]):not([zen-private-window="true"]) #zen-appcontent-navbar-wrapper {
+:root:is([zc-window-dots-in-sidebar], [zc-customize-layout="single"]):not([zen-has-bookmarks]):not([zen-private-window="true"]) #zen-appcontent-navbar-wrapper {
   height: var(--zen-element-separation) !important;
   min-height: var(--zen-element-separation) !important;
 
@@ -760,6 +761,100 @@
    to slide open. It no longer opens, so the page would just jump. */
 :root[zc-window-dots-in-sidebar]:not([zen-has-bookmarks]):not([zen-private-window="true"]) #tabbrowser-tabpanels[has-toolbar-hovered] .browserContainer {
   margin-top: 0 !important;
+}
+
+/* Customize Toolbar in the sidebar-only layout: card-tint.uc.js moves
+   the top toolbar into the sidebar, in place of the top row. The dots
+   and the menu button lead the first line, the buttons follow, and the
+   address bar takes its own line under them, from the toolbar's start
+   (the script measures the indent). */
+:root[zc-customize-layout="single"]:not([zen-private-window="true"]) {
+  & #zen-sidebar-top-buttons {
+    display: none !important;
+  }
+
+  /* The sidebar's column squeezed the second line under the tabs */
+  & #nav-bar {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    flex-shrink: 0 !important;
+    align-items: flex-start !important;
+    padding: 3px 0 0 !important;
+  }
+
+  /* Firefox shows window buttons only in the first toolbar, so it hides
+     them in a #nav-bar right inside the toolbox */
+  & #nav-bar > .titlebar-buttonbox-container {
+    display: flex !important;
+    order: -2 !important;
+  }
+
+  /* The first line is as tall as Zen's row (36px), with the buttons in
+     its middle; they were shorter and sat at its top, above the dots */
+  & #nav-bar > :is(.titlebar-buttonbox-container, #PanelUI-button),
+  & #nav-bar-customization-target > toolbarpaletteitem:not(#wrapper-urlbar-container) {
+    height: 36px !important;
+    max-height: none !important;
+    align-self: flex-start !important;
+  }
+
+  & #nav-bar > #PanelUI-button,
+  & #nav-bar-customization-target > toolbarpaletteitem:not(#wrapper-urlbar-container, [id^="wrapper-customizableui-special-spring"]) {
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  & #nav-bar > #PanelUI-button {
+    order: -1 !important;
+  }
+
+  /* It clips what's outside it, which is where the address bar's line
+     starts */
+  & #nav-bar-customization-target {
+    flex-wrap: wrap !important;
+    row-gap: 2px !important;
+    min-width: 0 !important;
+    overflow: visible !important;
+  }
+
+  & #wrapper-urlbar-container {
+    order: 1 !important;
+    flex: 0 0 calc(100% + var(--zc-customize-indent, 0px)) !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    margin-inline-start: calc(-1 * var(--zc-customize-indent, 0px)) !important;
+
+    & #urlbar-container {
+      flex: 1 1 auto !important;
+      width: auto !important;
+      min-width: 0 !important;
+      max-width: none !important;
+    }
+
+    & #urlbar {
+      width: 100% !important;
+    }
+  }
+
+  /* Zen's row puts the extensions button right after the menu button and
+     leaves Flexible Spaces out, with a gap before the other buttons. Here
+     the spaces stand in for that gap. Firefox keeps the overflow menu
+     beside the palette while customizing, so its button isn't needed. */
+  & #wrapper-unified-extensions-button {
+    order: -2 !important;
+  }
+
+  & #nav-bar-customization-target > toolbarpaletteitem[id^="wrapper-customizableui-special-spring"] {
+    order: -1 !important;
+    flex: 1 1 0 !important;
+    min-width: 8px !important;
+    max-width: none !important;
+  }
+
+  & #nav-bar-overflow-button {
+    display: none !important;
+  }
 }
 
 /* ---- Site-colored toolbar ----
@@ -1915,11 +2010,14 @@ slot[part="content"]:only-child {
   }
 
   /* The sidebar's top row holds only the window buttons and takes no
-     drops (card-tint.uc.js), so it shows no drop area */
+     drops (card-tint.uc.js), so it shows no drop area. Firefox gives
+     empty areas 100px while customizing, which left a gap before the
+     top toolbar's buttons with the sidebar collapsed. */
   & #zen-sidebar-top-buttons-customization-target {
     border: none !important;
     background: none !important;
     margin: 0 !important;
+    min-width: 0 !important;
   }
 
   /* Drop areas: the sidebar's footer and the overflow menu */
