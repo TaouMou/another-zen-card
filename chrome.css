@@ -671,9 +671,12 @@
 }
 
 /* The collapsed sidebar is a grid, which split its height evenly between
-   the dots and the tabs; the dots' row takes only what it needs */
+   the dots and the tabs; the dots' row takes only what it needs. Zen
+   also keeps room on top for the sidebar's top row, which the dots
+   replace. */
 :root[zc-window-controls="stacked"]:not([zen-private-window="true"]) #titlebar {
   grid-template-rows: auto 1fr !important;
+  padding-top: 0 !important;
 }
 
 :root[zc-window-controls="stacked"]:not([zen-private-window="true"]) #titlebar > .titlebar-buttonbox-container {
@@ -683,7 +686,7 @@
   justify-self: stretch !important;
   width: auto !important;
   justify-content: center !important;
-  margin: 2px 6px 6px !important;
+  margin: 6px 6px 6px !important;
   padding-bottom: 4px !important;
   border-bottom: 1px solid var(--zc-line) !important;
 
@@ -693,8 +696,17 @@
     padding-inline: 0 !important;
   }
 
+  /* The button keeps some room beside the dot, which put the dot 5px
+     off its middle; noticeable in a column */
   & .titlebar-button {
+    position: relative !important;
     height: 24px !important;
+
+    &::before {
+      position: absolute !important;
+      inset: 0 !important;
+      margin: auto !important;
+    }
   }
 }
 
