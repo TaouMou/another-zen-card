@@ -1834,10 +1834,9 @@ slot[part="content"]:only-child {
      its items get wrapped once for the strip and again for the palette
      (wrapper-wrapper-...), so they show without their icon or box (Smart
      Window switcher, Organize Tabs, a second Flexible Space). Zen hides
-     the switcher itself, and the palette keeps a single Flexible Space,
-     at its end. card-tint.uc.js marks these hidden before a drag so
-     Firefox's drag animation skips them. */
-  & #customization-palette > :is([id^="wrapper-wrapper-"], [id^="wrapper-customizableui-special-spring"]:not(:last-child)) {
+     the switcher itself. card-tint.uc.js marks these hidden before a drag
+     so Firefox's drag animation skips them. */
+  & #customization-palette > [id^="wrapper-wrapper-"] {
     display: none !important;
   }
 
