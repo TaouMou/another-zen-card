@@ -664,7 +664,12 @@
 
 /* card-tint.uc.js moves the dots to the start of the sidebar's top row.
    With the sidebar collapsed, it stacks them at the top of the sidebar,
-   minimize first, above a line */
+   minimize first, above a line. Firefox orders the box last in whatever
+   holds it (order: 1000), so bring it first. */
+:root[zc-window-controls]:not([zen-private-window="true"]) :is(#zen-sidebar-top-buttons, #titlebar) > .titlebar-buttonbox-container {
+  order: -1 !important;
+}
+
 :root[zc-window-controls="stacked"]:not([zen-private-window="true"]) #titlebar > .titlebar-buttonbox-container {
   /* Zen gives the box the full height of its parent */
   height: auto !important;
