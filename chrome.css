@@ -1900,6 +1900,8 @@ slot[part="content"]:only-child {
     margin: 0 !important;
   }
 
+  /* Drop areas: the sidebar's footer and the overflow menu */
+  & #zen-sidebar-foot-buttons,
   & #customization-panelHolder > #widget-overflow-fixed-list {
     outline: none !important;
     border: 1px dashed color-mix(in srgb, var(--zc-accent) 55%, transparent) !important;
