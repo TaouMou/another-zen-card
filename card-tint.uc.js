@@ -410,39 +410,59 @@
   };
 
   // ---- Window buttons in the sidebar ----
-  // In the sidebar-only layout Zen puts the window buttons in a strip
-  // above the page. Move them into the sidebar's top row, beside back,
-  // forward and reload, and mark :root so chrome.css can close that
-  // strip. Zen puts them back whenever it rebuilds the layout, so watch
-  // for that. Only for a left sidebar with the buttons on the right
-  // (Windows), outside compact mode.
+  // Zen puts the window buttons at the end of the top toolbar, or in a
+  // strip above the page in the sidebar-only layout. Move them to the
+  // start of the sidebar's top row; with the sidebar collapsed, which is
+  // too narrow for a row, stack them at the top of the sidebar instead
+  // ([zc-window-controls="stacked"]). In the sidebar-only layout, mark
+  // :root so chrome.css can close the emptied strip. Zen puts them back
+  // whenever it rebuilds the layout, so watch for that. Only for a left
+  // sidebar with the buttons on the right (Windows), outside compact
+  // mode; private windows keep Zen's layout.
   let windowButtonsHome = null;
 
-  const dotsInSidebar = () =>
-    root.getAttribute("zen-single-toolbar") === "true" &&
+  const controlsInSidebar = () =>
     root.getAttribute("zen-compact-mode") !== "true" &&
     root.getAttribute("zen-right-side") !== "true" &&
-    root.getAttribute("zen-window-buttons-reversed") !== "true";
+    root.getAttribute("zen-window-buttons-reversed") !== "true" &&
+    root.getAttribute("zen-private-window") !== "true";
 
   function placeWindowButtons() {
     const buttons = window.gZenVerticalTabsManager?.actualWindowButtons;
     const topButtons = document.getElementById("zen-sidebar-top-buttons");
-    if (!buttons || !topButtons) {
+    const titlebar = document.getElementById("titlebar");
+    if (!buttons || !topButtons || !titlebar) {
       return;
     }
-    if (dotsInSidebar()) {
-      if (buttons.parentElement !== topButtons) {
-        windowButtonsHome = buttons.parentElement;
-        topButtons.append(buttons);
+    const placed = buttons.parentElement === topButtons || buttons.parentElement === titlebar;
+    if (controlsInSidebar()) {
+      const stacked = root.getAttribute("zen-sidebar-expanded") !== "true";
+      const home = stacked ? titlebar : topButtons;
+      if (buttons.parentElement !== home || home.firstElementChild !== buttons) {
+        if (!placed) {
+          windowButtonsHome = buttons.parentElement;
+        }
+        home.prepend(buttons);
       }
-      root.setAttribute("zc-window-dots-in-sidebar", "true");
+      root.setAttribute("zc-window-controls", stacked ? "stacked" : "row");
+      root.toggleAttribute("zc-window-dots-in-sidebar", root.getAttribute("zen-single-toolbar") === "true");
     } else {
-      if (buttons.parentElement === topButtons && windowButtonsHome) {
+      if (placed && windowButtonsHome) {
         windowButtonsHome.append(buttons);
       }
+      root.removeAttribute("zc-window-controls");
       root.removeAttribute("zc-window-dots-in-sidebar");
     }
   }
+
+  // The sidebar's top row holds only the window buttons: refuse drops
+  // there in Customize Toolbar. This runs before Customize mode's own
+  // handlers, which then never accept the drop.
+  const onCustomizeDragOver = event => {
+    if (root.hasAttribute("customizing") && event.target.closest?.("#zen-sidebar-top-buttons")) {
+      event.stopPropagation();
+    }
+  };
 
   const windowButtonsObserver = new MutationObserver(placeWindowButtons);
 
@@ -509,11 +529,20 @@
 
     windowButtonsObserver.observe(root, {
       attributes: true,
-      attributeFilter: ["zen-single-toolbar", "zen-compact-mode", "zen-right-side"],
+      attributeFilter: [
+        "zen-single-toolbar",
+        "zen-compact-mode",
+        "zen-right-side",
+        "zen-sidebar-expanded",
+        "zen-window-buttons-reversed",
+      ],
     });
-    const navbarContainer = document.getElementById("zen-appcontent-navbar-container");
-    if (navbarContainer) {
-      windowButtonsObserver.observe(navbarContainer, { childList: true });
+    // Where Zen puts the buttons back, and where they go
+    for (const id of ["zen-appcontent-navbar-container", "nav-bar", "zen-sidebar-top-buttons", "titlebar"]) {
+      const element = document.getElementById(id);
+      if (element) {
+        windowButtonsObserver.observe(element, { childList: true });
+      }
     }
     placeWindowButtons();
 
@@ -522,6 +551,9 @@
 
     // Capturing, so it runs before Customize mode's own dragstart handler
     window.addEventListener("dragstart", onCustomizeDragStart, true);
+    for (const type of ["dragenter", "dragover", "drop"]) {
+      window.addEventListener(type, onCustomizeDragOver, true);
+    }
     window.addEventListener("popupshowing", onPopupShowing);
     try {
       removeStrayWrappers();
@@ -548,6 +580,9 @@
         Services.prefs.removeObserver(PREF_OFF, prefObserver);
         libraryFadeObserver.disconnect();
         window.removeEventListener("dragstart", onCustomizeDragStart, true);
+        for (const type of ["dragenter", "dragover", "drop"]) {
+          window.removeEventListener(type, onCustomizeDragOver, true);
+        }
         window.removeEventListener("popupshowing", onPopupShowing);
         windowButtonsObserver.disconnect();
         if (originalTrim) {

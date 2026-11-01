@@ -662,8 +662,31 @@
   }
 }
 
-/* Sidebar-only layout: card-tint.uc.js moves the dots into the sidebar's
-   top row, beside back, forward and reload. The strip above the page that
+/* card-tint.uc.js moves the dots to the start of the sidebar's top row.
+   With the sidebar collapsed, it stacks them at the top of the sidebar,
+   minimize first, above a line */
+:root[zc-window-controls="stacked"]:not([zen-private-window="true"]) #titlebar > .titlebar-buttonbox-container {
+  /* Zen gives the box the full height of its parent */
+  height: auto !important;
+  flex: none !important;
+  justify-content: center !important;
+  margin: 2px 6px 6px !important;
+  padding-bottom: 4px !important;
+  border-bottom: 1px solid var(--zc-line) !important;
+
+  & .titlebar-buttonbox {
+    flex-direction: column !important;
+    align-items: center !important;
+    padding-inline: 0 !important;
+  }
+
+  & .titlebar-button {
+    height: 24px !important;
+  }
+}
+
+/* Sidebar-only layout: the dots join back, forward and reload in the
+   sidebar's top row. The strip above the page that
    held them is then empty, so it shrinks to the usual gap (unless the
    bookmarks toolbar lives there). */
 :root[zc-window-dots-in-sidebar]:not([zen-has-bookmarks]):not([zen-private-window="true"]) #zen-appcontent-navbar-wrapper {
@@ -1811,7 +1834,14 @@ slot[part="content"]:only-child {
     --drag-drop-transition-duration: 0.15s !important;
   }
 
-  & #zen-sidebar-top-buttons-customization-target,
+  /* The sidebar's top row holds only the window buttons and takes no
+     drops (card-tint.uc.js), so it shows no drop area */
+  & #zen-sidebar-top-buttons-customization-target {
+    border: none !important;
+    background: none !important;
+    margin: 0 !important;
+  }
+
   & #customization-panelHolder > #widget-overflow-fixed-list {
     outline: none !important;
     border: 1px dashed color-mix(in srgb, var(--zc-accent) 55%, transparent) !important;
