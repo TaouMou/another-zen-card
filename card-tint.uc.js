@@ -88,22 +88,27 @@
     return { r, g, b: bl, dark: luma < 0.55 };
   }
 
+  // Resolves to the color found (null for none), or undefined when no
+  // sample was taken
   async function sample(browser, host) {
     if (isOff() || browser !== gBrowser.selectedBrowser || hostOf(browser) !== host) {
-      return;
+      return undefined;
     }
     const width = browser.clientWidth;
     if (!width) {
-      return;
+      return undefined;
     }
+    // Only the strip that becomes the rows we read, not the whole page
+    const scale = SAMPLE_WIDTH / width;
+    const stripHeight = Math.ceil(SAMPLE_ROWS / scale) + 1;
     let bitmap;
     try {
-      bitmap = await browser.drawSnapshot(0, 0, 0, 0, SAMPLE_WIDTH / width, "transparent", true);
+      bitmap = await browser.drawSnapshot(0, 0, width, stripHeight, scale, "transparent", true);
     } catch {
-      return; // page not ready, crashed, or not snapshot-able
+      return undefined; // page not ready, crashed, or not snapshot-able
     }
     if (!bitmap) {
-      return;
+      return undefined;
     }
     try {
       const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
@@ -114,7 +119,7 @@
       const color = dominantTopColor(data, bitmap.width);
       // The user may have moved on while we were sampling
       if (browser !== gBrowser.selectedBrowser || hostOf(browser) !== host) {
-        return;
+        return undefined;
       }
       if (color) {
         cache.delete(host);
@@ -124,29 +129,58 @@
         }
       }
       apply(color);
+      return color;
     } finally {
       bitmap.close();
     }
   }
 
-  // Pages often paint their header late, so sample a few times
-  function schedule(browser, delays) {
+  const sameColor = (a, b) => a === b || (!!a && !!b && a.r === b.r && a.g === b.g && a.b === b.b);
+
+  function clearTimers() {
     for (const t of timers) {
       clearTimeout(t);
     }
+    timers = [];
+  }
+
+  // Pages often paint their header late, so sample a few times; once two
+  // samples in a row agree, the header has settled and the rest are
+  // dropped
+  function schedule(browser, delays) {
+    clearTimers();
     const host = hostOf(browser);
     apply(host ? cache.get(host) : null);
     if (!host) {
-      timers = [];
       return;
     }
-    timers = delays.map(d => setTimeout(() => sample(browser, host), d));
+    const run = [];
+    timers = run;
+    let previous;
+    for (const d of delays) {
+      run.push(
+        setTimeout(async () => {
+          const color = await sample(browser, host);
+          if (color === undefined) {
+            return;
+          }
+          // Only if no newer run has started meanwhile
+          if (timers === run && previous !== undefined && sameColor(color, previous)) {
+            clearTimers();
+          }
+          previous = color;
+        }, d)
+      );
+    }
   }
 
   const progressListener = {
     onLocationChange(browser, webProgress, request, location, flags) {
       if (webProgress.isTopLevel && browser === gBrowser.selectedBrowser) {
-        schedule(browser, [150, 700, 1600]);
+        // Sites that change the address without loading a new page
+        // (YouTube, Gmail...) keep their header; one look is enough
+        const sameDocument = flags & Ci.nsIWebProgressListener.LOCATION_CHANGE_SAME_DOCUMENT;
+        schedule(browser, sameDocument ? [150] : [150, 700, 1600]);
       }
     },
     onStateChange(browser, webProgress, request, flags) {
@@ -219,8 +253,13 @@
   // the sidebar [zc-library-fading] and give chrome.css the sidebar's
   // opacity as --zc-toolbox-fade on :root (not on the sidebar, whose
   // style this observer watches).
+  let libraryElement = null;
+
   function syncLibraryFade() {
-    const library = document.querySelector("zen-library");
+    if (!libraryElement?.isConnected) {
+      libraryElement = document.querySelector("zen-library");
+    }
+    const library = libraryElement;
     if (!library) {
       return;
     }

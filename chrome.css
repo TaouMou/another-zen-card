@@ -1144,11 +1144,16 @@
   }
 }
 
-/* Ghost tabs: tabs that aren't loaded yet are faded and grey */
+/* Ghost tabs: tabs that aren't loaded yet are faded and grey. Only the
+   icon needs the grey filter (the label is already in the text color),
+   which keeps a big restored session cheap to redraw. */
 @media not -moz-pref("mod.zencard.noghosttabs") {
   .tabbrowser-tab[pending="true"]:not([zen-essential]):not([visuallyselected]) .tab-content {
     opacity: 0.5 !important;
-    filter: grayscale(1) !important;
+
+    & .tab-icon-image {
+      filter: grayscale(1) !important;
+    }
   }
 }
 
