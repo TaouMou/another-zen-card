@@ -850,12 +850,12 @@
       pointer-events: auto !important;
     }
 
-    /* Placed over the page, the container no longer stretches its row,
-       so the toolbar shrank to its buttons; it fills the card instead */
-    & #zen-appcontent-navbar-container > #nav-bar {
-      flex: 1 !important;
-      width: auto !important;
-      min-width: 0 !important;
+    /* Zen gives the toolbar position: inherit, so it took the card's
+       absolute position, shrank to its buttons and left the rest of the
+       card empty (no toolbar to right-click). It stays in the card's
+       flow instead. */
+    & #zen-appcontent-navbar-container #nav-bar {
+      position: relative !important;
       margin-inline: 0 !important;
     }
 
