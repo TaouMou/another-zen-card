@@ -1078,6 +1078,14 @@
   }
 }
 
+/* Firefox won't start a tab drag on the close button, and here it covers
+   the middle of the tab. With the script, the mark lets the mouse through
+   (so the whole tab drags) and the script closes the tab on a click on
+   the mark instead. */
+:root[zc-collapsed-tab-close]:not([zen-private-window="true"]) #navigator-toolbox:not([zen-sidebar-expanded="true"]) .tabbrowser-tab:not([pinned], [zen-essential]):hover .tab-close-button {
+  pointer-events: none !important;
+}
+
 /* ---- Active tab style ----
    "Soft fill" (the default) is the selected-tab color set above plus
    the same thin border as the card; the other styles build on or

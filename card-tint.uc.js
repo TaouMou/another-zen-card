@@ -375,6 +375,53 @@
     }
   }
 
+  // ---- Closing tabs in the collapsed sidebar ----
+  // chrome.css shows a tab's close mark over its icon while hovered, in
+  // the middle of the tab, but Firefox won't start a drag on the close
+  // button. With [zc-collapsed-tab-close] the mark lets the mouse through,
+  // so the whole tab drags, and a plain click on it closes the tab here.
+  // A click doesn't follow a drag. The press on the mark is kept from the
+  // tab so it doesn't select the tab first, as Firefox's own close button
+  // does.
+  const COLLAPSED_TAB =
+    ':root:not([zen-private-window="true"]) #navigator-toolbox:not([zen-sidebar-expanded="true"]) .tabbrowser-tab:not([pinned], [zen-essential])';
+
+  function closeMarkTab(event) {
+    if (event.button != 0 || event.ctrlKey || event.shiftKey || event.metaKey || event.altKey) {
+      return null;
+    }
+    const tab = event.target.closest?.(".tabbrowser-tab");
+    if (!tab?.matches(COLLAPSED_TAB)) {
+      return null;
+    }
+    const mark = tab.querySelector(".tab-close-button")?.getBoundingClientRect();
+    if (
+      !mark ||
+      event.clientX < mark.left ||
+      event.clientX > mark.right ||
+      event.clientY < mark.top ||
+      event.clientY > mark.bottom
+    ) {
+      return null;
+    }
+    return tab;
+  }
+
+  const onCloseMarkMouseDown = event => {
+    if (closeMarkTab(event)) {
+      event.stopPropagation();
+    }
+  };
+
+  const onCloseMarkClick = event => {
+    const tab = closeMarkTab(event);
+    if (tab) {
+      event.stopPropagation();
+      event.preventDefault();
+      gBrowser.removeTab(tab, { animate: true, triggeringEvent: event });
+    }
+  };
+
   // ---- Menu separators ----
   // Firefox and Zen hide menu items that don't fit the click (the tab
   // items when a toolbar is right-clicked), which can leave two
@@ -555,6 +602,9 @@
       window.addEventListener(type, onCustomizeDragOver, true);
     }
     window.addEventListener("popupshowing", onPopupShowing);
+    gBrowser.tabContainer.addEventListener("mousedown", onCloseMarkMouseDown, true);
+    gBrowser.tabContainer.addEventListener("click", onCloseMarkClick, true);
+    root.setAttribute("zc-collapsed-tab-close", "true");
     try {
       removeStrayWrappers();
     } catch (e) {
@@ -584,6 +634,8 @@
           window.removeEventListener(type, onCustomizeDragOver, true);
         }
         window.removeEventListener("popupshowing", onPopupShowing);
+        gBrowser.tabContainer.removeEventListener("mousedown", onCloseMarkMouseDown, true);
+        gBrowser.tabContainer.removeEventListener("click", onCloseMarkClick, true);
         windowButtonsObserver.disconnect();
         if (originalTrim) {
           gURLBar._zenTrimURL = originalTrim;
