@@ -3,8 +3,8 @@
 // @description    Colors the card's toolbar with the color along the top edge of the page,
 //                 shows only the domain in the centered address bar, cross-fades the
 //                 Library, moves the window buttons into the sidebar-only layout's top row,
-//                 opens extension popups from the Extensions button, and themes the
-//                 settings dialogs.
+//                 opens extension popups from the Extensions button, themes the
+//                 settings dialogs, and leaves the address bar unfocused at startup.
 // @include        main
 // ==/UserScript==
 
@@ -254,6 +254,44 @@
 
   const libraryFadeObserver = new MutationObserver(syncLibraryFade);
 
+  // ---- No address bar focus at startup ----
+  // The startup page is treated like a new tab, so Firefox puts the
+  // cursor in the address bar, and in compact mode a hidden toolbar
+  // stays shown while it has focus. In the first window, give the focus
+  // back to the page during the first moments, unless you have already
+  // clicked or typed (Ctrl+L or a click on the bar still work).
+  const STARTUP_FOCUS_WINDOW_MS = 3000;
+
+  function releaseStartupFocus() {
+    const windows = Services.wm.getEnumerator("navigator:browser");
+    windows.getNext();
+    if (windows.hasMoreElements()) {
+      return; // not the first window
+    }
+
+    let userActed = false;
+    const onUserInput = () => {
+      userActed = true;
+    };
+    const release = () =>
+      setTimeout(() => {
+        if (!userActed && gURLBar.focused) {
+          gBrowser.selectedBrowser.focus();
+        }
+      }, 0);
+
+    window.addEventListener("mousedown", onUserInput, { capture: true });
+    window.addEventListener("keydown", onUserInput, { capture: true });
+    gURLBar.inputField.addEventListener("focus", release);
+    release();
+
+    setTimeout(() => {
+      window.removeEventListener("mousedown", onUserInput, { capture: true });
+      window.removeEventListener("keydown", onUserInput, { capture: true });
+      gURLBar.inputField.removeEventListener("focus", release);
+    }, STARTUP_FOCUS_WINDOW_MS);
+  }
+
   // ---- Window buttons in the sidebar ----
   // In the sidebar-only layout Zen puts the window buttons in a strip
   // above the page. Move them into the sidebar's top row, beside back,
@@ -348,6 +386,7 @@
   }
 
   function init() {
+    releaseStartupFocus();
     anchorExtensionPopups();
     registerDialogStyles();
 

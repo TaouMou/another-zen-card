@@ -7,7 +7,7 @@
   "scripts": {
     "card-tint.uc.js": {
       "name": "Card helpers",
-      "description": "Colors the toolbar from the top of the page, shows only the domain in the centered address bar, cross-fades the Library, moves the window buttons into the sidebar-only layout's top row, opens extension popups from the Extensions button, and themes the settings dialogs.",
+      "description": "Colors the toolbar from the top of the page, shows only the domain in the centered address bar, cross-fades the Library, moves the window buttons into the sidebar-only layout's top row, opens extension popups from the Extensions button, themes the settings dialogs, and leaves the address bar unfocused at startup.",
       "include": ["chrome://browser/content/browser.xhtml"]
     }
   },
