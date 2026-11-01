@@ -1797,6 +1797,14 @@ slot[part="content"]:only-child {
     background-color: var(--zc-frame) !important;
   }
 
+  /* Firefox slides items aside over 0.3s while dragging, and finishes
+     every slide at once on drop; dropping mid-slide made items snap.
+     A shorter slide is mostly over by the time the item is dropped.
+     (Reduced motion keeps Firefox's 0s.) */
+  @media not (prefers-reduced-motion: reduce) {
+    --drag-drop-transition-duration: 0.15s !important;
+  }
+
   & #zen-sidebar-top-buttons-customization-target,
   & #customization-panelHolder > #widget-overflow-fixed-list {
     outline: none !important;

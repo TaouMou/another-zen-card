@@ -331,6 +331,30 @@
     }, STARTUP_FOCUS_WINDOW_MS);
   }
 
+  // ---- Customize Toolbar: items Zen hides with CSS ----
+  // While an item is dragged, Firefox shifts the palette items with
+  // transforms measured from each one's box, skipping only [hidden] ones.
+  // Zen hides some (Firefox View) with display: none instead, which
+  // measures as the window's corner, so the item before it was shifted
+  // there for the whole drag. Mark those wrappers hidden before each drag.
+  function hideUndisplayedPaletteItems() {
+    const palette = document.getElementById("customization-palette");
+    if (!palette) {
+      return;
+    }
+    for (const item of palette.children) {
+      if (!item.hidden && getComputedStyle(item).display == "none") {
+        item.hidden = true;
+      }
+    }
+  }
+
+  const onCustomizeDragStart = () => {
+    if (root.hasAttribute("customizing")) {
+      hideUndisplayedPaletteItems();
+    }
+  };
+
   // ---- Window buttons in the sidebar ----
   // In the sidebar-only layout Zen puts the window buttons in a strip
   // above the page. Move them into the sidebar's top row, beside back,
@@ -442,6 +466,9 @@
     libraryFadeObserver.observe(gNavToolbox, { attributes: true, attributeFilter: ["style"] });
     root.setAttribute("zc-library-fade", "true");
 
+    // Capturing, so it runs before Customize mode's own dragstart handler
+    window.addEventListener("dragstart", onCustomizeDragStart, true);
+
     gBrowser.addTabsProgressListener(progressListener);
     gBrowser.tabContainer.addEventListener("TabSelect", onTabSelect);
     Services.prefs.addObserver(PREF_OFF, prefObserver);
@@ -460,6 +487,7 @@
         gBrowser.tabContainer.removeEventListener("TabSelect", onTabSelect);
         Services.prefs.removeObserver(PREF_OFF, prefObserver);
         libraryFadeObserver.disconnect();
+        window.removeEventListener("dragstart", onCustomizeDragStart, true);
         windowButtonsObserver.disconnect();
         if (originalTrim) {
           gURLBar._zenTrimURL = originalTrim;
