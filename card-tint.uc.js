@@ -375,6 +375,40 @@
     }
   }
 
+  // ---- Menu separators ----
+  // Firefox and Zen hide menu items that don't fit the click (the tab
+  // items when a toolbar is right-clicked), which can leave two
+  // separators in a row, or one at either end. Their handlers run on the
+  // popup itself, before this one; mark the leftovers for chrome.css.
+  function tidySeparators(popup) {
+    const items = [...popup.children];
+    for (const item of items) {
+      if (item.localName == "menuseparator") {
+        item.removeAttribute("zc-redundant");
+      }
+    }
+    let previous = null;
+    for (const item of items) {
+      if (item.hidden || getComputedStyle(item).display == "none") {
+        continue;
+      }
+      if (item.localName == "menuseparator" && (!previous || previous.localName == "menuseparator")) {
+        item.setAttribute("zc-redundant", "true");
+        continue;
+      }
+      previous = item;
+    }
+    if (previous?.localName == "menuseparator") {
+      previous.setAttribute("zc-redundant", "true");
+    }
+  }
+
+  const onPopupShowing = event => {
+    if (event.target.localName == "menupopup") {
+      tidySeparators(event.target);
+    }
+  };
+
   // ---- Window buttons in the sidebar ----
   // In the sidebar-only layout Zen puts the window buttons in a strip
   // above the page. Move them into the sidebar's top row, beside back,
@@ -488,6 +522,7 @@
 
     // Capturing, so it runs before Customize mode's own dragstart handler
     window.addEventListener("dragstart", onCustomizeDragStart, true);
+    window.addEventListener("popupshowing", onPopupShowing);
     try {
       removeStrayWrappers();
     } catch (e) {
@@ -513,6 +548,7 @@
         Services.prefs.removeObserver(PREF_OFF, prefObserver);
         libraryFadeObserver.disconnect();
         window.removeEventListener("dragstart", onCustomizeDragStart, true);
+        window.removeEventListener("popupshowing", onPopupShowing);
         windowButtonsObserver.disconnect();
         if (originalTrim) {
           gURLBar._zenTrimURL = originalTrim;

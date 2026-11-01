@@ -1507,6 +1507,12 @@
   }
 }
 
+/* Separators left doubled, or at either end, once Firefox and Zen hide
+   the items between them (marked by card-tint.uc.js) */
+menupopup > menuseparator[zc-redundant] {
+  display: none !important;
+}
+
 /* Dropdowns show their chosen value at normal weight; it is drawn
    inside the dropdown's shadow DOM, hence ::part */
 :root:not([zen-private-window="true"]) menulist {
