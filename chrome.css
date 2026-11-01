@@ -670,10 +670,18 @@
   order: -1 !important;
 }
 
+/* The collapsed sidebar is a grid, which split its height evenly between
+   the dots and the tabs; the dots' row takes only what it needs */
+:root[zc-window-controls="stacked"]:not([zen-private-window="true"]) #titlebar {
+  grid-template-rows: auto 1fr !important;
+}
+
 :root[zc-window-controls="stacked"]:not([zen-private-window="true"]) #titlebar > .titlebar-buttonbox-container {
   /* Zen gives the box the full height of its parent */
   height: auto !important;
   flex: none !important;
+  justify-self: stretch !important;
+  width: auto !important;
   justify-content: center !important;
   margin: 2px 6px 6px !important;
   padding-bottom: 4px !important;
