@@ -670,8 +670,11 @@
 :root:not([zen-private-window="true"]) #navigator-toolbox[zen-sidebar-expanded="true"] #zen-sidebar-foot-buttons {
   justify-content: flex-start !important;
 
-  & > :is(toolbarspring, toolbarpaletteitem[id^="wrapper-customizableui-special-spring"]) {
+  /* In Customize the space sits in a frame; both take the row's height,
+     or the space's outline flattened into a line */
+  & :is(toolbarspring, toolbarpaletteitem[id^="wrapper-customizableui-special-spring"]) {
     max-width: none !important;
+    align-self: stretch !important;
   }
 }
 
