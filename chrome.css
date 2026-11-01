@@ -1790,6 +1790,13 @@ slot[part="content"]:only-child {
    be dropped (the sidebar's top row, flexible spaces) get a dashed
    accent outline with a faint tint. */
 :root[customizing]:not([zen-private-window="true"]) {
+  /* The Customize area sits outside Zen's main wrapper, on the window's
+     own background, which showed as a lighter grey around the card */
+  &,
+  & body {
+    background-color: var(--zc-frame) !important;
+  }
+
   & #zen-sidebar-top-buttons-customization-target,
   & toolbarpaletteitem > toolbarspring,
   & #customization-panelHolder > #widget-overflow-fixed-list {
