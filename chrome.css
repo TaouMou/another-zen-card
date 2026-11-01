@@ -675,11 +675,10 @@
    and drops its divider, so it flows into the site's header. The
    field variables are redeclared here because the :root ones resolve
    against the theme text color. The selector repeats every condition
-   of the card rule above (plus [zc-site-tint]) so it outranks it. In
-   compact mode the bar isn't part of a card, so the tint runs edge to
-   edge; while Zen hides the bar, its thin leftover strip stays tinted. */
-:root[zc-site-tint]:not([zen-single-toolbar="true"]):not([zen-compact-mode="true"]):not([inDOMFullscreen="true"]):not([popup-window]):not([zen-private-window="true"]) #zen-appcontent-navbar-wrapper,
-:root[zc-site-tint][zen-compact-mode="true"]:not([zen-single-toolbar="true"]):not([inDOMFullscreen="true"]):not([popup-window]):not([zen-private-window="true"]) #zen-appcontent-navbar-wrapper {
+   of the card rule above (plus [zc-site-tint]) so it outranks it. Not
+   in compact mode: there the bar isn't part of a card, and a tinted bar
+   above the frame's gap around the page looked detached. */
+:root[zc-site-tint]:not([zen-single-toolbar="true"]):not([zen-compact-mode="true"]):not([inDOMFullscreen="true"]):not([popup-window]):not([zen-private-window="true"]) #zen-appcontent-navbar-wrapper {
   background: var(--zc-site) !important;
   border-bottom-color: transparent !important;
   color: var(--zc-site-text) !important;
