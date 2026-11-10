@@ -18,6 +18,21 @@
 
   const root = document.documentElement;
 
+  // Each feature's work shows up by name in the Firefox Profiler's Marker
+  // Chart (about:profiling), as "Another Zen Card: <feature>". A marker
+  // costs nothing while the profiler isn't recording.
+  function timed(feature, fn) {
+    const name = `Another Zen Card: ${feature}`;
+    return function (...args) {
+      const start = Cu.now();
+      try {
+        return fn.apply(this, args);
+      } finally {
+        ChromeUtils.addProfilerMarker(name, start);
+      }
+    };
+  }
+
   // ---- Domain-only address bar ----
   // Zen shows only the domain in the sidebar layout by trimming through
   // gURLBar._zenTrimURL. Wrap it to do the same for the centered address
@@ -102,7 +117,7 @@
     }
   }
 
-  const libraryFadeObserver = new MutationObserver(syncLibraryFade);
+  const libraryFadeObserver = new MutationObserver(timed("Library fade", syncLibraryFade));
 
   // ---- No address bar focus at startup ----
   // The startup page is treated like a new tab, so Firefox puts the
@@ -160,11 +175,11 @@
     }
   }
 
-  const onCustomizeDragStart = () => {
+  const onCustomizeDragStart = timed("Customize Toolbar", () => {
     if (root.hasAttribute("customizing")) {
       hideUndisplayedPaletteItems();
     }
-  };
+  });
 
   // Items from Zen's hidden tab strip show up wrapped twice in the
   // palette (chrome.css now hides them). Dragging one into a toolbar
@@ -218,20 +233,20 @@
     return tab;
   }
 
-  const onCloseMarkMouseDown = event => {
+  const onCloseMarkMouseDown = timed("collapsed tabs", event => {
     if (closeMarkTab(event)) {
       event.stopPropagation();
     }
-  };
+  });
 
-  const onCloseMarkClick = event => {
+  const onCloseMarkClick = timed("collapsed tabs", event => {
     const tab = closeMarkTab(event);
     if (tab) {
       event.stopPropagation();
       event.preventDefault();
       gBrowser.removeTab(tab, { animate: true, triggeringEvent: event });
     }
-  };
+  });
 
   // ---- Menu separators ----
   // Firefox and Zen hide menu items that don't fit the click (the tab
@@ -261,11 +276,11 @@
     }
   }
 
-  const onPopupShowing = event => {
+  const onPopupShowing = timed("menu separators", event => {
     if (event.target.localName == "menupopup") {
       tidySeparators(event.target);
     }
-  };
+  });
 
   // ---- Window buttons in the sidebar ----
   // Zen puts the window buttons at the end of the top toolbar, or in a
@@ -323,13 +338,13 @@
   // The sidebar's top row holds only the window buttons: refuse drops
   // there in Customize Toolbar. This runs before Customize mode's own
   // handlers, which then never accept the drop.
-  const onCustomizeDragOver = event => {
+  const onCustomizeDragOver = timed("Customize Toolbar", event => {
     if (root.hasAttribute("customizing") && event.target.closest?.("#zen-sidebar-top-buttons")) {
       event.stopPropagation();
     }
-  };
+  });
 
-  const windowButtonsObserver = new MutationObserver(placeWindowButtons);
+  const windowButtonsObserver = new MutationObserver(timed("window buttons", placeWindowButtons));
 
   // ---- Customize Toolbar in the current layout ----
   // Zen shows Customize Toolbar with the expanded sidebar and a top
@@ -341,7 +356,7 @@
   // forced expansion. Both are put back before Zen rebuilds the layout.
   let navBarHome = null;
 
-  function onCustomizationReady() {
+  const onCustomizationReady = timed("Customize Toolbar", () => {
     const navBar = document.getElementById("nav-bar");
     const topButtons = document.getElementById("zen-sidebar-top-buttons");
     if (!navBar || !topButtons || root.getAttribute("zen-private-window") === "true") {
@@ -380,9 +395,9 @@
       };
       navBar.style.setProperty("--zc-customize-indent", `${contentLeft(target) - contentLeft(navBar)}px`);
     });
-  }
+  });
 
-  function onCustomizationEnding() {
+  const onCustomizationEnding = timed("Customize Toolbar", () => {
     if (!navBarHome) {
       return;
     }
@@ -393,7 +408,7 @@
     navBar.style.removeProperty("--zc-customize-indent");
     root.removeAttribute("zc-customize-layout");
     placeWindowButtons();
-  }
+  });
 
   // ---- Extension popups ----
   // With Zen's zen.theme.hide-unified-extensions-button off, extensions
@@ -497,7 +512,7 @@
 
     if (typeof gURLBar._zenTrimURL === "function") {
       originalTrim = gURLBar._zenTrimURL;
-      gURLBar._zenTrimURL = trimToDomain;
+      gURLBar._zenTrimURL = timed("address bar", trimToDomain);
       Services.prefs.addObserver(PREF_URLBAR, urlbarPrefObserver);
       refreshUrlbar();
     }
@@ -526,12 +541,12 @@
   }
 
   if (window.gBrowserInit?.delayedStartupFinished) {
-    init();
+    timed("startup", init)();
   } else {
     const onStartup = subject => {
       if (subject === window) {
         Services.obs.removeObserver(onStartup, "browser-delayed-startup-finished");
-        init();
+        timed("startup", init)();
       }
     };
     Services.obs.addObserver(onStartup, "browser-delayed-startup-finished");
