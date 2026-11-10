@@ -25,6 +25,8 @@
   const PREF_OFF = "mod.zencard.nositetint";
   const SAMPLE_WIDTH = 96; // snapshot is scaled down to about this many pixels wide
   const SAMPLE_ROWS = 2; // top rows of the snapshot to read
+  const FLAT_SHARE = 0.75; // share of the edge that must be the color for a tint
+  const FLAT_TOLERANCE = 12; // per channel, out of 255
   const CACHE_MAX = 200;
   const { STATE_STOP, STATE_IS_WINDOW } = Ci.nsIWebProgressListener;
 
@@ -55,7 +57,9 @@
   }
 
   // Most common color in the top rows, so a logo or a button in the header
-  // doesn't skew it the way a plain average would.
+  // doesn't skew it the way a plain average would. Only for a flat edge:
+  // when too little of it is close to that color (a picture or a
+  // gradient), there is none, and the toolbar keeps the theme color.
   function dominantTopColor(data, width) {
     const buckets = new Map();
     let opaque = 0;
@@ -84,6 +88,22 @@
     const r = Math.round(best.r / best.n);
     const g = Math.round(best.g / best.n);
     const bl = Math.round(best.b / best.n);
+    // Counted against the color itself, not its bucket, so a flat color
+    // split across two buckets by dithering still counts as flat
+    let close = 0;
+    for (let i = 0; i < width * SAMPLE_ROWS * 4; i += 4) {
+      if (
+        data[i + 3] >= 200 &&
+        Math.abs(data[i] - r) <= FLAT_TOLERANCE &&
+        Math.abs(data[i + 1] - g) <= FLAT_TOLERANCE &&
+        Math.abs(data[i + 2] - bl) <= FLAT_TOLERANCE
+      ) {
+        close++;
+      }
+    }
+    if (close < width * SAMPLE_ROWS * FLAT_SHARE) {
+      return null;
+    }
     const luma = (0.2126 * r + 0.7152 * g + 0.0722 * bl) / 255;
     return { r, g, b: bl, dark: luma < 0.55 };
   }
@@ -127,12 +147,12 @@
       if (browser !== gBrowser.selectedBrowser || hostOf(browser) !== host) {
         return undefined;
       }
-      if (color) {
-        cache.delete(host);
-        cache.set(host, color);
-        if (cache.size > CACHE_MAX) {
-          cache.delete(cache.keys().next().value);
-        }
+      // No color is remembered too, so a site with a picture at the top
+      // doesn't show an older tint when you come back
+      cache.delete(host);
+      cache.set(host, color);
+      if (cache.size > CACHE_MAX) {
+        cache.delete(cache.keys().next().value);
       }
       apply(color);
       return color;
