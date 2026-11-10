@@ -94,6 +94,12 @@
     if (isOff() || browser !== gBrowser.selectedBrowser || hostOf(browser) !== host) {
       return undefined;
     }
+    // A snapshot makes the page lay itself out first. While it's still
+    // loading, that starts its layout before its stylesheets arrive, and
+    // it shows unstyled for a moment, so wait until it has loaded
+    if (browser.webProgress?.isLoadingDocument) {
+      return undefined;
+    }
     const width = browser.clientWidth;
     if (!width) {
       return undefined;
@@ -177,10 +183,12 @@
   const progressListener = {
     onLocationChange(browser, webProgress, request, location, flags) {
       if (webProgress.isTopLevel && browser === gBrowser.selectedBrowser) {
-        // Sites that change the address without loading a new page
-        // (YouTube, Gmail...) keep their header; one look is enough
+        // A new page shows the site's remembered color and is sampled
+        // once it has loaded (onStateChange). Sites that change the
+        // address without loading a new page (YouTube, Gmail...) keep
+        // their header; one look is enough
         const sameDocument = flags & Ci.nsIWebProgressListener.LOCATION_CHANGE_SAME_DOCUMENT;
-        schedule(browser, sameDocument ? [150] : [150, 700, 1600]);
+        schedule(browser, sameDocument ? [150] : []);
       }
     },
     onStateChange(browser, webProgress, request, flags) {
