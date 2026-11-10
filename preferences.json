@@ -173,12 +173,6 @@
     "label": "Behavior"
   },
   {
-    "property": "mod.zencard.nositetint",
-    "label": "Keep the toolbar in the theme color instead of the site's color",
-    "type": "checkbox",
-    "defaultValue": false
-  },
-  {
     "property": "mod.zencard.noghosttabs",
     "label": "Don't fade tabs that aren't loaded yet",
     "type": "checkbox",

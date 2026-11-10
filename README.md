@@ -5,7 +5,6 @@ A solid, glass-free theme for [Zen Browser](https://zen-browser.app).
 - **Fixed palettes** instead of the workspace gradient: no transparency, blur, grain or gradients
 - **One card**: the top toolbar and the page share one outlined card
 - **Panel sidebar**: the sidebar is its own outlined card beside the page, with a quiet space label, a segmented space switcher and plain line icons in the footer
-- **Site-colored toolbar**: the toolbar takes the color of the top of the page, so it flows into the site's header; pages that start with a picture or a gradient keep the theme color (a small script; can be turned off)
 - **Centered address bar**: just the domain in the middle of the toolbar, with no box until you hover or type (the domain-only part uses the script). A boxed version and Zen's full-width bar are also available
 - **Window buttons in the sidebar**: minimize, maximize and close become three small dots at the start of the sidebar's top row, or stacked at the top of a collapsed sidebar (Windows and Linux, sidebar on the left; uses the script)
 - **Customize Toolbar in your layout**: in the sidebar-only layout, Customize shows the toolbar where Zen puts it, in the sidebar; with the sidebar collapsed, the sidebar stays narrow (the script)
@@ -31,9 +30,9 @@ Each palette has a dark and a light version. By default the theme follows Zen's 
 ## Install
 
 1. Install [Sine](https://github.com/CosmoCreeper/Sine).
-2. The site-colored toolbar is a script, and Sine only runs scripts from mods outside its store when you allow it: open Sine's settings and turn on **installing JS from unofficial sources**. Without it the theme still works; the toolbar just keeps the theme color.
+2. Some features use a small script (marked below), and Sine only runs scripts from mods outside its store when you allow it: open Sine's settings and turn on **installing JS from unofficial sources**. Without it the theme still works, without those features.
 3. In Sine's install box, enter `TaouMou/another-zen-card` and click **Install**, then restart Zen.
-4. For the full card look, switch Zen to the **Sidebar and top toolbar** layout (or set `zen.view.use-single-toolbar` to `false` in `about:config`). In the sidebar-only layout, the page alone becomes the card and there's no toolbar to color.
+4. For the full card look, switch Zen to the **Sidebar and top toolbar** layout (or set `zen.view.use-single-toolbar` to `false` in `about:config`). In the sidebar-only layout, the page alone becomes the card.
 
 The theme replaces the colors from Zen's theme picker, so changes made there won't show while it's on.
 
@@ -47,7 +46,6 @@ The theme replaces the colors from Zen's theme picker, so changes made there won
 | Custom palette is light (Custom ignores Mode) | Off |
 | Active tab style | Soft fill |
 | Address bar style | Centered, no background (domain only) |
-| Keep the toolbar in the theme color instead of the site's color | Off |
 | Interface font | System |
 | Don't fade tabs that aren't loaded yet | Off |
 
@@ -57,8 +55,6 @@ For a separate Extensions button in the toolbar (instead of extensions inside th
 
 - [Another Zen Load Bar](https://github.com/TaouMou/another-zen-load-bar): turn off its custom color to follow this theme's accent.
 - [Zen Folder Tree Connectors](https://github.com/JustAdumbPrsn/ZenFolderTreeConnectors): tree lines in folders.
-
-The site-colored toolbar is inspired by [Zia](https://github.com/z1n-k/zia) and [Zen Page Tint](https://github.com/caezium/zen-page-tint).
 
 ## License
 

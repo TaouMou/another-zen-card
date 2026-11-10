@@ -4,8 +4,8 @@ A solid, glass-free theme for Zen Browser, installed through the Sine mod manage
 
 ## Files
 
-- `chrome.css`: the whole theme (palettes, card, site-colored strip, address bar, tab styles, fonts)
-- `card-tint.uc.js`: chrome script that samples the top edge of the page to color the toolbar strip, makes the address bar show only the domain, cross-fades the Library, and moves the window buttons to the start of the sidebar's top row, or stacks them at the top of a collapsed sidebar (`#titlebar`), outside compact mode. Zen otherwise puts them at the end of `#nav-bar`, or in a strip above the page in the sidebar-only layout (`#zen-appcontent-navbar-container`), and puts them back on every layout rebuild. That row refuses drops in Customize Toolbar, so it holds only the window buttons (plus what Zen puts there in the sidebar-only layout). It also shows Customize Toolbar in the current layout: in the sidebar-only layout it moves `#nav-bar` into the sidebar under the top row while customizing (`[zc-customize-layout="single"]`), and with the sidebar collapsed it undoes Zen's forced expansion
+- `chrome.css`: the whole theme (palettes, card, address bar, tab styles, fonts)
+- `card-tint.uc.js`: chrome script (named after the site tint it used to draw, which was dropped in Nov 2026 for its load-time cost and its look on pictures; renaming it would leave the old file in installed copies) that makes the address bar show only the domain, cross-fades the Library, and moves the window buttons to the start of the sidebar's top row, or stacks them at the top of a collapsed sidebar (`#titlebar`), outside compact mode. Zen otherwise puts them at the end of `#nav-bar`, or in a strip above the page in the sidebar-only layout (`#zen-appcontent-navbar-container`), and puts them back on every layout rebuild. That row refuses drops in Customize Toolbar, so it holds only the window buttons (plus what Zen puts there in the sidebar-only layout). It also shows Customize Toolbar in the current layout: in the sidebar-only layout it moves `#nav-bar` into the sidebar under the top row while customizing (`[zc-customize-layout="single"]`), and with the sidebar collapsed it undoes Zen's forced expansion
 - `preferences.json`: the settings Sine shows
 - `theme.json`: Sine's manifest
 
@@ -32,9 +32,8 @@ Zen's source (`zen-browser/desktop`) is the reference: check selectors there bef
 
 ## Pitfalls already hit
 
-- The card rule's selector outranked the site-tint rule; the tint selector repeats every condition of the card rule so it wins.
-- Firefox paints `#nav-bar` with `--toolbar-bgcolor`, which covered the strip; it is made transparent while tinted.
-- Variables like `--toolbar-field-color` resolve on `:root`, so they must be redeclared on the strip to follow the site text color.
+- `browser.drawSnapshot` flushes the page's layout first; on a page still loading, that starts layout before its stylesheets arrive and the page shows unstyled for a moment. Don't snapshot pages from the chrome while `browser.webProgress.isLoadingDocument` (the removed site tint ran into this).
+- Variables like `--toolbar-field-color` resolve on `:root`, so recoloring part of the toolbar means redeclaring them there.
 - With `layout.css.corner-shape.enabled`, Zen gives every element squircle corners; anything along a card edge needs `corner-shape: round`, and children inside a 1px border need `radius - 1px`.
 - Firefox's own styles aren't in Zen's repo. The installed build is the reference: `C:\Program Files\Zen Browser\browser\omni.ja` is a zip (Windows theme at `chrome/browser/skin/classic/browser/browser.css`, Zen's at `chrome/browser/content/browser/zen-styles/`). Example: window buttons draw their glyph as a font character in `::before`, not as an icon.
 - In the sidebar-only layout, hovering the strip above the page sets `[has-toolbar-hovered]` on `#tabbrowser-tabpanels`, and Zen pulls `.browserContainer` up with a negative `margin-top` (only with `zen.view.hide-window-controls`).
