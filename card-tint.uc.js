@@ -20,11 +20,16 @@
 
   // Each feature's work shows up by name in the Firefox Profiler's Marker
   // Chart (about:profiling), as "Another Zen Card: <feature>". A marker
-  // costs nothing while the profiler isn't recording.
+  // costs nothing while the profiler isn't recording. Without the
+  // profiler API (it has changed before: Cu.now() is gone), the feature
+  // still runs, just without its marker.
   function timed(feature, fn) {
+    if (typeof ChromeUtils.now !== "function" || typeof ChromeUtils.addProfilerMarker !== "function") {
+      return fn;
+    }
     const name = `Another Zen Card: ${feature}`;
     return function (...args) {
-      const start = Cu.now();
+      const start = ChromeUtils.now();
       try {
         return fn.apply(this, args);
       } finally {
