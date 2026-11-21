@@ -619,8 +619,11 @@
    dots: two muted ones and a dimmed accent one for close, no glyphs. Each keeps
    a full-height click area wider than the dot, and maximize still opens
    Windows 11's snap layouts on hover. The muted dots follow currentColor.
-   Firefox draws each glyph as a Segoe Fluent Icons character in ::before
-   (its icon image is hidden), so the dot replaces that character. */
+   On Windows, Firefox draws each glyph as a Segoe Fluent Icons character
+   in ::before (its icon image is hidden), so the dot replaces that
+   character. On Linux it draws the GTK theme's icon (Breeze, Adwaita...)
+   in .toolbarbutton-icon instead, which is hidden so only the dot shows;
+   GTK's button order and its hidden buttons are kept. */
 @media not (-moz-platform: macos) {
   :root:not([zen-private-window="true"]) {
     & .titlebar-buttonbox {
@@ -634,6 +637,10 @@
       align-items: center !important;
       justify-content: center !important;
       background: transparent !important;
+
+      & > .toolbarbutton-icon {
+        display: none !important;
+      }
 
       &::before {
         content: "" !important;
